@@ -1,4 +1,6 @@
-<a href="https://activity-points.vercel.app/">Link</a>
+<a href="https://activity-points.vercel.app/">Web Link</a>
+
+
 problem statement  
 
 A web application to efficiently track, validate, and manage student participation in co-curricular and non-co-curricular activities,
