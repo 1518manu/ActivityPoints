@@ -49,7 +49,7 @@ export function LoginPage({ onLoginSuccess }) {
     <div className="login-container">
       <div className="login-content">
         <h1 className="login-title">Activity Point System</h1>
-        <h2 className="login-subtitle">{isLogin ? "Sign in to your account" : "Create a new account"}</h2>
+        <h2 className="login-subtitle">Sign in to your account</h2>
 
         <div className="login-form">
           <form onSubmit={handleSubmit}>
@@ -90,7 +90,7 @@ export function LoginPage({ onLoginSuccess }) {
             <div className="form-footer">
               <div className="remember-me">
                 <input id="remember-me" name="remember-me" type="checkbox" />
-                <label className="Remember_me"htmlFor="remember-me">Remember me</label>
+                <label className="Remember_me" htmlFor="remember-me">Remember me</label>
               </div>
 
               {isLogin && (
@@ -113,15 +113,6 @@ export function LoginPage({ onLoginSuccess }) {
             <FcGoogle className="google-icon" />
             Sign in with Google
           </button>
-
-          <div className="toggle-form">
-            <p>
-              {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-              <button className="toggle-button" onClick={() => setIsLogin(!isLogin)}>
-                {isLogin ? "Register" : "Sign in"}
-              </button>
-            </p>
-          </div>
         </div>
       </div>
     </div>
