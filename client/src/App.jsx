@@ -1,5 +1,4 @@
-import React, { useState } from "react"
-import { LoginPage } from "./Login/Login"
+import { useState } from 'react'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
