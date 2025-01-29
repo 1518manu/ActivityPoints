@@ -90,7 +90,7 @@ export function LoginPage({ onLoginSuccess }) {
             <div className="form-footer">
               <div className="remember-me">
                 <input id="remember-me" name="remember-me" type="checkbox" />
-                <label htmlFor="remember-me">Remember me</label>
+                <label className="Remember_me"htmlFor="remember-me">Remember me</label>
               </div>
 
               {isLogin && (
