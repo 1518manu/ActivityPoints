@@ -31,7 +31,8 @@
   .login-form {
     background-color: white;   
     padding: 70px;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+
     border-radius: 0.5rem;
   }
   
@@ -157,25 +158,5 @@
   
   .google-icon {
     margin-right: 0.5rem;
-  }
-  
-  .toggle-form {
-    text-align: center;
-    margin-top: 1.5rem;
-    font-size: 0.875rem;
-    color: #6b7280;
-  }
-  
-  .toggle-button {
-    background: none;
-    border: none;
-    color: #4f46e5;
-    font-size: 0.875rem;
-    cursor: pointer;
-    text-decoration: underline;
-  }
-  
-  .toggle-button:hover {
-    color: #4338ca;
   }
   
