@@ -1,7 +1,7 @@
 export async function mockAuthApi(email, password, action) {
     // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 1000))
-  
+    console.log(email,password)
     // Mock authentication logic
     if (action === "login") {
       if (email === "user@example.com" && password === "password") {

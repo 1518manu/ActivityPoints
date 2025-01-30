@@ -1,18 +1,18 @@
 import React, { useState } from "react"
 import { FcGoogle } from "react-icons/fc"
 import { mockAuthApi } from "./Api"
-import "./Login.css"
+import "./SignUp.css"
 
-export function LoginPage({ onLoginSuccess }) {
+export function SignUpPage({ onSignUpSuccess }) {
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
-  const [isLogin, setIsLogin] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!email || !password) {
+    if (!name || !email || !password) {
       setError("Please fill in all fields")
       return
     }
@@ -21,39 +21,50 @@ export function LoginPage({ onLoginSuccess }) {
     setError("")
 
     try {
-      const response = await mockAuthApi(email, password, isLogin ? "login" : "register")
+      const response = await mockAuthApi(email, password, "register", name)
 
       if (response.success) {
-        onLoginSuccess(response.token)
+        onSignUpSuccess(response.token)
       } else {
         setError(response.message || "An error occurred")
       }
-    } catch (error) {
+    } catch (err) {
       setError("An error occurred. Please try again.")
-      console.log(error)
+      console.log(err);
     } finally {
       setIsLoading(false)
     }
   }
 
-  const handleGoogleSignIn = () => {
-    // Implement Google Sign-In logic here
-    console.log("Google Sign-In attempted")
-  }
-
-  const handleForgotPassword = () => {
-    // Implement forgot password logic here
-    console.log("Forgot password for:", email)
+  const handleGoogleSignUp = () => {
+    // Implement Google Sign-Up logic here
+    console.log("Google Sign-Up attempted")
   }
 
   return (
-    <div className="login-container">
-      <div className="login-content">
-        <h1 className="login-title">Activity Point System</h1>
-        <h2 className="login-subtitle">{isLogin ? "Sign in to your account" : "Create a new account"}</h2>
+    <div className="signup-container">
+      <div className="signup-content">
+        <h1 className="signup-title">Activity Point System</h1>
+        <h2 className="signup-subtitle">Create a new account</h2>
 
-        <div className="login-form">
+        <div className="signup-form">
           <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label className="form-label" htmlFor="name">
+                Full Name
+              </label>
+              <input
+                className="form-input"
+                id="name"
+                name="name"
+                type="text"
+                autoComplete="name"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+
             <div className="form-group">
               <label className="form-label" htmlFor="email">
                 Email address
@@ -79,7 +90,7 @@ export function LoginPage({ onLoginSuccess }) {
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -88,21 +99,8 @@ export function LoginPage({ onLoginSuccess }) {
 
             {error && <div className="error-message">{error}</div>}
 
-            <div className="form-footer">
-              <div className="remember-me">
-                <input id="remember-me" name="remember-me" type="checkbox" />
-                <label className="Remember_me"htmlFor="remember-me">Remember me</label>
-              </div>
-
-              {isLogin && (
-                <a href="#" onClick={handleForgotPassword} className="forgot-password">
-                  Forgot your password?
-                </a>
-              )}
-            </div>
-
             <button className="submit-button" type="submit" disabled={isLoading}>
-              {isLoading ? "Processing..." : isLogin ? "Sign in" : "Register"}
+              {isLoading ? "Processing..." : "Sign Up"}
             </button>
           </form>
 
@@ -110,17 +108,17 @@ export function LoginPage({ onLoginSuccess }) {
             <span className="divider-text">Or continue with</span>
           </div>
 
-          <button onClick={handleGoogleSignIn} className="google-button">
+          <button onClick={handleGoogleSignUp} className="google-button">
             <FcGoogle className="google-icon" />
-            Sign in with Google
+            Sign up with Google
           </button>
 
           <div className="toggle-form">
             <p>
-              {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-              <button className="toggle-button" onClick={() => setIsLogin(!isLogin)}>
-                {isLogin ? "Register" : "Sign in"}
-              </button>
+              Already have an account?{" "}
+              <a href="/login" className="toggle-link">
+                Sign in
+              </a>
             </p>
           </div>
         </div>
