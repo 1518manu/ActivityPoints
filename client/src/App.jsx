@@ -14,7 +14,9 @@ function App() {
 
   if (!isLoggedIn) {
     return (<>
-      <SignupPage/>
+      {
+      //<SignupPage/> 
+      }
       <LoginPage onLoginSuccess={handleLoginSuccess} />
     </>)
   }
