@@ -89,10 +89,7 @@ export function LoginPage({ onLoginSuccess }) {
             {error && <div className="error-message">{error}</div>}
 
             <div className="form-footer">
-              <div className="remember-me">
-                <input id="remember-me" name="remember-me" type="checkbox" />
-                <label className="Remember_me" htmlFor="remember-me">Remember me</label>
-              </div>
+             
 
               {isLogin && (
                 <a href="#" onClick={handleForgotPassword} className="forgot-password">

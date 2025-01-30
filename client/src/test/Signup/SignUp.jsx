@@ -3,7 +3,7 @@ import { FcGoogle } from "react-icons/fc"
 import { mockAuthApi } from "./Api"
 import "./SignUp.css"
 
-export function SignUpPage({ onSignUpSuccess }) {
+export function SignupPage({ onSignUpSuccess }) {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")

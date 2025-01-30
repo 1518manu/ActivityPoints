@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { LoginPage} from "./Login/Login"
+import { SignupPage } from './test/Signup/signup'
+
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -11,7 +13,10 @@ function App() {
   }
 
   if (!isLoggedIn) {
-    return <LoginPage onLoginSuccess={handleLoginSuccess} />
+    return (<>
+      <SignupPage/>
+      <LoginPage onLoginSuccess={handleLoginSuccess} />
+    </>)
   }
 
   return (
