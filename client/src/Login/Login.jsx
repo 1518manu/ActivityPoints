@@ -1,50 +1,50 @@
-import React, { useState } from "react"
-import { FcGoogle } from "react-icons/fc"
-import { mockAuthApi } from "./Api"
-import "./Login.css"
+import React, { useState } from "react";
+import { FcGoogle } from "react-icons/fc";
+import { mockAuthApi } from "./Api";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; // Import icons for show/hide
+import "./Login.css";
 
 export function LoginPage({ onLoginSuccess }) {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const [isLogin, setIsLogin] = useState(true)
-  const [isLoading, setIsLoading] = useState(false)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [error, setError] = useState("");
+  const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!email || !password) {
-      setError("Please fill in all fields")
-      return
+      setError("Please fill in all fields");
+      return;
     }
 
-    setIsLoading(true)
-    setError("")
+    setIsLoading(true);
+    setError("");
 
     try {
-      const response = await mockAuthApi(email, password, isLogin ? "login" : "register")
+      const response = await mockAuthApi(email, password, isLogin ? "login" : "register");
 
       if (response.success) {
-        onLoginSuccess(response.token)
+        onLoginSuccess(response.token);
       } else {
-        setError(response.message || "An error occurred")
+        setError(response.message || "An error occurred");
       }
     } catch (error) {
-      setError("An error occurred. Please try again.")
-      console.log(error)
+      setError("An error occurred. Please try again.");
+      console.log(error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleGoogleSignIn = () => {
-    // Implement Google Sign-In logic here
-    console.log("Google Sign-In attempted")
-  }
+    console.log("Google Sign-In attempted");
+  };
 
   const handleForgotPassword = () => {
-    // Implement forgot password logic here
-    console.log("Forgot password for:", email)
-  }
+    console.log("Forgot password for:", email);
+  };
 
   return (
     <div className="login-container">
@@ -60,6 +60,7 @@ export function LoginPage({ onLoginSuccess }) {
               </label>
               <input
                 className="form-input"
+                placeholder = "123456@tkmce.ac.in"
                 id="email"
                 name="email"
                 type="email"
@@ -70,27 +71,35 @@ export function LoginPage({ onLoginSuccess }) {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group relative">
               <label className="form-label" htmlFor="password">
                 Password
               </label>
-              <input
-                className="form-input"
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <div className="password-input-container">
+                <input
+                  className="form-input"
+                  placeholder="Password"
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"} // Toggle password visibility
+                  autoComplete="current-password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                </button>
+              </div>
             </div>
 
             {error && <div className="error-message">{error}</div>}
 
             <div className="form-footer">
-             
-
               {isLogin && (
                 <a href="#" onClick={handleForgotPassword} className="forgot-password">
                   Forgot your password?
@@ -114,6 +123,5 @@ export function LoginPage({ onLoginSuccess }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
-
