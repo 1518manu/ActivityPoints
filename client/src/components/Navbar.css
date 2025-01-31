@@ -1,0 +1,68 @@
+/* Navbar Styling */
+.navbar {
+  background: linear-gradient(#2c3e50, #2c729b, #2c3e50);
+  color: white;
+  padding: 0.6rem 2rem; /* Adjusted padding for better height */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Navbar container for proper alignment */
+.navbar-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 1rem; /* Added padding to ensure equal spacing */
+}
+
+/* Profile section (Left) */
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+.profile:hover {
+  transform: scale(1.05);
+}
+
+/* Profile picture */
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+/* Student name */
+.name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: white;
+}
+
+/* Logout Button (Right) */
+.logout-btn {
+  background: white;
+  color: #205c87;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: #24a9d9;
+  color: #26148d;
+}
