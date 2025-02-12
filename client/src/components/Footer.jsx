@@ -10,6 +10,7 @@ const Footer = () => {
           <p className="footer-description">
             Track your progress, earn rewards, and stay motivated!
           </p>
+          
         </div>
       </div>
       <div className="footer-bottom">
