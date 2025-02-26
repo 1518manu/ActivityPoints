@@ -602,3 +602,23 @@
     color: white;
     line-height: 1.2;
   }
+  .upload-div{
+    width: auto;
+    background-color: transparent;
+    position: fixed;
+    bottom:50px;
+    right: 40px;
+    margin-right: 30px;
+  }
+  .upload-button {
+    display: flex;
+    place-items: center;
+    gap: 19px;
+    padding: 3px 10px;
+    border-radius: 10px;
+    color: #000000;
+    background-color:#e0ebf6;
+    border:1px solid rgb(122, 200, 245);
+    font-weight:bolder;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }

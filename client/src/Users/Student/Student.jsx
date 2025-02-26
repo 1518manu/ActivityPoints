@@ -2,7 +2,7 @@
 // Student.js
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaSearch, FaEdit, FaUser, FaUniversity } from "react-icons/fa"; 
+import { FaSearch, FaEdit, FaUser, FaUniversity, FaUpload } from "react-icons/fa"; 
 import './Student.css';
 
 export const Student = ({ token, onLogout }) => {
@@ -166,7 +166,10 @@ export const Student = ({ token, onLogout }) => {
           </div>
         </div>
       </div>
-      
+      <diV className="upload-div">
+        <button className="upload-button">Upload 
+          <FaUpload style={{ color: "#666868", fontSize: "20px", margin:" 5px 0px",fontWeight: "100" }}/> </button>
+      </diV>
     </div>
   );
 };

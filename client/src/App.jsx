@@ -8,6 +8,7 @@ function App() {
   const [token, setToken] = useState(null);
 
   // Check localStorage for a stored token on initial load
+  
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
