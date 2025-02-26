@@ -29,11 +29,7 @@ export const Student = ({ token, onLogout }) => {
         
         
         <div className="header-right">
-          <img src="/api/placeholder/24/24" alt="Message Icon" className="icon" />
-          <img src="/api/placeholder/24/24" alt="Notification Icon" className="icon" />
-          <div className="profile-thumbnail">
-            <img src="/api/placeholder/36/36" alt="Profile" className="profile-pic-small" />
-          </div>
+         
           <button className="business-btn" onClick={onLogout}>
             Logout
           </button>
@@ -62,52 +58,52 @@ export const Student = ({ token, onLogout }) => {
           <ul className="sidebar-menu">
             <li>
               <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>Registrations/Applications</span>
+              <span>######</span>
             </li>
             <li>
               <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>Referrals</span>
+              <span>######</span>
             </li>
             <li>
               <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>My Rounds</span>
+              <span>######</span>
               <span className="badge">New</span>
             </li>
             <li>
               <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>Unstop Awards Nominations</span>
+              <span>######</span>
             </li>
             <li>
               <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>Watchlist</span>
+              <span>######</span>
             </li>
             <li>
               <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>Recently Viewed</span>
+              <span>######</span>
             </li>
             <li>
               <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>Mentor Sessions</span>
+              <span>######</span>
             </li>
             <li>
               <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>Courses</span>
+              <span>######</span>
             </li>
             <li>
               <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>Certificates</span>
+              <span>######</span>
             </li>
             <li>
               <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>Unstop Coins</span>
+              <span>######</span>
             </li>
             <li>
               <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>Settings</span>
+              <span>######</span>
             </li>
             <li>
               <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>Unstop Pro Subscription</span>
+              <span>######</span>
             </li>
           </ul>
         </div>
@@ -142,15 +138,7 @@ export const Student = ({ token, onLogout }) => {
                   <span>TKM College of Engineering, Kerala</span>
                 </div>
               </div>
-              
-              <div className="profile-actions">
-                <button className="share-btn">
-                  <img src="/api/placeholder/20/20" alt="Share" className="share-icon" />
-                </button>
-                <button className="visibility-btn">
-                  <img src="/api/placeholder/20/20" alt="Visibility" className="visibility-icon" />
-                </button>
-              </div>
+         
             </div>
             
             <div className="section-container">
