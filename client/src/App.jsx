@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { LoginPage } from "./Login/Login";
 import { SignupPage } from "./test/Signup/signup";
-import { Student } from "./Users/Student/Student"
+import { Student } from "./Users/Student/Student";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(null);
@@ -40,6 +40,8 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      
+      <Student/>
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h1 className="text-3xl font-extrabold text-center text-gray-900 mb-6">
           Activity Point System
@@ -53,7 +55,6 @@ function App() {
           Log out
         </button>
       </div>
-      <Student/>
     </div>
   );
 }

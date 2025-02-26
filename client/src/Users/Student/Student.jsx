@@ -1,7 +1,7 @@
 import React from 'react';
 import './Student.css';
 
-const Student = () => {
+export  const Student = () => {
   return (
     <div className="unstop-container">
       {/* Header/Navigation */}
@@ -181,28 +181,7 @@ const Student = () => {
         </div>
       </div>
       
-      {/* Snipping Tool Notification */}
-      <div className="snipping-tool">
-        <div className="snipping-header">
-          <img src="/api/placeholder/20/20" alt="Snipping Tool" className="snipping-icon" />
-          <span>Snipping Tool</span>
-          <div className="snipping-actions">
-            <img src="/api/placeholder/16/16" alt="Options" className="options-icon" />
-            <img src="/api/placeholder/16/16" alt="Close" className="close-icon" />
-          </div>
-        </div>
-        <div className="snipping-content">
-          <p>Screenshot copied to clipboard</p>
-          <p>Automatically saved to screenshots folder.</p>
-          <div className="snipping-buttons">
-            <button className="markup-btn">Mark-up and share</button>
-            <div className="snipping-footer">
-              <button className="cancel-btn">Cancel</button>
-              <button className="next-btn">Next</button>
-            </div>
-          </div>
-        </div>
-      </div>
+     
       
       {/* Footer/Taskbar */}
       <div className="windows-taskbar">
@@ -246,4 +225,3 @@ const Student = () => {
   );
 };
 
-export default Student;
