@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { LoginPage } from "./Login/Login";
 import { Student } from "./Users/Student/Student";
-
+import "./App.css"
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(null);

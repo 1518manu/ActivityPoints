@@ -1,4 +1,4 @@
-/* UnstopProfile.css */
+/* Profile.css */
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +6,7 @@
     font-family: Arial, sans-serif;
   }
   
-  .unstop-container {
+  .container {
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -293,11 +293,18 @@
     border-bottom: 1px solid #e0e0e0;
     position: relative;
   }
-  
   .profile-pic-container {
+    border-radius: 50%;
     position: relative;
+    border: 2px solid #1e67af;
     margin-right: 20px;
+    width: 100px;
+    height: 100px;  /* Ensure it's a square for perfect centering */
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
+  
   
   .profile-pic-large {
     width: 80px;

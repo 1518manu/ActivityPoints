@@ -1,0 +1,8 @@
+button{
+    
+  transition: background-color 0.2s, transform 0.2s ease-in-out;
+}
+
+button:active{
+    transform: scale(0.9);
+  }

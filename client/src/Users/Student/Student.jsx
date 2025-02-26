@@ -2,7 +2,7 @@
 // Student.js
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaSearch, FaEdit } from "react-icons/fa"; 
+import { FaSearch, FaEdit, FaUser, FaUniversity } from "react-icons/fa"; 
 import './Student.css';
 
 export const Student = ({ token, onLogout }) => {
@@ -15,7 +15,7 @@ export const Student = ({ token, onLogout }) => {
   }, [token, navigate]);
 
   return (
-    <div className="unstop-container">
+    <div className="container">
       {/* Header/Navigation */}
       <header className="header">
         <div className="header-left">
@@ -42,7 +42,8 @@ export const Student = ({ token, onLogout }) => {
         {/* Sidebar */}
         <div className="sidebar">
           <div className="sidebar-profile">
-            <img src="/api/placeholder/60/60" alt="Profile" className="profile-pic" />
+            <FaUser style={{ color: "#ccc", fontSize: "40px", margin:"5px",fontWeight: "100" }}/>
+            {/* <img src="/api/placeholder/60/60" alt="Profile" className="profile-pic" /> */}
             <div className="profile-info">
               <h3>Arun M</h3>
               <p>arunmundakkal003@gmail.com</p>
@@ -123,8 +124,8 @@ export const Student = ({ token, onLogout }) => {
           <div className="profile-details">
             <div className="profile-header">
               <div className="profile-pic-container">
-                <img src="/api/placeholder/80/80" alt="Profile" className="profile-pic-large" />
-                <div className="profile-progress">84%</div>
+                <FaUser style={{ color: "#ccc", fontSize: "40px", margin:"5px",fontWeight: "100" }}/>
+                {/*<img src="/api/placeholder/80/80" alt="Profile" className="profile-pic-large" />*/}
               </div>
               
               <div className="profile-header-info">
@@ -135,7 +136,7 @@ export const Student = ({ token, onLogout }) => {
                   <span className="profile-email">arunmundakkal003@gmail.com</span>
                 </div>
                 <div className="profile-education">
-                  <img src="/api/placeholder/16/16" alt="Education" className="education-icon" />
+                  <FaUniversity style={{ fontSize: "15px" ,fontWeight: "100" }} />
                   <span>TKM College of Engineering, Kerala</span>
                 </div>
               </div>
