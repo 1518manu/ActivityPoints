@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { LoginPage } from "./Login/Login";
 import { SignupPage } from "./test/Signup/signup";
-
+import { Student } from "./Users/Student/Student"
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(null);
@@ -53,6 +53,7 @@ function App() {
           Log out
         </button>
       </div>
+      <Student/>
     </div>
   );
 }
