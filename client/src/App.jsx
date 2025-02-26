@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { LoginPage } from "./Login/Login";
 import { Student } from "./Users/Student/Student";
 import { CertificateUploadPage } from "./Users/Upload/Upload";
+import {NotificationContainer } from "./Notification/NotificationContainer";
 import "./App.css"
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
 
   return (
     <Router>
+      <NotificationContainer/>
       <Routes>
         <Route 
           path="/" 

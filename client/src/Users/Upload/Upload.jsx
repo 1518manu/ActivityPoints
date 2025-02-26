@@ -125,7 +125,7 @@ export function CertificateUploadPage() {
 
       {/* Upload Button */}
       <button className="uploadButton" onClick={handleUpload}>
-        Upload
+        Upload  <FaUpload style={{ color: "#ffff", fontSize: "20px", margin:" 5px 0px",fontWeight: "100" }}/>
       </button>
     </div>
   );

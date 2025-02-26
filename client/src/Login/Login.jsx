@@ -2,55 +2,66 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { mockAuthApi } from "./Api";
+import {NotificationContainer } from "../Notification/NotificationContainer";
 import "./Login.css";
 
 export function LoginPage({ onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [notification, setNotification] = useState({ message: "", type: "", show: false });
 
   const navigate = useNavigate();
+
+  const showNotification = (message, type) => {
+    setNotification({ message, type, show: true });
+    setTimeout(() => setNotification({ message: "", type: "", show: false }), 3000);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
-      setError("Please fill in all fields");
+      showNotification("Please fill in all fields", "error");
       return;
     }
-
+  
     setIsLoading(true);
-    setError("");
-
+  
     try {
       const response = await mockAuthApi(email, password, isLogin ? "login" : "register");
-
+  
       if (response.success) {
         onLoginSuccess(response.token);
-        
-        navigate("/dashboard");
+        showNotification("Login Successful!", "success");
+  
+        // Add a short delay before navigating
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1500); // 1.5 seconds delay
       } else {
-        setError(response.message || "An error occurred");
+        showNotification(response.message || "Login Failed!", "error");
       }
     } catch (error) {
-      setError("An error occurred. Please try again.");
-      console.log(error);
+      showNotification("An error occurred. Please try again.", "error");
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   const handleGoogleSignIn = () => {
-    console.log("Google Sign-In attempted");
+    showNotification("Google Sign-In attempted!", "info");
   };
 
   const handleForgotPassword = () => {
-    console.log("Forgot password for:", email);
+    showNotification("Password reset link sent!", "info");
   };
 
   return (
     <div className="login-container">
+      <NotificationContainer message={notification.message} type={notification.type} show={notification.show} />
+      
       <div className="login-content">
         <h1 className="login-title">Activity Point System</h1>
         <h2 className="login-subtitle">Sign in to your account</h2>
@@ -58,9 +69,7 @@ export function LoginPage({ onLoginSuccess }) {
         <div className="login-form">
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label className="form-label" htmlFor="email">
-                Email address
-              </label>
+              <label className="form-label" htmlFor="email">Email address</label>
               <input
                 className="form-input"
                 placeholder="123456@tkmce.ac.in"
@@ -75,9 +84,7 @@ export function LoginPage({ onLoginSuccess }) {
             </div>
 
             <div className="form-group">
-              <label className="form-label" htmlFor="password">
-                Password
-              </label>
+              <label className="form-label" htmlFor="password">Password</label>
               <input
                 className="form-input"
                 placeholder="Password"
@@ -99,8 +106,6 @@ export function LoginPage({ onLoginSuccess }) {
                 <label htmlFor="show-password">Show Password</label>
               </div>
             </div>
-
-            {error && <div className="error-message">{error}</div>}
 
             <div className="form-footer">
               {isLogin && (
