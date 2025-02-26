@@ -14,6 +14,10 @@ export const Student = ({ token, onLogout }) => {
     }
   }, [token, navigate]);
 
+  const openUploadPage = () => {
+    navigate("/upload-certificate");
+  }
+
   return (
     <div className="container">
       {/* Header/Navigation */}
@@ -166,10 +170,10 @@ export const Student = ({ token, onLogout }) => {
           </div>
         </div>
       </div>
-      <diV className="upload-div">
-        <button className="upload-button">Upload 
+      <div className="upload-div">
+        <button className="upload-button" onClick ={openUploadPage} >Upload 
           <FaUpload style={{ color: "#666868", fontSize: "20px", margin:" 5px 0px",fontWeight: "100" }}/> </button>
-      </diV>
+      </div>
     </div>
   );
 };
