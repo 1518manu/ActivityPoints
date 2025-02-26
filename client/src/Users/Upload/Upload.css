@@ -6,6 +6,12 @@
     border-radius: 15px;
     background: #ffffff;
     text-align: center;
+    box-shadow: 0 7px 4px rgba(0, 0, 0, 0.5);
+}
+
+.Upload-Your-Certificate{
+    text-align: left;
+    color: #007bff;
 }
 
 .upload-box {
@@ -16,6 +22,7 @@
     padding: 20px;
     border: 2px dashed #007bff;
     cursor: pointer;
+    background-color: #fafafa;
     margin: 15px 0px;
 }
 

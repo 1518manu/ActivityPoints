@@ -140,7 +140,7 @@ export const Student = ({ token, onLogout }) => {
                   <span className="profile-email">arunmundakkal003@gmail.com</span>
                 </div>
                 <div className="profile-education">
-                  <FaUniversity style={{ fontSize: "15px" ,fontWeight: "100" }} />
+                  <FaUniversity style={{ fontSize: "15px", margin:"10px" ,fontWeight: "100" }} />
                   <span>TKM College of Engineering, Kerala</span>
                 </div>
               </div>
@@ -172,7 +172,7 @@ export const Student = ({ token, onLogout }) => {
       </div>
       <div className="upload-div">
         <button className="upload-button" onClick ={openUploadPage} >Upload 
-          <FaUpload style={{ color: "#666868", fontSize: "20px", margin:" 5px 0px",fontWeight: "100" }}/> </button>
+          <FaUpload style={{ color: "#ffff", fontSize: "20px", margin:" 5px 0px",fontWeight: "100" }}/> </button>
       </div>
     </div>
   );

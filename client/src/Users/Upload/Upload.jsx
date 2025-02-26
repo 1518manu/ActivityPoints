@@ -41,7 +41,7 @@ export function CertificateUploadPage() {
 
   return (
     <div className="upload-container">
-      <h2>Upload Your Certificate</h2>
+      <h2  className= "Upload-Your-Certificate">Upload Your Certificate</h2>
       
       {/* File Upload */}
       <label className="upload-box">
