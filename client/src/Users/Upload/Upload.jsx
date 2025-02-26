@@ -42,7 +42,7 @@ export function CertificateUploadPage() {
         </div>
       )}
 
-      <button className="upload-button" onClick={handleUpload}>Upload</button>
+      <button className="uploadButton" onClick={handleUpload}>Upload</button>
     </div>
   );
 }
