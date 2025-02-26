@@ -1,7 +1,9 @@
+
+// Student.js
 import React from 'react';
 import './Student.css';
 
-export  const Student = () => {
+export const Student = ({ token, onLogout }) => {
   return (
     <div className="unstop-container">
       {/* Header/Navigation */}
@@ -37,9 +39,10 @@ export  const Student = () => {
           <button className="host-btn">
             <span>+</span> Host
           </button>
-          <button className="business-btn">
-            <img src="/api/placeholder/16/16" alt="Business Icon" className="business-icon" />
-            For Business
+          {/* Replaced "For Business" button with Logout button */}
+          <button className="business-btn" onClick={onLogout}>
+            <img src="/api/placeholder/16/16" alt="Logout Icon" className="business-icon" />
+            Logout
           </button>
         </div>
       </header>
@@ -181,8 +184,6 @@ export  const Student = () => {
         </div>
       </div>
       
-     
-      
       {/* Footer/Taskbar */}
       <div className="windows-taskbar">
         <div className="taskbar-left">
@@ -224,4 +225,3 @@ export  const Student = () => {
     </div>
   );
 };
-

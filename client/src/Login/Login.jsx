@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { mockAuthApi } from "./Api";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; // Import icons for show/hide
 import "./Login.css";
 
 export function LoginPage({ onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -60,7 +59,7 @@ export function LoginPage({ onLoginSuccess }) {
               </label>
               <input
                 className="form-input"
-                placeholder = "123456@tkmce.ac.in"
+                placeholder="123456@tkmce.ac.in"
                 id="email"
                 name="email"
                 type="email"
@@ -71,29 +70,29 @@ export function LoginPage({ onLoginSuccess }) {
               />
             </div>
 
-            <div className="form-group relative">
+            <div className="form-group">
               <label className="form-label" htmlFor="password">
                 Password
               </label>
-              <div className="password-input-container">
+              <input
+                className="form-input"
+                placeholder="Password"
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <div className="password-checkbox">
                 <input
-                  className="form-input"
-                  placeholder="Password"
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"} // Toggle password visibility
-                  autoComplete="current-password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  type="checkbox"
+                  id="show-password"
+                  checked={showPassword}
+                  onChange={() => setShowPassword(!showPassword)}
                 />
-                <button
-                  type="button"
-                  className="password-toggle"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-                </button>
+                <label htmlFor="show-password">Show Password</label>
               </div>
             </div>
 
