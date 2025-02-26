@@ -139,7 +139,6 @@
     color: #6b7280;
     font-size: 0.875rem;
   }
-  
   .google-button {
     width: 100%;
     padding: 0.5rem 1rem;
@@ -153,11 +152,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, transform 0.2s ease-in-out; /* Combined transition */
   }
   
   .google-button:hover {
-    background-color: #f9fafb;
+    background-color: #b0b2b4;
+  }
+  
+  .google-button:active {
+    transform: scale(0.9); /* Removes the invalid 'in 1s' */
   }
   
   .google-icon {

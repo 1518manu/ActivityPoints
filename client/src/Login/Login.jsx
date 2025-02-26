@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { mockAuthApi } from "./Api";
 import "./Login.css";
@@ -11,6 +12,7 @@ export function LoginPage({ onLoginSuccess }) {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
@@ -26,6 +28,8 @@ export function LoginPage({ onLoginSuccess }) {
 
       if (response.success) {
         onLoginSuccess(response.token);
+        
+        navigate("/dashboard");
       } else {
         setError(response.message || "An error occurred");
       }

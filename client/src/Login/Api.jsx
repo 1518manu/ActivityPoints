@@ -1,3 +1,4 @@
+
 export async function mockAuthApi(email, password, action) {
 
   // Simulate API delay
@@ -9,9 +10,13 @@ export async function mockAuthApi(email, password, action) {
 
   if (action === "login") {
       if (emailPattern.test(email) && passwordPattern.test(password)) {
-          return { success: true, token: "mock_token_12345" };
+        
+        return { success: true, token: "mock_token_12345" };
+
       } else {
-          return { success: false, message: "Invalid email or password" };
+
+        return { success: false, message: "Invalid email or password" };
+
       }
   } else if (action === "register") {
       // Simulating successful registration

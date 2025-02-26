@@ -1,9 +1,18 @@
 
 // Student.js
-import React from 'react';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import './Student.css';
 
 export const Student = ({ token, onLogout }) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/");
+    }
+  }, [token, navigate]);
+
   return (
     <div className="unstop-container">
       {/* Header/Navigation */}
@@ -18,17 +27,6 @@ export const Student = ({ token, onLogout }) => {
           </div>
         </div>
         
-        <div className="nav-links">
-          <a href="#internships">Internships</a>
-          <a href="#jobs">Jobs</a>
-          <a href="#competitions">Competitions</a>
-          <a href="#mentorships">Mentorships</a>
-          <a href="#practice">Practice</a>
-          <div className="dropdown">
-            <a href="#more">More</a>
-            <img src="/api/placeholder/16/16" alt="Dropdown Icon" className="dropdown-icon" />
-          </div>
-        </div>
         
         <div className="header-right">
           <img src="/api/placeholder/24/24" alt="Message Icon" className="icon" />
@@ -36,12 +34,7 @@ export const Student = ({ token, onLogout }) => {
           <div className="profile-thumbnail">
             <img src="/api/placeholder/36/36" alt="Profile" className="profile-pic-small" />
           </div>
-          <button className="host-btn">
-            <span>+</span> Host
-          </button>
-          {/* Replaced "For Business" button with Logout button */}
           <button className="business-btn" onClick={onLogout}>
-            <img src="/api/placeholder/16/16" alt="Logout Icon" className="business-icon" />
             Logout
           </button>
         </div>
