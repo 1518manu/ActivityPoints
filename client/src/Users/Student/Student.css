@@ -165,6 +165,7 @@
     height: 50px;
     border-radius: 50%;
     object-fit: cover;
+    border:2px solid rgb(66, 66, 240);
   }
   
   .profile-info {
@@ -266,7 +267,7 @@
     right: 10px;
     width: 36px;
     height: 36px;
-    background-color: white;
+    background-color: rgba(166, 190, 251, 0.363);
     border-radius: 50%;
     display: flex;
     align-items: center;

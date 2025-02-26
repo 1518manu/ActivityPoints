@@ -2,6 +2,7 @@
 // Student.js
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaSearch, FaEdit } from "react-icons/fa"; 
 import './Student.css';
 
 export const Student = ({ token, onLogout }) => {
@@ -19,11 +20,11 @@ export const Student = ({ token, onLogout }) => {
       <header className="header">
         <div className="header-left">
           <div className="logo-container">
-            <img src="/api/placeholder/100/40" alt="Unstop Logo" className="logo" />
+            <img src="/api/placeholder/100/40" alt="Logo" className="logo" />
           </div>
           <div className="search-bar">
-            <img src="/api/placeholder/20/20" alt="Search Icon" className="search-icon" />
-            <input type="text" placeholder="Search Opportunities" />
+            <input type="text" placeholder="Search " />
+            <FaSearch style={{ color: "#ccc", fontSize: "20px", margin:" 5px 0px",fontWeight: "100" }}/>
           </div>
         </div>
         
@@ -115,7 +116,7 @@ export const Student = ({ token, onLogout }) => {
               {/* Network graphic background */}
             </div>
             <div className="edit-button">
-              <img src="/api/placeholder/20/20" alt="Edit" className="edit-icon" />
+              <FaEdit style={{ color: "#ccc", fontSize: "15px", margin:"5px",fontWeight: "100" }}/>
             </div>
           </div>
           
@@ -165,44 +166,6 @@ export const Student = ({ token, onLogout }) => {
         </div>
       </div>
       
-      {/* Footer/Taskbar */}
-      <div className="windows-taskbar">
-        <div className="taskbar-left">
-          <img src="/api/placeholder/24/24" alt="Start" className="taskbar-icon" />
-          <div className="search-taskbar">
-            <img src="/api/placeholder/16/16" alt="Search" className="search-taskbar-icon" />
-            <span>Search</span>
-          </div>
-          <div className="taskbar-icons">
-            <img src="/api/placeholder/24/24" alt="App Icon" className="taskbar-app" />
-            <img src="/api/placeholder/24/24" alt="App Icon" className="taskbar-app" />
-            <img src="/api/placeholder/24/24" alt="App Icon" className="taskbar-app" />
-            <img src="/api/placeholder/24/24" alt="App Icon" className="taskbar-app" />
-            <img src="/api/placeholder/24/24" alt="App Icon" className="taskbar-app" />
-            <img src="/api/placeholder/24/24" alt="App Icon" className="taskbar-app" />
-            <img src="/api/placeholder/24/24" alt="App Icon" className="taskbar-app" />
-            <img src="/api/placeholder/24/24" alt="App Icon" className="taskbar-app" />
-            <img src="/api/placeholder/24/24" alt="App Icon" className="taskbar-app" />
-            <img src="/api/placeholder/24/24" alt="App Icon" className="taskbar-app" />
-            <img src="/api/placeholder/24/24" alt="App Icon" className="taskbar-app" />
-            <img src="/api/placeholder/24/24" alt="App Icon" className="taskbar-app" />
-          </div>
-        </div>
-        <div className="taskbar-right">
-          <img src="/api/placeholder/16/16" alt="Up Arrow" className="taskbar-icon-small" />
-          <div className="language-indicator">
-            <span>ENG</span>
-            <span>IN</span>
-          </div>
-          <img src="/api/placeholder/16/16" alt="Network" className="taskbar-icon-small" />
-          <img src="/api/placeholder/16/16" alt="Sound" className="taskbar-icon-small" />
-          <img src="/api/placeholder/16/16" alt="Battery" className="taskbar-icon-small" />
-          <div className="time-date">
-            <div className="time">12:51</div>
-            <div className="date">26-02-2025</div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
