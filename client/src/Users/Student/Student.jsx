@@ -172,7 +172,8 @@ export const Student = ({ token, onLogout }) => {
       </div>
       <div className="upload-div">
         <button className="upload-button" onClick ={openUploadPage} >Upload 
-          <FaUpload style={{ color: "#ffff", fontSize: "20px", margin:" 5px 0px",fontWeight: "100" }}/> </button>
+          <FaUpload style={{ color: "#ffff", fontSize: "20px", margin:" 5px 0px",fontWeight: "100" }}/> 
+        </button>
       </div>
     </div>
   );

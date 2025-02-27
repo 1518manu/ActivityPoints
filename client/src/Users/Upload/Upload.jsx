@@ -132,7 +132,7 @@ export function CertificateUploadPage() {
           ))}
         </select>
       </div>
-
+      
       {/* Institute Dropdown */}
       <div className="input-group">
         <label>Institute:</label>
