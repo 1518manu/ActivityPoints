@@ -5,16 +5,19 @@ import "./Upload.css";
 export function CertificateUploadPage() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
-  const [category, setCategory] = useState("curricular"); // Curricular or Non-curricular
+  const [category, setCategory] = useState("curricular");
   const [eventDate, setEventDate] = useState("");
   const [certificateDate, setCertificateDate] = useState("");
-  const [certificateType, setCertificateType] = useState(" ");
-  const [organization, setOrganization] = useState(" ");
+  const [certificateType, setCertificateType] = useState("");
+  const [organization, setOrganization] = useState("");
   const [institute, setInstitute] = useState("");
 
-  const institutes = ["TKMCE", "CTE", "NSSCE", "", ""];
-  const organizations =[ "IEEE", "IEI", "ACM", "HESTIA", "TINKERHUB"];
-  const certificateTypes = [  "Hackathon" , "Sports" ,  "Arts" ,  "Workshop" , "Volunteering" ,  "NPTEL Course"  , "Internship" , "Webinar" , "Seminar" , "Conference" , "Other" ];
+  const institutes = ["TKMCE", "CTE", "NSSCE"];
+  const organizations = ["IEEE", "IEI", "ACM", "HESTIA", "TINKERHUB"];
+  const certificateTypes = [
+    "Hackathon", "Sports", "Arts", "Workshop", "Volunteering",
+    "NPTEL Course", "Internship", "Webinar", "Seminar", "Conference", "Other"
+  ];
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -25,7 +28,7 @@ export function CertificateUploadPage() {
   };
 
   const handleUpload = () => {
-    if (!selectedFile || !eventDate || !certificateDate) {
+    if (!selectedFile || !eventDate || !certificateDate || !certificateType || !organization || !institute) {
       alert("Please fill all details before uploading!");
       return;
     }
@@ -42,13 +45,13 @@ export function CertificateUploadPage() {
 
     console.log("Uploading Data:", uploadData);
     alert("Certificate uploaded successfully!");
-    // TODO: Handle file upload to backend
+    // TODO: Implement backend file upload
   };
 
   return (
     <div className="upload-container">
-      <h2  className= "Upload-Your-Certificate">Upload Your Certificate</h2>
-      
+      <h2 className="Upload-Your-Certificate">Upload Your Certificate</h2>
+
       {/* File Upload */}
       <label className="upload-box">
         <FaUpload className="upload-icon" />
@@ -74,28 +77,20 @@ export function CertificateUploadPage() {
         <div className="toggle-active"></div>
         <div className={`toggle-button ${category === "curricular" ? "active" : ""}`}>Curricular</div>
         <div className={`toggle-button ${category === "noncurricular" ? "active" : ""}`}>Non-Curricular</div>
-        </div>
-
+      </div>
 
       {/* Date of Event */}
       <div className="input-group">
         <label>Date of Event:</label>
-        <input
-          type="date"
-          value={eventDate}
-          onChange={(e) => setEventDate(e.target.value)}
-        />
+        <input type="date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} />
       </div>
 
       {/* Date of Certificate Provided */}
       <div className="input-group">
         <label>Date Certificate Provided:</label>
-        <input
-          type="date"
-          value={certificateDate}
-          onChange={(e) => setCertificateDate(e.target.value)}
-        />
+        <input type="date" value={certificateDate} onChange={(e) => setCertificateDate(e.target.value)} />
       </div>
+
       {/* Certificate Type Dropdown */}
       <div className="input-group">
         <label>Type of Certificate:</label>
@@ -107,17 +102,13 @@ export function CertificateUploadPage() {
         </select>
       </div>
 
-
       {/* Organization Dropdown */}
       <div className="input-group">
         <label>Organization:</label>
-        <select
-          value={organization}
-          onChange={(e) => setOrganization(e.target.value)}
-        > 
-        <option value="" disabled>Select an Organization</option>
-          {organizations.map((organi) => (
-            <option key={organi} value={organi}>{organi}</option>
+        <select value={organization} onChange={(e) => setOrganization(e.target.value)}>
+          <option value="" disabled>Select an Organization</option>
+          {organizations.map((org) => (
+            <option key={org} value={org}>{org}</option>
           ))}
         </select>
       </div>
