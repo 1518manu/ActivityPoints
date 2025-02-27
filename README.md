@@ -1,6 +1,7 @@
-<a href="https://activity-points.vercel.app/">Web Link</a>
+<a href="https://activity-points.vercel.app/" target = "_blank">Web Link</a>
 
-<a href="https://github.com/1518manu/ActivityPoints.git">github Link</a>
+<a href="https://github.com/1518manu/ActivityPoints.git" target = "_blank">github Link</a>
+
 
 problem statement  
 
