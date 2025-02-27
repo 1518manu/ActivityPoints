@@ -8,8 +8,13 @@ export function CertificateUploadPage() {
   const [category, setCategory] = useState("curricular"); // Curricular or Non-curricular
   const [eventDate, setEventDate] = useState("");
   const [certificateDate, setCertificateDate] = useState("");
-  const [certificateType, setCertificateType] = useState("hackathon");
-  const [organization, setOrganization] = useState("IEEE");
+  const [certificateType, setCertificateType] = useState(" ");
+  const [organization, setOrganization] = useState(" ");
+  const [institute, setInstitute] = useState("");
+
+  const institutes = ["TKMCE", "CTE", "NSSCE", "", ""];
+  const organizations =[ "IEEE", "IEI", "ACM", "HESTIA", "TINKERHUB"];
+  const certificateTypes = [  "Hackathon" , "Sports" ,  "Arts" ,  "Workshop" , "Volunteering" ,  "NPTEL Course"  , "Internship" , "Webinar" , "Seminar" , "Conference" , "Other" ];
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -32,6 +37,7 @@ export function CertificateUploadPage() {
       certificateDate,
       certificateType,
       organization,
+      institute,
     };
 
     console.log("Uploading Data:", uploadData);
@@ -90,22 +96,17 @@ export function CertificateUploadPage() {
           onChange={(e) => setCertificateDate(e.target.value)}
         />
       </div>
-
       {/* Certificate Type Dropdown */}
       <div className="input-group">
         <label>Type of Certificate:</label>
-        <select
-          value={certificateType}
-          onChange={(e) => setCertificateType(e.target.value)}
-        >
-          <option value="hackathon">Hackathon</option>
-          <option value="sports">Sports</option>
-          <option value="arts">Arts</option>
-          <option value="workshop">Workshop</option>
-          <option value="volunteering">Volunteering</option>
-          <option value="nptel">NPTEL Course</option>
+        <select value={certificateType} onChange={(e) => setCertificateType(e.target.value)}>
+          <option value="" disabled>Select a Certificate Type</option>
+          {certificateTypes.map((cert) => (
+            <option key={cert} value={cert}>{cert}</option>
+          ))}
         </select>
       </div>
+
 
       {/* Organization Dropdown */}
       <div className="input-group">
@@ -113,15 +114,24 @@ export function CertificateUploadPage() {
         <select
           value={organization}
           onChange={(e) => setOrganization(e.target.value)}
-        >
-          <option value="IEEE">IEEE</option>
-          <option value="IEI">IEI</option>
-          <option value="ACM">ACM</option>
-          <option value="HESTIA">HESTIA</option>
-          <option value="TINKERHUB">TINKERHUB</option>
+        > 
+        <option value="" disabled>Select an Organization</option>
+          {organizations.map((organi) => (
+            <option key={organi} value={organi}>{organi}</option>
+          ))}
         </select>
       </div>
 
+      {/* Institute Dropdown */}
+      <div className="input-group">
+        <label>Institute:</label>
+        <select value={institute} onChange={(e) => setInstitute(e.target.value)}>
+          <option value="" disabled>Select an Institute</option>
+          {institutes.map((inst) => (
+            <option key={inst} value={inst}>{inst}</option>
+          ))}
+        </select>
+      </div>
 
       {/* Upload Button */}
       <button className="uploadButton" onClick={handleUpload}>
