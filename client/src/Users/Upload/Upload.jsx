@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaUpload, FaFile } from "react-icons/fa";
+import { NotificationContainer } from "../../Notification/NotificationContainer";
 import "./Upload.css";
 
 export function CertificateUploadPage() {
@@ -10,7 +12,9 @@ export function CertificateUploadPage() {
   const [certificateDate, setCertificateDate] = useState("");
   const [certificateType, setCertificateType] = useState("");
   const [organization, setOrganization] = useState("");
-  const [institute, setInstitute] = useState("");
+  const [institute, setInstitute] = useState("");const [notification, setNotification] = useState({ message: "", type: "", show: false });
+  
+  const navigate = useNavigate();
 
   const institutes = ["TKMCE", "CTE", "NSSCE"];
   const organizations = ["IEEE", "IEI", "ACM", "HESTIA", "TINKERHUB"];
@@ -27,9 +31,16 @@ export function CertificateUploadPage() {
     }
   };
 
+  const showNotification = (message, type) => {
+    setNotification({ message, type, show: true });
+    setTimeout(() => setNotification({ message: "", type: "", show: false }), 3000);
+  };
+
+
   const handleUpload = () => {
     if (!selectedFile || !eventDate || !certificateDate || !certificateType || !organization || !institute) {
-      alert("Please fill all details before uploading!");
+      showNotification("Please fill all details before uploading!", "error");
+      //alert("Please fill all details before uploading!");
       return;
     }
 
@@ -44,12 +55,19 @@ export function CertificateUploadPage() {
     };
 
     console.log("Uploading Data:", uploadData);
-    alert("Certificate uploaded successfully!");
+    showNotification("upload Successful!", "success");
+    //alert("Certificate uploaded successfully!");
+    // Add a short delay before navigating
+    setTimeout(() => {
+      navigate("/dashboard");
+    }, 1500); // 1.5 seconds delay
+
     // TODO: Implement backend file upload
   };
 
   return (
     <div className="upload-container">
+      <NotificationContainer message={notification.message} type={notification.type} show={notification.show} />
       <h2 className="Upload-Your-Certificate">Upload Your Certificate</h2>
 
       {/* File Upload */}
