@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaUpload } from "react-icons/fa";
+import { FaUpload, FaFile } from "react-icons/fa";
 import "./Upload.css";
 
 export function CertificateUploadPage() {
@@ -62,7 +62,9 @@ export function CertificateUploadPage() {
       {/* Preview */}
       {previewUrl && (
         <div className="preview-container">
-          <p>Selected File: {selectedFile.name}</p>
+          <p>
+           <FaFile style={{ color: "#868282", fontSize: "20px", margin:"0px 10px 0px 0px ",fontWeight: "100" }}/>
+            Selected File: {selectedFile.name}</p>
           {selectedFile.type.startsWith("image/") && (
             <img src={previewUrl} alt="Certificate Preview" className="preview-image" />
           )}
