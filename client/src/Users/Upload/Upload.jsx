@@ -12,16 +12,15 @@ export function CertificateUploadPage() {
   const [certificateDate, setCertificateDate] = useState("");
   const [certificateType, setCertificateType] = useState("");
   const [organization, setOrganization] = useState("");
-  const [institute, setInstitute] = useState("");const [notification, setNotification] = useState({ message: "", type: "", show: false });
+  const [institute, setInstitute] = useState("");
+  const [notification, setNotification] = useState({ message: "", type: "", show: false });
   
   const navigate = useNavigate();
 
   const institutes = ["TKMCE", "CTE", "NSSCE"];
   const organizations = ["IEEE", "IEI", "ACM", "HESTIA", "TINKERHUB"];
-  const certificateTypes = [
-    "Hackathon", "Sports", "Arts", "Workshop", "Volunteering",
-    "NPTEL Course", "Internship", "Webinar", "Seminar", "Conference", "Other"
-  ];
+  const certificateTypes = ["Hackathon", "Sports", "Arts", "Workshop", "Volunteering",
+    "NPTEL Course", "Internship", "Webinar", "Seminar", "Conference", "Other"];
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];

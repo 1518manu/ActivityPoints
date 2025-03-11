@@ -44,75 +44,13 @@ export const Student = ({ token, onLogout }) => {
       {/* Main Content */}
       <div className="main-content">
         {/* Sidebar */}
-        <div className="sidebar">
-          <div className="sidebar-profile">
-            <FaUser style={{ color: "#ccc", fontSize: "40px", margin:"5px",fontWeight: "100" }}/>
-            {/* <img src="/api/placeholder/60/60" alt="Profile" className="profile-pic" /> */}
-            <div className="profile-info">
-              <h3>Arun M</h3>
-              <p>arunmundakkal003@gmail.com</p>
-            </div>
+        <div class="sidebar-menu">
+            <button><img src="dashboard-icon.svg" class="menu-icon"/> Dashboard</button>
+            <button><img src="settings-icon.svg" class="menu-icon"/> Settings</button>
+            <button><img src="messages-icon.svg" class="menu-icon"/> Messages <span class="badge">new</span></button>
+            <button><img src="notifications-icon.svg" class="menu-icon"/> Notifications</button>
+            <button><img src="logout-icon.svg" class="menu-icon"/> Logout</button>
           </div>
-          
-          <div className="profile-completion">
-            <div className="progress-bar">
-              <div className="progress" style={{ width: '84%' }}></div>
-            </div>
-            <span className="progress-text">84%</span>
-          </div>
-          
-          <ul className="sidebar-menu">
-            <li>
-              <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>######</span>
-            </li>
-            <li>
-              <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>######</span>
-            </li>
-            <li>
-              <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>######</span>
-              <span className="badge">New</span>
-            </li>
-            <li>
-              <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>######</span>
-            </li>
-            <li>
-              <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>######</span>
-            </li>
-            <li>
-              <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>######</span>
-            </li>
-            <li>
-              <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>######</span>
-            </li>
-            <li>
-              <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>######</span>
-            </li>
-            <li>
-              <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>######</span>
-            </li>
-            <li>
-              <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>######</span>
-            </li>
-            <li>
-              <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>######</span>
-            </li>
-            <li>
-              <img src="/api/placeholder/20/20" alt="Icon" className="menu-icon" />
-              <span>######</span>
-            </li>
-          </ul>
-        </div>
         
         {/* Profile Content */}
         <div className="profile-content">

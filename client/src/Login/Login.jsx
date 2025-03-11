@@ -39,6 +39,7 @@ export function LoginPage({ onLoginSuccess }) {
         setTimeout(() => {
           navigate("/dashboard");
         }, 1500); // 1.5 seconds delay
+        
       } else {
         showNotification(response.message || "Login Failed!", "error");
       }
