@@ -37,6 +37,7 @@ export function LoginPage({ onLoginSuccess }) {
   
         // Add a short delay before navigating
         setTimeout(() => {
+          console.log("dashboard");
           navigate("/dashboard");
         }, 1500); // 1.5 seconds delay
         
