@@ -45,7 +45,7 @@ export const Student = ({ token, onLogout }) => {
       <div className="main-content">
         {/* Sidebar */}
         <div class="sidebar-menu">
-            <button><img src="dashboard-icon.svg" class="menu-icon"/> Certicicates</button>
+            <button><img src="dashboard-icon.svg" class="menu-icon"/> Certificates</button>
             <button><img src="settings-icon.svg" class="menu-icon"/> Settings</button>
             <button><img src="messages-icon.svg" class="menu-icon"/> Messages <span class="badge">new</span></button>
             <button><img src="notifications-icon.svg" class="menu-icon"/> Notifications</button>
