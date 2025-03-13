@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { mockAuthApi } from "./Api";
@@ -36,10 +36,17 @@ export function LoginPage({ onLoginSuccess }) {
         showNotification("Login Successful!", "success");
   
         // Add a short delay before navigating
-        setTimeout(() => {
-          console.log("dashboard");
-          navigate("/dashboard");
-        }, 1500); // 1.5 seconds delay
+        
+        useEffect(() => {
+          const token = localStorage.getItem("token");
+          if (token) {
+            setTimeout(() => {
+              navigate("/StudentDashboard");
+              console.log("Navigating to Student Dashboard...");
+            }, 500);
+          }
+        }, []);
+        
         
       } else {
         showNotification(response.message || "Login Failed!", "error");

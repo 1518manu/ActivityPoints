@@ -26,6 +26,8 @@ function App() {
     setIsLoggedIn(true);
     setToken(token);
     localStorage.setItem("token", token);
+    
+  window.location.href = "/StudentDashboard";
   };
 
   // Logout function: Remove token from localStorage
@@ -44,7 +46,7 @@ function App() {
           element={<LoginPage onLoginSuccess={handleLoginSuccess} />} 
         />
         <Route 
-          path="/dashboard" 
+          path="/StudentDashboard" 
           element={isLoggedIn ? <Student token={token} onLogout={handleLogout} /> : <LoginPage onLoginSuccess={handleLoginSuccess} />}
         />
         <Route path="/upload-certificate" element={<CertificateUploadPage />} />
