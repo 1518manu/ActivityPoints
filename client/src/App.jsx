@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import {app} from "./firebase/firebaseConfid"; 
+import {app} from "./firebaseFile/firebaseConfid"; 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { LoginPage } from "./Login/Login";
 import { Student } from "./Users/Student/Student";

@@ -1,4 +1,4 @@
-import { getAuth, signInWithEmailAndPassword } from "../firebase/firebaseConfid";
+import { getAuth, signInWithEmailAndPassword } from "../firebaseFile/firebaseConfid";
 
 const auth = getAuth();
 
