@@ -20,7 +20,7 @@ export const Certificate = () => {
         console.error("Error fetching certificates:", error);
       }
     };
-    
+
     fetchCertificates();
   }, []);
 
@@ -35,9 +35,11 @@ export const Certificate = () => {
               <p><strong>Issued By:</strong> {cert.issuer}</p>
               <p><strong>Date:</strong> {cert.date}</p>
               <p><strong>Description:</strong> {cert.description}</p>
-              <a href={cert.fileUrl} target="_blank" rel="noopener noreferrer" className="view-button">
-                View Certificate
-              </a>
+              <img 
+                src={cert.fileUrl} 
+                alt={`Certificate for ${cert.title}`} 
+                className="certificate-image"
+              />
             </div>
           ))
         ) : (
