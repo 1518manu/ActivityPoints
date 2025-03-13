@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { LoginPage } from "./Login/Login";
 import { Student } from "./Users/Student/Student";
 import { CertificateUploadPage } from "./Users/Upload/Upload";
+import { Certificate } from "./Users/Student/Certificates/Certificate";
 import { NotificationContainer } from "./Notification/NotificationContainer";
 import "./App.css";
 
@@ -46,6 +47,7 @@ function App() {
           element={isLoggedIn ? <Student token={token} onLogout={handleLogout} /> : <LoginPage onLoginSuccess={handleLoginSuccess} />}
         />
         <Route path="/upload-certificate" element={<CertificateUploadPage />} />
+        <Route path="/certificate" element={<Certificate />} />
       </Routes>
     </Router>
   );

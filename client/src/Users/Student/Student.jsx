@@ -1,5 +1,3 @@
-
-// Student.js
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaSearch, FaEdit, FaUser, FaUniversity, FaUpload } from "react-icons/fa"; 
@@ -17,7 +15,11 @@ export const Student = ({ token, onLogout }) => {
   const openUploadPage = () => {
     navigate("/upload-certificate");
   }
-
+  
+  const OnCertificate = () => {
+    navigate("/certificate");
+  }
+  
   return (
     <div className="container">
       {/* Header/Navigation */}
@@ -32,9 +34,7 @@ export const Student = ({ token, onLogout }) => {
           </div>
         </div>
         
-        
         <div className="header-right">
-         
           <button className="business-btn" onClick={onLogout}>
             Logout
           </button>
@@ -44,12 +44,12 @@ export const Student = ({ token, onLogout }) => {
       {/* Main Content */}
       <div className="main-content">
         {/* Sidebar */}
-        <div class="sidebar-menu">
-            <button><img src="dashboard-icon.svg" class="menu-icon"/> Certificates</button>
-            <button><img src="settings-icon.svg" class="menu-icon"/> Settings</button>
-            <button><img src="messages-icon.svg" class="menu-icon"/> Messages <span class="badge">new</span></button>
-            <button><img src="notifications-icon.svg" class="menu-icon"/> Notifications</button>
-            <button><img src="logout-icon.svg" class="menu-icon"/> Logout</button>
+        <div className="sidebar-menu">
+            <button onClick={OnCertificate}><img src="dashboard-icon.svg" className="menu-icon"/> Certificates</button>
+            <button><img src="settings-icon.svg" className="menu-icon"/> Settings</button>
+            <button><img src="messages-icon.svg" className="menu-icon"/> Messages <span className="badge">new</span></button>
+            <button><img src="notifications-icon.svg" className="menu-icon"/> Notifications</button>
+            <button><img src="logout-icon.svg" className="menu-icon"/> Logout</button>
           </div>
         
         {/* Profile Content */}
@@ -67,7 +67,6 @@ export const Student = ({ token, onLogout }) => {
             <div className="profile-header">
               <div className="profile-pic-container">
                 <FaUser style={{ color: "#ccc", fontSize: "40px", margin:"5px",fontWeight: "100" }}/>
-                {/*<img src="/api/placeholder/80/80" alt="Profile" className="profile-pic-large" />*/}
               </div>
               
               <div className="profile-header-info">
@@ -82,7 +81,6 @@ export const Student = ({ token, onLogout }) => {
                   <span>TKM College of Engineering, Kerala</span>
                 </div>
               </div>
-         
             </div>
             
             <div className="section-container">
@@ -109,7 +107,7 @@ export const Student = ({ token, onLogout }) => {
         </div>
       </div>
       <div className="upload-div">
-        <button className="upload-button" onClick ={openUploadPage} >Upload 
+        <button className="upload-button" onClick={openUploadPage}>Upload 
           <FaUpload style={{ color: "#ffff", fontSize: "20px", margin:" 5px 0px",fontWeight: "100" }}/> 
         </button>
       </div>
