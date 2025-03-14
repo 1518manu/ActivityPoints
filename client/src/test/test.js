@@ -1,83 +1,68 @@
-import { 
-  getAuth, 
-  createUserWithEmailAndPassword, 
-  GoogleAuthProvider, 
-  signInWithPopup, 
-  signInWithEmailAndPassword, 
-  getAdditionalUserInfo, 
-  linkWithCredential, 
-  EmailAuthProvider 
-} from "firebase/auth";
+import { useState, useEffect } from "react";
+import { app } from "./firebaseFile/firebaseConfid"; 
+import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { LoginPage } from "./Login/Login";
+import { Student } from "./Users/Student/Student";
+import { CertificateUploadPage } from "./Users/Upload/Upload";
+import { Certificate } from "./Users/Student/Certificates/Certificate";
+import { NotificationContainer } from "./Notification/NotificationContainer";
+import "./App.css";
 
+function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState(null);
 
-const auth = getAuth();
-// ----------------------- Email/Password Signup -----------------------
-export const handleEmailPasswordSignup = async (email, password) => {
-  console.log("Email:", email);
-  console.log ("Password:", password);
-  try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      console.log("Email/Password Sign-up successful:", userCredential.user);
-      return userCredential.user;
-  } catch (error) {
-      if (error.code === 'auth/email-already-in-use') {
-          console.error("Email already in use. Attempting linking...");
-          return handleExistingEmail(email);  // Handle linking logic
-      }
-      console.error("Email/Password Sign-up failed:", error);
-      alert(`Error: ${error.message} (Code: ${error.code})`);
-      throw error;
-  }
-};
+  const auth = getAuth(app);
 
-// ----------------------- Google Signup -----------------------
-const handleGoogleSignup = async () => {
-  const provider = new GoogleAuthProvider();
-  try {
-      const result = await signInWithPopup(auth, provider);
-      const additionalUserInfo = getAdditionalUserInfo(result);
-
-      if (additionalUserInfo?.isNewUser) {
-          console.log("Google Sign-up successful:", result.user);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsLoggedIn(true);
+        setToken(localStorage.getItem("token"));
       } else {
-          console.log("Google Sign-in successful (existing user):", result.user);
+        setIsLoggedIn(false);
+        setToken(null);
       }
-      return result.user;
-  } catch (error) {
-      if (error.code === 'auth/account-exists-with-different-credential') {
-          console.error("Account exists with different credential. Attempting linking...");
-          return handleExistingEmail(error.customData.email); 
-      }
-      console.error("Google Sign-up/in failed:", error);
-      alert(`Error: ${error.message} (Code: ${error.code})`);
-      throw error;
-  }
-};
+    });
 
-// ----------------------- Account Linking -----------------------
-const handleExistingEmail = async (email) => {
-  const password = prompt(`Email "${email}" is already registered. Enter your password to link accounts:`);
+    return () => unsubscribe();
+  }, [auth]);
 
-  if (!password) {
-      alert("Password entry was canceled. Linking aborted.");
-      throw new Error("Password entry aborted");
-  }
+  const handleLoginSuccess = (token) => {
+    setIsLoggedIn(true);
+    setToken(token);
+    localStorage.setItem("token", token);
+  };
 
-  try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const provider = new GoogleAuthProvider();
-      const result = await linkWithCredential(userCredential.user, provider.credential());
-      
-      console.log("Account linked successfully:", result.user);
-      alert("Accounts linked successfully!");
-      return result.user;
-  } catch (error) {
-      console.error("Account linking failed:", error);
-      alert(`Error linking accounts: ${error.message}`);
-      throw error;
-  }
-};
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setIsLoggedIn(false);
+      setToken(null);
+      localStorage.removeItem("token");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
 
-// Example Usage
- handleEmailPasswordSignup("220294@tkmce.ac.in", "B22CSA14");
-// handleGoogleSignup();
+  return (
+    <Router>
+      <NotificationContainer />
+      <Routes>
+        <Route 
+          path="/" 
+          element={<LoginPage onLoginSuccess={handleLoginSuccess} />} 
+        />
+        <Route 
+          path="/StudentDashboard" 
+          element={isLoggedIn ? <Student token={token} onLogout={handleLogout} /> : <LoginPage onLoginSuccess={handleLoginSuccess} />} 
+        />
+        <Route path="/upload-certificate" element={<CertificateUploadPage />} />
+        <Route path="/certificate" element={<Certificate />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;

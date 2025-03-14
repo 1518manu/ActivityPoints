@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { mockAuthApi } from "./AuthApi/Api";
 import { signInWithGoogle } from "./AuthApi/GoogleAuth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import {NotificationContainer } from "../Notification/NotificationContainer";
 import "./Login.css";
 
@@ -15,6 +16,20 @@ export function LoginPage({ onLoginSuccess }) {
   const [notification, setNotification] = useState({ message: "", type: "", show: false });
 
   const navigate = useNavigate();
+  const auth = getAuth();
+  
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User is logged in:", user);
+        navigate("/StudentDashboard");
+      } else {
+        console.log("User is logged out", user);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [auth, navigate]);
 
   const showNotification = (message, type) => {
     setNotification({ message, type, show: true });

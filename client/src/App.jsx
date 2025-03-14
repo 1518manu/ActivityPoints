@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import {app} from "./firebaseFile/firebaseConfid"; 
+import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { LoginPage } from "./Login/Login";
 import { Student } from "./Users/Student/Student";
@@ -13,14 +14,23 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(null);
   
-  // Check localStorage for a stored token on initial load
+  // Check localStorage for a stored token on initial load for login checking..
+
+  const auth = getAuth(app);
+
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setIsLoggedIn(true);
-      setToken(storedToken);
-    }
-  }, []);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsLoggedIn(true);
+        setToken(localStorage.getItem("token"));
+      } else {
+        setIsLoggedIn(false);
+        setToken(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [auth]);
 
   // Handle login success and store token in localStorage
   const handleLoginSuccess = (token) => {
@@ -31,11 +41,16 @@ function App() {
   };
 
   // Logout function: Remove token from localStorage
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    setToken(null);
-    localStorage.removeItem("token");
-  };
+  const handleLogout = async () => {
+     try {
+       await signOut(auth);
+       setIsLoggedIn(false);
+       setToken(null);
+       localStorage.removeItem("token");
+     } catch (error) {
+       console.error("Error logging out:", error);
+     }
+   };
 
   return (
     <Router>
