@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-import { mockAuthApi } from "./Api";
+import { mockAuthApi } from "./AuthApi/Api";
+import { signInWithGoogle } from "./AuthApi/GoogleAuth";
 import {NotificationContainer } from "../Notification/NotificationContainer";
 import "./Login.css";
 
@@ -54,8 +55,32 @@ export function LoginPage({ onLoginSuccess }) {
   };
   
 
-  const handleGoogleSignIn = () => {
-    showNotification("Google Sign-In attempted!", "info");
+  const handleGoogleSignIn = async (e) => {
+    e.preventDefault();
+    
+    setIsLoading(true);
+    
+    try {
+      const response = await signInWithGoogle("login");
+      
+      console.log(response);
+      if (response.success) {
+        onLoginSuccess(response.token);
+        showNotification("Login Successful!", "success");
+
+        console.log("Google Sign In");
+        localStorage.setItem("token", response.token);
+        setTimeout(() => navigate("/StudentDashboard"), 1400);
+      } else {
+        showNotification(response.error || "Login Failed!", "error");
+      }
+
+    } catch (error) {
+      showNotification("An error occurred. Please try again.", "error");
+    } finally {
+      setIsLoading(false);
+    }
+    
   };
 
   const handleForgotPassword = () => {
