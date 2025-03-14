@@ -27,7 +27,6 @@ function App() {
     setToken(token);
     localStorage.setItem("token", token);
     
-  window.location.href = "/StudentDashboard";
   };
 
   // Logout function: Remove token from localStorage

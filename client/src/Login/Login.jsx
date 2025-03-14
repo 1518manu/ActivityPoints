@@ -30,29 +30,24 @@ export function LoginPage({ onLoginSuccess }) {
   
     try {
       const response = await mockAuthApi(email, password, isLogin ? "login" : "register");
-  
+      console.log(response);
       if (response.success) {
+        console.log(response.token);
         onLoginSuccess(response.token);
         showNotification("Login Successful!", "success");
+        
   
         // Add a short delay before navigating
+        localStorage.setItem("token", response.token);
+        setTimeout(() => navigate("/StudentDashboard"), 1400);
         
-        useEffect(() => {
-          const token = localStorage.getItem("token");
-          if (token) {
-            setTimeout(() => {
-              navigate("/StudentDashboard");
-              console.log("Navigating to Student Dashboard...");
-            }, 500);
-          }
-        }, []);
         
         
       } else {
         showNotification(response.message || "Login Failed!", "error");
       }
     } catch (error) {
-      showNotification("An error occurred. Please try again.", "error");
+      showNotification("An error occurred . Please try again.", "error");
     } finally {
       setIsLoading(false);
     }
