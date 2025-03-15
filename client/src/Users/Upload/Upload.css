@@ -94,13 +94,27 @@
     color: #007bff;
   }
   
-  .upload-button {
+  /* .upload-button {
     display: flex;
     align-items: center;
     gap: 10px;
     justify-content: center;
     margin-top: 20px;
-  }
+  } */
+  .uploadButton {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    gap: 19px;
+    place-items: center;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 50px;
+    align-items: center;
+}
   
   .upload-button svg {
     font-size: 18px;
@@ -111,4 +125,63 @@
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
   }
-  
+  .upload-box {
+    display: flex;
+    place-items: center;
+    border-radius: 8px;
+    align-items: center;
+    gap: 19px;
+    height: 200px;
+    padding: 20px;
+    border: 2px dashed #007bff;
+    cursor: pointer;
+    background-color: #fafafa;
+    margin: 15px 0px;
+}
+.Upload-Your-Certificate{
+  text-align: left;
+  color: #007bff;
+}
+.toggle-group {
+  display: flex;
+  position: relative;
+  width: 200px; /* Adjust width as needed */
+  height: 40px;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1.5px solid #007bff;
+}
+
+.toggle-button {
+  width: 50%;
+  height: 100%;
+  text-align: center;
+  font-size: 13px;
+  line-height: 40px;
+  color: #007bff;
+  transition: color 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.toggle-active {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: #007bff;
+  border-radius: 10px;
+  transition: left 0.3s ease;
+  z-index: 1;
+}
+
+.toggle-group.noncurricular .toggle-active {
+  left: 50%;
+}
+
+.toggle-group .toggle-button.active {
+  color: white;
+}

@@ -150,7 +150,6 @@
 //   //   // TODO: Implement backend file upload
 //   // };
 //   //----------------------------------------
-  
 // //----------------------------------------
 //   return (
 //     <div className="upload-container">
@@ -267,11 +266,13 @@ export function CertificateUploadPage() {
   const [organization, setOrganization] = useState("");
   const [institute, setInstitute] = useState("");
   const [notification, setNotification] = useState({ message: "", type: "", show: false });
+  
+
 
   const navigate = useNavigate();
   const auth = getAuth(); // Get authenticated user
   const db = getFirestore(app);
-  const storage = getStorage(app);
+  //const storage = getStorage(app);
 
   const institutes = ["TKMCE", "CTE", "NSSCE"];
   const organizations = ["IEEE", "IEI", "ACM", "HESTIA", "TINKERHUB"];
@@ -300,135 +301,127 @@ export function CertificateUploadPage() {
   };
 
   // // 🔹 Function to Upload PDF and Save Data
+  //FIREBASE STORAGE
+  // const handleUpload = async () => {
+  //   if (!selectedFile || !eventDate || !certificateDate || !certificateType || !organization || !institute) {
+  //     showNotification("Please fill all details before uploading!", "error");
+  //     return;
+  //   }
+
+  //   const user = auth.currentUser;
+  //   if (!user) {
+  //     showNotification("User not logged in!", "error");
+  //     return;
+  //   }
+
+  //   const userId = user.uid; // Get logged-in user's ID
+  //   const storageRef = ref(storage, `certificates/${userId}/${selectedFile.name}`);
+
+  //   try {
+  //     // Upload the file to Firebase Storage
+  //     await uploadBytes(storageRef, selectedFile);
+  //     const fileURL = await getDownloadURL(storageRef);
+
+  //     // Save certificate details & file URL to Firestore
+  //     const docRef = await addDoc(collection(db, "certificates"), {
+  //       userId,
+  //       fileURL,
+  //       category,
+  //       eventDate,
+  //       certificateDate,
+  //       certificateType,
+  //       organization,
+  //       institute,
+  //       uploadedAt: new Date(),
+  //     });
+
+  //     console.log("Certificate uploaded with ID:", docRef.id);
+  //     showNotification("Upload Successful!", "success");
+
+  //     setTimeout(() => {
+  //       navigate("/StudentDashboard");
+  //     }, 1500);
+  //   } catch (error) {
+  //     console.error("Upload failed:", error);
+  //     showNotification("File upload failed!", "error");
+  //   }
+  // };
+
+  //--------Cloudinary
   const handleUpload = async () => {
     if (!selectedFile || !eventDate || !certificateDate || !certificateType || !organization || !institute) {
       showNotification("Please fill all details before uploading!", "error");
       return;
     }
-
+  
     const user = auth.currentUser;
     if (!user) {
       showNotification("User not logged in!", "error");
       return;
     }
-
-    const userId = user.uid; // Get logged-in user's ID
-    const storageRef = ref(storage, `certificates/${userId}/${selectedFile.name}`);
-
+  
+    const userId = user.uid;
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("upload_preset", "certificates_upload"); // Replace with your Cloudinary preset
+    formData.append("folder", `certificates/${userId}`); // Create user-specific folders
+  
     try {
-      // Upload the file to Firebase Storage
-      await uploadBytes(storageRef, selectedFile);
-      const fileURL = await getDownloadURL(storageRef);
-
-      // Save certificate details & file URL to Firestore
-      const docRef = await addDoc(collection(db, "certificates"), {
-        userId,
-        fileURL,
-        category,
-        eventDate,
-        certificateDate,
-        certificateType,
-        organization,
-        institute,
-        uploadedAt: new Date(),
+      // 🔹 Upload file to Cloudinary
+      const response = await fetch("https://api.cloudinary.com/v1_1/dbcaiomnc/raw/upload", {
+        method: "POST",
+        body: formData,
       });
+  
+      if (!response.ok) throw new Error("Cloudinary upload failed");
+  
+      const data = await response.json();
+      if (data.secure_url) {
+        const fileURL = data.secure_url; // This is the URL of the uploaded PDF file
 
-      console.log("Certificate uploaded with ID:", docRef.id);
-      showNotification("Upload Successful!", "success");
+        // Save certificate details & file URL to Firestore
+        const docRef = await addDoc(collection(db, "certificates"), {
+            userId,
+            fileURL,
+            category,
+            eventDate,
+            certificateDate,
+            certificateType,
+            organization,
+            institute,
+            uploadedAt: new Date(),
+        });
 
-      setTimeout(() => {
-        navigate("/StudentDashboard");
-      }, 1500);
-    } catch (error) {
-      console.error("Upload failed:", error);
-      showNotification("File upload failed!", "error");
+        console.log("Certificate uploaded with ID:", docRef.id);
+        showNotification("Upload Successful!", "success");
+
+        setTimeout(() => {
+            navigate("/StudentDashboard");
+        }, 1500);
+    } else {
+        showNotification("File upload failed!", "error");
     }
-  };
-
-  //--------Cloudinary
-//   const handleUpload = async () => {
-//     if (!selectedFile || !eventDate || !certificateDate || !certificateType || !organization || !institute) {
-//       showNotification("Please fill all details before uploading!", "error");
-//       return;
-//     }
-  
-//     const user = auth.currentUser;
-//     if (!user) {
-//       showNotification("User not logged in!", "error");
-//       return;
-//     }
-  
-//     const userId = user.uid;
-//     const formData = new FormData();
-//     formData.append("file", selectedFile);
-//     formData.append("upload_preset", "certificates_upload"); // Replace with your Cloudinary preset
-//     formData.append("folder", `certificates/${userId}`); // Create user-specific folders
-  
-//     try {
-//       // 🔹 Upload file to Cloudinary
-//       const response = await fetch("https://api.cloudinary.com/v1_1/dbcaiomnc/raw/upload", {
-//         method: "POST",
-//         body: formData,
-//       });
-  
-//       if (!response.ok) throw new Error("Cloudinary upload failed");
-  
-//       const data = await response.json();
-//       if (data.secure_url) {
-//         const fileURL = data.secure_url; // This is the URL of the uploaded PDF file
-
-//         // Save certificate details & file URL to Firestore
-//         const docRef = await addDoc(collection(db, "certificates"), {
-//             userId,
-//             fileURL,
-//             category,
-//             eventDate,
-//             certificateDate,
-//             certificateType,
-//             organization,
-//             institute,
-//             uploadedAt: new Date(),
-//         });
-
-//         console.log("Certificate uploaded with ID:", docRef.id);
-//         showNotification("Upload Successful!", "success");
-
-//         setTimeout(() => {
-//             navigate("/StudentDashboard");
-//         }, 1500);
-//     } else {
-//         showNotification("File upload failed!", "error");
-//     }
-// } catch (error) {
-//     console.error("Upload failed:", error);
-//     showNotification("File upload failed!", "error");
-// }
-// };
+} catch (error) {
+    console.error("Upload failed:", error);
+    showNotification("File upload failed!", "error");
+}
+};
 ///----------------------------------------cloudinary
   
 
-  return (
+ return (
     <div className="upload-container">
-      <h2>Upload Your Certificate</h2>
+      <NotificationContainer message={notification.message} type={notification.type} show={notification.show} />
+      <h2 className="Upload-Your-Certificate">Upload Your Certificate</h2>
 
-      {error && <div className="error-message">{error}</div>}
-
-      <div className="input-group">
-        <label>Certificate Name:</label>
-        <input
-          type="text"
-          value={certificateName}
-          onChange={(e) => setCertificateName(e.target.value)}
-          placeholder="Enter Certificate Name"
-          aria-label="Certificate Name"
-        />
-      </div>
-
-      <label className="file-input">
-        <FaUpload /> Select Certificate
-        <input type="file" accept=".pdf, .jpg, .png" onChange={handleFileChange} aria-label="Select Certificate" />
+      {/* File Upload */}
+      <label className="upload-box">
+        <FaUpload className="upload-icon" />
+        <p>Click to select a certificate</p>
+        <input type="file" accept=".pdf, .jpg, .png" onChange={handleFileChange} />
       </label>
 
+      {/* Preview */}
       {previewUrl && (
         <div className="preview-container">
           <p>
@@ -450,15 +443,23 @@ export function CertificateUploadPage() {
 
       {/* Date of Event */}
       <div className="input-group">
-        <label>Activity Head:</label>
-        <select value={activityHead} onChange={(e) => setActivityHead(e.target.value)} aria-label="Activity Head">
-          <option value="" disabled>
-            Select Activity Head
-          </option>
-          {Object.keys(activityOptions).map((head) => (
-            <option key={head} value={head}>
-              {head}
-            </option>
+        <label>Date of Event:</label>
+        <input type="date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} />
+      </div>
+
+      {/* Date of Certificate Provided */}
+      <div className="input-group">
+        <label>Date Certificate Provided:</label>
+        <input type="date" value={certificateDate} onChange={(e) => setCertificateDate(e.target.value)} />
+      </div>
+
+      {/* Certificate Type Dropdown */}
+      <div className="input-group">
+        <label>Type of Certificate:</label>
+        <select value={certificateType} onChange={(e) => setCertificateType(e.target.value)}>
+          <option value="" disabled>Select a Certificate Type</option>
+          {certificateTypes.map((cert) => (
+            <option key={cert} value={cert}>{cert}</option>
           ))}
         </select>
       </div>
