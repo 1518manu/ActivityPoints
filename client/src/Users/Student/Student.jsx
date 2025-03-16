@@ -6,6 +6,7 @@ import './Student.css';
 export const Student = ({ token, userData, onLogout }) => {
 
   console.log("Student Data:", userData);
+  console.log("Token:", token);
   const navigate = useNavigate();
 
   useEffect(() => {

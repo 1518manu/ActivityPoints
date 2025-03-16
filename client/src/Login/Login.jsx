@@ -16,8 +16,6 @@ const fetchUserData = async (email) => {
     const q = await query(usersRef, where("email", "==", email));
     const querySnapshot = await getDocs(q);
 
-    console.log("userRef:", usersRef);
-    console.log("q:", q);
     console.log("querySnapshot:" , querySnapshot);
     
     if (!querySnapshot.empty) {
@@ -125,6 +123,7 @@ export function LoginPage({ onLoginSuccess }) {
           localStorage.setItem("userData", JSON.stringify(userData));
 
           showNotification("Login Successful!", "success");
+          console.log("Login Successful!");
 
           // Redirect to the appropriate dashboard based on the role
           setTimeout(() => {
@@ -148,7 +147,7 @@ export function LoginPage({ onLoginSuccess }) {
                 console.log("User role not found!");
                 showNotification("User role not found!", "error");
             }
-          }, 1400);
+          }, 4400);
         } else {
           showNotification("User role not found!", "error");
         }

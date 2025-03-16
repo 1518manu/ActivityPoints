@@ -22,6 +22,7 @@ function App() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      
       if (user) {
         setIsLoggedIn(true);
         setToken(localStorage.getItem("token"));
@@ -55,7 +56,7 @@ function App() {
   };
 
   // Logout function: Remove token from localStorage
-  const handleLogout = async () => {
+  const handleLogout = async (e) => {
      try {
        await signOut(auth);
        setIsLoggedIn(false);
