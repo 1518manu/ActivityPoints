@@ -68,7 +68,7 @@ export const Student = ({ token, userData, onLogout }) => {
 
               <div className="profile-header-info">
                 <h2>{userData?.name || "N/A"}</h2>
-                <div className="profile-username">@{userData?.user_id || "unknown"}</div>
+                <div className="profile-username">@{userData?.rollNo || "unknown"}</div>
                 <div className="profile-contact">
                   <span>{userData?.phone || "N/A"}</span>
                   <span className="profile-email">{userData?.email || "N/A"}</span>
