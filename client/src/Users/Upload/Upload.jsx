@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUpload, FaFile, FaTimes } from "react-icons/fa";
 import { NotificationContainer } from "../../Notification/NotificationContainer";
+//import GoogleDriveAuth from '../../components/GoogleDriveAuth.jsx'; // Ensure the correct extension
+ // Import GoogleDriveAuth component
 import { getAuth } from "firebase/auth";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+//import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from "../../firebaseFile/firebaseConfig"; // Firebase config file
 import "./Upload.css";
-
 export function CertificateUploadPage() {
   const [certificateName, setCertificateName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -22,8 +23,9 @@ export function CertificateUploadPage() {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
-    const auth = getAuth(); // Get authenticated user
-    const db = getFirestore(app);
+
+  const auth = getAuth(); // Get authenticated user
+  const db = getFirestore(app);
   const activityOptions = {
     "National Initiatives": ["NCC", "NSS"],
     "Sports & Games": ["Football", "Cricket", "Basketball", "Other"],
@@ -73,14 +75,10 @@ export function CertificateUploadPage() {
       if (file.size > 5 * 1024 * 1024) {
         // 5MB limit
         setError("File size should be less than 5MB.");
-        showNotification("File size should be less than 5MB.", "error");
-        console.log("File size should be less than 5MB.");
         return;
       }
       if (!["image/jpeg", "image/png", "application/pdf"].includes(file.type)) {
         setError("Only JPEG, PNG, and PDF files are allowed.");
-        console.log("Only JPEG, PNG, and PDF files are allowed.");
-        showNotification("Only JPEG, PNG, and PDF files are allowed.", "error");
         return;
       }
       setSelectedFile(file);
@@ -89,85 +87,84 @@ export function CertificateUploadPage() {
     }
   };
   const handleSubmit = async () => {
-    if (
-      !certificateName ||
-      !selectedFile ||
-      !activityHead ||
-      !activity ||
-      (isLevelRequired() && !achievementLevel) ||
-      (isRoleRequired() && !role) ||
-      !eventDate ||
-      !certificateDate
-    ) {
-      setError("Please fill all fields before submitting.");
-      console.log("Please fill all fields before submitting.");
-      showNotification("Please fill all fields before submitting.", "error");
-      return;
+      if (
+        !certificateName ||
+        !selectedFile ||
+        !activityHead ||
+        !activity ||
+        (isLevelRequired() && !achievementLevel) ||
+        (isRoleRequired() && !role) ||
+        !eventDate ||
+        !certificateDate
+      ) {
+        setError("Please fill all fields before submitting.");
+        return;
+      }
+    
+      const user = auth.currentUser;
+      if (!user) {
+        setError("User not logged in!");
+        return;
+      }
+    
+      const user_id = "B22CSB75";
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      formData.append("fileName", selectedFile.name);
+      formData.append("folder", `certificates/${user_id}`); 
+      formData.append("publicKey", "public_dGrtJlwx1cYmPGWcjN5Ybdp0bYw="); 
+
+  try {
+    const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
+      method: "POST",
+      headers: {
+        Authorization: Basic `${btoa("private_6doDUpitrkkv73i9cZvUYrviuDg=:")}`, // Fixed API Key format
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorDetails = await response.json();
+      console.error("Error Details:", errorDetails); // Log detailed error
+      throw new Error("ImageKit upload failed");
     }
-  
-    const user = auth.currentUser;
-    if (!user) {
-      setError("User not logged in!");
-      console.log("User not logged in!");
-      showNotification("User not logged in!", "error");
-      return;
-    }
-  
-    const userId = user.uid;
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-    formData.append("upload_preset", "certificates_upload"); // Replace with your Cloudinary preset
-    formData.append("folder", `certificates/${userId}`); // Create user-specific folders
-  
-    try {
-      // 🔹 Upload file to Cloudinary
-      
-      const response = await fetch("https://api.cloudinary.com/v1_1/dbcaiomnc/raw/upload" ,{
-        method: "POST",
-        body: formData,
-      });
-  
-      if (!response.ok) throw new Error("Cloudinary upload failed");
-  
-      const data = await response.json();
-      if (data.secure_url) {
-        const fileURL = data.secure_url; // This is the uploaded file's URL
-  
-        // Save certificate details & file URL to Firestore
-        const docRef = await addDoc(collection(db, "certificates"), {
-          userId,
-          certificateName: certificateName || null, // If empty, store as null
-          fileURL,
-          activityHead: activityHead || null,
-          activity: activity || null,
-          achievementLevel: achievementLevel || null,
-          role: role || null,
-          prize: prize || null,
-          eventDate: eventDate || null,
-          certificateDate: certificateDate || null,
-          uploadedAt: new Date(),
-        });
-        
-  
-        console.log("Certificate uploaded with ID:", docRef.id);
-        alert("Certificate uploaded successfully!");
+
+    //const data = await response.json();
+    const data = await response.json();
+        if (data.url) {
+          const fileURL = data.url; // This is the uploaded file's URL
+    
+          // Save certificate details & file URL to Firestore
+          const docRef = await addDoc(collection(db, "certificates"), {
+            user_id,
+            certificateName: certificateName || null,
+            fileURL,
+            activityHead: activityHead || null,
+            activity: activity || null,
+            achievementLevel: achievementLevel || null,
+            role: role || null,
+            prize: prize || null,
+            eventDate: eventDate || null,
+            certificateDate: certificateDate || null,
+            uploadedAt: new Date(),
+          });
+    
+          console.log("Certificate uploaded with ID:", docRef.id);
+          alert("Certificate uploaded successfully!");
         resetForm();
-  
-        setTimeout(() => {
-          console.log("Navigating to StudentDashboard... in Upload.jsx");
-          navigate("/StudentDashboard");
-        }, 1500);
-      } else {
+    
+          setTimeout(() => {
+            navigate("/StudentDashboard");
+          }, 1500);
+        } else {
+          setError("File upload failed!");
+        }
+      } catch (error) {
+        console.error("Upload failed:", error);
         setError("File upload failed!");
       }
-    } catch (error) {
-      console.error("Upload failed:", error);
-      setError("File upload failed!");
-    }
-  };
-  
-  // Reset form function remains unchanged
-  const resetForm = () => {
+    };
+const resetForm = () => {
     setCertificateName("");
     setSelectedFile(null);
     setPreviewUrl("");
