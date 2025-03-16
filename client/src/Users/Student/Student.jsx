@@ -24,7 +24,10 @@ export const Student = ({ token, userData, onLogout }) => {
   const openUploadPage = () => navigate("/upload-certificate");
 
   const onCertificate = () => navigate("/certificate");
-
+  if (!userData) {
+    return <div>Loading user data...</div>; // Prevent render until data is ready
+  }
+  
   return (
     <div className="container">
       <header className="header">
