@@ -3,26 +3,29 @@ import { useNavigate } from "react-router-dom";
 import { FaSearch, FaEdit, FaUser, FaUniversity, FaUpload } from "react-icons/fa"; 
 import './Student.css';
 
-export const Student = ({ token, onLogout }) => {
+export const Student = ({ token, userData, onLogout }) => {
+
+  console.log("Student Data:", userData);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!token) {
       navigate("/");
     }
-  }, [token, navigate]);
 
-  const openUploadPage = () => {
-    navigate("/upload-certificate");
-  }
-  
-  const OnCertificate = () => {
-    navigate("/certificate");
-  }
-  
+    if (userData) {
+      console.log("Student Data Loaded:", userData);
+    } else {
+      console.warn("No user data available!");
+    }
+  }, [token, userData, navigate]);
+
+  const openUploadPage = () => navigate("/upload-certificate");
+
+  const onCertificate = () => navigate("/certificate");
+
   return (
     <div className="container">
-      {/* Header/Navigation */}
       <header className="header">
         <div className="header-left">
           <div className="logo-container">
@@ -30,59 +33,52 @@ export const Student = ({ token, onLogout }) => {
           </div>
           <div className="search-bar">
             <input type="text" placeholder="Search " />
-            <FaSearch style={{ color: "#ccc", fontSize: "20px", margin:" 5px 0px",fontWeight: "100" }}/>
+            <FaSearch style={{ color: "#ccc", fontSize: "20px", margin: "5px 0px", fontWeight: "100" }} />
           </div>
         </div>
-        
+
         <div className="header-right">
-          <button className="business-btn" onClick={onLogout}>
-            Logout
-          </button>
+          <button className="business-btn" onClick={onLogout}>Logout</button>
         </div>
       </header>
 
-      {/* Main Content */}
       <div className="main-content">
-        {/* Sidebar */}
         <div className="sidebar-menu">
-            <button onClick={OnCertificate}><img src="dashboard-icon.svg" className="menu-icon"/> Certificates</button>
-            <button><img src="settings-icon.svg" className="menu-icon"/> Settings</button>
-            <button><img src="messages-icon.svg" className="menu-icon"/> Messages <span className="badge">new</span></button>
-            <button><img src="notifications-icon.svg" className="menu-icon"/> Notifications</button>
-            <button><img src="logout-icon.svg" className="menu-icon"/> Logout</button>
-          </div>
-        
-        {/* Profile Content */}
+          <button onClick={onCertificate}><img src="dashboard-icon.svg" className="menu-icon" /> Certificates</button>
+          <button><img src="settings-icon.svg" className="menu-icon" /> Settings</button>
+          <button><img src="messages-icon.svg" className="menu-icon" /> Messages <span className="badge">new</span></button>
+          <button><img src="notifications-icon.svg" className="menu-icon" /> Notifications</button>
+          <button onClick={onLogout}><img src="logout-icon.svg" className="menu-icon" /> Logout</button>
+        </div>
+
         <div className="profile-content">
           <div className="profile-banner">
-            <div className="banner-background">
-              {/* Network graphic background */}
-            </div>
+            <div className="banner-background"></div>
             <div className="edit-button">
-              <FaEdit style={{ color: "#ccc", fontSize: "15px", margin:"5px",fontWeight: "100" }}/>
+              <FaEdit style={{ color: "#ccc", fontSize: "15px", margin: "5px", fontWeight: "100" }} />
             </div>
           </div>
-          
+
           <div className="profile-details">
             <div className="profile-header">
               <div className="profile-pic-container">
-                <FaUser style={{ color: "#ccc", fontSize: "40px", margin:"5px",fontWeight: "100" }}/>
+                <FaUser style={{ color: "#ccc", fontSize: "40px", margin: "5px", fontWeight: "100" }} />
               </div>
-              
+
               <div className="profile-header-info">
-                <h2>Arun M</h2>
-                <div className="profile-username">@arunzriv2653</div>
+                <h2>{userData?.name || "N/A"}</h2>
+                <div className="profile-username">@{userData?.user_id || "unknown"}</div>
                 <div className="profile-contact">
-                  <span>+919995024963</span>
-                  <span className="profile-email">arunmundakkal003@gmail.com</span>
+                  <span>{userData?.phone || "N/A"}</span>
+                  <span className="profile-email">{userData?.email || "N/A"}</span>
                 </div>
                 <div className="profile-education">
-                  <FaUniversity style={{ fontSize: "15px", margin:"10px" ,fontWeight: "100" }} />
+                  <FaUniversity style={{ fontSize: "15px", margin: "10px", fontWeight: "100" }} />
                   <span>TKM College of Engineering, Kerala</span>
                 </div>
               </div>
             </div>
-            
+
             <div className="section-container">
               <div className="section-header">
                 <h3>About</h3>
@@ -92,7 +88,7 @@ export const Student = ({ token, onLogout }) => {
               </p>
               <button className="add-button">Add About</button>
             </div>
-            
+
             <div className="section-container">
               <div className="section-header">
                 <h3>Resume</h3>
@@ -106,10 +102,9 @@ export const Student = ({ token, onLogout }) => {
           </div>
         </div>
       </div>
+
       <div className="upload-div">
-        <button className="upload-button" onClick={openUploadPage}>Upload 
-          <FaUpload style={{ color: "#ffff", fontSize: "20px", margin:" 5px 0px",fontWeight: "100" }}/> 
-        </button>
+        <button className="upload-button" onClick={openUploadPage}>Upload <FaUpload style={{ color: "#fff", fontSize: "20px", margin: "5px 0px", fontWeight: "100" }} /></button>
       </div>
     </div>
   );

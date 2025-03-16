@@ -21,7 +21,7 @@ const fetchUserData = async (email) => {
     console.log("querySnapshot:" , querySnapshot);
     
     if (!querySnapshot.empty) {
-      console.log("Role found:", querySnapshot.docs[0].data());
+      console.log("Data found:", querySnapshot.docs[0].data());
       return querySnapshot.docs[0].data(); // Assuming the role is stored in the "role" field
     } else {
       throw new Error("Role not found");
@@ -55,6 +55,7 @@ export function LoginPage({ onLoginSuccess }) {
         if (role) {
           localStorage.setItem("token", await user.getIdToken());
           localStorage.setItem("role", role);
+          localStorage.setItem("userData", JSON.stringify(userData));
 
           switch (role) {
             case "admin":

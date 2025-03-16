@@ -26,8 +26,12 @@ function App() {
         setIsLoggedIn(true);
         setToken(localStorage.getItem("token"));
         const storedUserData = localStorage.getItem("userData");
+
+        console.log("Stored Token in localStorage:", token);
+
         if (storedUserData) {
           setUserData(JSON.parse(storedUserData));
+          console.log("Stored User Data in localStorage:", userData);
         }
       } else {
         setIsLoggedIn(false);
@@ -40,7 +44,7 @@ function App() {
   }, [auth]);
 
   // Handle login success and store token in localStorage
-  const handleLoginSuccess = (token) => {
+  const handleLoginSuccess = (token, userData) => {
     setIsLoggedIn(true);
     setToken(token);
     localStorage.setItem("token", token);
