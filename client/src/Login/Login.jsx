@@ -5,18 +5,24 @@ import { mockAuthApi } from "./AuthApi/Api";
 import { signInWithGoogle } from "./AuthApi/GoogleAuth";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import {NotificationContainer } from "../Notification/NotificationContainer";
-import "./Login.css";
 import { db } from "../firebaseFile/firebaseConfig"; // Make sure to import your db configuration
 import { collection, query, where, getDocs } from "firebase/firestore";
+import "./Login.css";
 
-const fetchUserRole = async (email) => {
+const fetchUserData = async (email) => {
   try {
-    const usersRef = collection(db, "Users"); // Assuming "users" is your collection
-    const q = query(usersRef, where("email", "==", email));
+    console.log("Fetching user role for email:", email);
+    const usersRef = await collection(db, "Users"); // Assuming "users" is your collection
+    const q = await query(usersRef, where("email", "==", email));
     const querySnapshot = await getDocs(q);
 
+    console.log("userRef:", usersRef);
+    console.log("q:", q);
+    console.log("querySnapshot:" , querySnapshot);
+    
     if (!querySnapshot.empty) {
-      return (querySnapshot.docs[0].data().role) ? querySnapshot.docs[0].data().role : null; // Assuming the role is stored in the "role" field
+      console.log("Role found:", querySnapshot.docs[0].data());
+      return querySnapshot.docs[0].data(); // Assuming the role is stored in the "role" field
     } else {
       throw new Error("Role not found");
     }
@@ -39,24 +45,38 @@ export function LoginPage({ onLoginSuccess }) {
   
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+
       if (user) {
-        const role = await fetchUserRole(user.email);
+        console.log("User is logged in UseEffect:", user.email);
+        const userData = await fetchUserData(user.email);
+        const role = userData.role;
+        console.log("Role:", role);
+
         if (role) {
           localStorage.setItem("token", await user.getIdToken());
           localStorage.setItem("role", role);
 
           switch (role) {
             case "admin":
+              console.log("Admin role found!");
               navigate("/AdminDashboard");
               break;
             case "faculty":
+              console.log("Faculty role found!");
               navigate("/FacultyDashboard");
               break;
             case "club":
+              console.log("Club role found!");
               navigate("/ClubDashboard");
               break;
-            default:
+            case "student":
+              console.log("Student role found!");
               navigate("/StudentDashboard");
+              break;
+            default:
+              console.log("User role not found!");
+              showNotification("User role not found!", "error");
+              
           }
         } else {
           setTimeout(()=> navigate("/StudentDashboard"), 1500);
@@ -92,25 +112,40 @@ export function LoginPage({ onLoginSuccess }) {
       if (response.success) {
         // Fetch the role after login
 
-        const role = await fetchUserRole(email);
         console.log(response.token); 
-        onLoginSuccess(response.token);
+        const userData = await fetchUserData(email);
+        const role = userData.role;
+        onLoginSuccess(response.token, userData);
+
+        
         if (role) {
           localStorage.setItem("token", response.token);
-          localStorage.setItem("role", role); // Save the role in localStorage
+          localStorage.setItem("role", role);
+          localStorage.setItem("userData", JSON.stringify(userData));
 
           showNotification("Login Successful!", "success");
 
           // Redirect to the appropriate dashboard based on the role
           setTimeout(() => {
-            if (role === "admin") {
-              navigate("/AdminDashboard");
-            } else if (role === "faculty") {
-              navigate("/FacultyDashboard");
-            } else if (role === "club") {
-              navigate("/ClubDashboard");
-            } else {
-              navigate("/StudentDashboard");
+            switch (role) {
+              case "admin":
+                console.log("Admin role found!");
+                navigate("/AdminDashboard");
+                break;
+              case "faculty":
+                console.log("Faculty role found!");
+                navigate("/FacultyDashboard");
+                break;
+              case "club":
+                console.log("Club role found!");
+                navigate("/ClubDashboard");
+                break;
+              case "student":
+                console.log("Student role found!");
+                navigate("/StudentDashboard");
+              default:
+                console.log("User role not found!");
+                showNotification("User role not found!", "error");
             }
           }, 1400);
         } else {
@@ -140,12 +175,15 @@ export function LoginPage({ onLoginSuccess }) {
       if (response.success) {
         
         // Fetch the role after login
-        const role = await fetchUserRole(email);
         console.log(response.token); 
-        onLoginSuccess(response.token);  
+        const userData = await fetchUserData(email);
+        const role = userData.role;
+        onLoginSuccess(response.token, userData);
+
         if (role) {
           localStorage.setItem("token", response.token);
-          localStorage.setItem("role", role); // Save the role in localStorage
+          localStorage.setItem("role", role);
+          localStorage.setItem("userData", JSON.stringify(userData));
 
           showNotification("Login Successful!", "success");
 

@@ -14,6 +14,7 @@ import "./App.css";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(null);
+  const [userData, setUserData] = useState(null);
   
   // Check localStorage for a stored token on initial load for login checking..
 
@@ -24,9 +25,14 @@ function App() {
       if (user) {
         setIsLoggedIn(true);
         setToken(localStorage.getItem("token"));
+        const storedUserData = localStorage.getItem("userData");
+        if (storedUserData) {
+          setUserData(JSON.parse(storedUserData));
+        }
       } else {
         setIsLoggedIn(false);
         setToken(null);
+        setUserData(null);
       }
     });
 
@@ -38,7 +44,10 @@ function App() {
     setIsLoggedIn(true);
     setToken(token);
     localStorage.setItem("token", token);
-    
+    localStorage.setItem("userData", JSON.stringify(userData));
+
+    console.log("Token:", token);
+    console.log("UserData:", userData);
   };
 
   // Logout function: Remove token from localStorage
@@ -47,7 +56,9 @@ function App() {
        await signOut(auth);
        setIsLoggedIn(false);
        setToken(null);
+       setUserData(null);
        localStorage.removeItem("token");
+       localStorage.removeItem("userData");
      } catch (error) {
        console.error("Error logging out:", error);
      }
@@ -67,7 +78,7 @@ function App() {
         />
         <Route 
           path="/StudentDashboard" 
-          element={isLoggedIn ? <Student token={token} onLogout={handleLogout} /> : <LoginPage onLoginSuccess={handleLoginSuccess} />}
+          element={isLoggedIn ? <Student token={token} userData={userData} onLogout={handleLogout} /> : <LoginPage onLoginSuccess={handleLoginSuccess} />}
         />
         <Route path="/upload-certificate" element={<CertificateUploadPage />} />
         <Route path="/certificate" element={<Certificate />} />
