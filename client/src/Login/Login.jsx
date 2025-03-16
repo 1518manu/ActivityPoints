@@ -6,11 +6,8 @@ import { signInWithGoogle } from "./AuthApi/GoogleAuth";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import {NotificationContainer } from "../Notification/NotificationContainer";
 import "./Login.css";
-//
 import { db } from "../firebaseFile/firebaseConfig"; // Make sure to import your db configuration
 import { collection, query, where, getDocs } from "firebase/firestore";
-
-//
 
 const fetchUserRole = async (email) => {
   try {
@@ -57,6 +54,8 @@ export function LoginPage({ onLoginSuccess }) {
     setNotification({ message, type, show: true });
     setTimeout(() => setNotification({ message: "", type: "", show: false }), 3000);
   };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
@@ -68,63 +67,43 @@ export function LoginPage({ onLoginSuccess }) {
   
     try {
       const response = await mockAuthApi(email, password, isLogin ? "login" : "register");
-    //   console.log(response);
-    //   if (response.success) {
-    //     console.log(response.token);
-    //     onLoginSuccess(response.token);
-    //     showNotification("Login Successful!", "success");
-        
-  
-    //     // Add a short delay before navigating
-    //     localStorage.setItem("token", response.token);
-    //     setTimeout(() => navigate("/StudentDashboard"), 1400);
-        
-        
-        
-    //   } else {
-    //     showNotification(response.message || "Login Failed!", "error");
-    //   }
-    // } catch (error) {
-    //   showNotification("An error occurred . Please try again.", "error");
-    // } finally {
-    //   setIsLoading(false);
-    // }
+      console.log(response);
+      if (response.success) {
+        // Fetch the role after login
 
-    //--------------
-    if (response.success) {
-      // Fetch the role after login
-      const role = await fetchUserRole(email);
+        const role = await fetchUserRole(email);
+        console.log(response.token); 
+        onLoginSuccess(response.token);
+        if (role) {
+          localStorage.setItem("token", response.token);
+          localStorage.setItem("role", role); // Save the role in localStorage
 
-      if (role) {
-        localStorage.setItem("token", response.token);
-        localStorage.setItem("role", role); // Save the role in localStorage
+          showNotification("Login Successful!", "success");
 
-        showNotification("Login Successful!", "success");
-
-        // Redirect to the appropriate dashboard based on the role
-        setTimeout(() => {
-          if (role === "admin") {
-            navigate("/AdminDashboard");
-          } else if (role === "faculty") {
-            navigate("/FacultyDashboard");
-          } else if (role === "club") {
-            navigate("/ClubDashboard");
-          } else {
-            navigate("/StudentDashboard");
-          }
-        }, 1400);
+          // Redirect to the appropriate dashboard based on the role
+          setTimeout(() => {
+            if (role === "admin") {
+              navigate("/AdminDashboard");
+            } else if (role === "faculty") {
+              navigate("/FacultyDashboard");
+            } else if (role === "club") {
+              navigate("/ClubDashboard");
+            } else {
+              navigate("/StudentDashboard");
+            }
+          }, 1400);
+        } else {
+          showNotification("User role not found!", "error");
+        }
       } else {
-        showNotification("User role not found!", "error");
+        showNotification(response.message || "Login Failed!", "error");
       }
-    } else {
-      showNotification(response.message || "Login Failed!", "error");
+    } catch (error) {
+      showNotification("An error occurred. Please try again.", "error");
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error) {
-    showNotification("An error occurred. Please try again.", "error");
-  } finally {
-    setIsLoading(false);
-  }
-    //---
+    
   };
   
 
@@ -138,12 +117,34 @@ export function LoginPage({ onLoginSuccess }) {
       
       console.log(response);
       if (response.success) {
-        onLoginSuccess(response.token);
-        showNotification("Login Successful!", "success");
+        
+        // Fetch the role after login
+        const role = await fetchUserRole(email);
+        console.log(response.token); 
+        onLoginSuccess(response.token);  
+        if (role) {
+          localStorage.setItem("token", response.token);
+          localStorage.setItem("role", role); // Save the role in localStorage
+
+          showNotification("Login Successful!", "success");
+
+          // Redirect to the appropriate dashboard based on the role
+          setTimeout(() => {
+            if (role === "admin") {
+              navigate("/AdminDashboard");
+            } else if (role === "faculty") {
+              navigate("/FacultyDashboard");
+            } else if (role === "club") {
+              navigate("/ClubDashboard");
+            } else {
+              navigate("/StudentDashboard");
+            }
+          }, 1400);
+        } else {
+          showNotification("User role not found!", "error");
+        }
 
         console.log("Google Sign In");
-        localStorage.setItem("token", response.token);
-        setTimeout(() => navigate("/StudentDashboard"), 1400);
       } else {
         showNotification(response.error || "Login Failed!", "error");
       }
