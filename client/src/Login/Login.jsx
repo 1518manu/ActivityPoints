@@ -38,12 +38,33 @@ export function LoginPage({ onLoginSuccess }) {
   const auth = getAuth();
   
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        console.log("User is logged in:", user);
-        navigate("/StudentDashboard");
+        const role = await fetchUserRole(user.email);
+        if (role) {
+          localStorage.setItem("token", await user.getIdToken());
+          localStorage.setItem("role", role);
+
+          switch (role) {
+            case "admin":
+              navigate("/AdminDashboard");
+              break;
+            case "faculty":
+              navigate("/FacultyDashboard");
+              break;
+            case "club":
+              navigate("/ClubDashboard");
+              break;
+            default:
+              navigate("/StudentDashboard");
+          }
+        } else {
+          setTimeout(()=> navigate("/StudentDashboard"), 1500);
+          console.log("User role not found!");
+          showNotification("User role not found!", "error");
+        }
       } else {
-        console.log("User is logged out", user);
+        console.log("User is logged out");
       }
     });
 
