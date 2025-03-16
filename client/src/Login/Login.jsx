@@ -54,31 +54,31 @@ export function LoginPage({ onLoginSuccess }) {
           localStorage.setItem("token", await user.getIdToken());
           localStorage.setItem("role", role);
           localStorage.setItem("userData", JSON.stringify(userData));
+          
+          showNotification("Login Successful!", "success");
+          console.log("Login Successful!");
 
-          switch (role) {
-            case "admin":
-              console.log("Admin role found!");
-              navigate("/AdminDashboard");
-              break;
-            case "faculty":
-              console.log("Faculty role found!");
-              navigate("/FacultyDashboard");
-              break;
-            case "club":
-              console.log("Club role found!");
-              navigate("/ClubDashboard");
-              break;
-            case "student":
-              console.log("Student role found!");
-              navigate("/StudentDashboard");
-              break;
-            default:
-              console.log("User role not found!");
-              showNotification("User role not found!", "error");
-              
-          }
+          setTimeout(() => {
+            switch (role) {
+              case "admin":
+                navigate("/AdminDashboard");
+                break;
+              case "faculty":
+                navigate("/FacultyDashboard");
+                break;
+              case "club":
+                navigate("/ClubDashboard");
+                break;
+              case "student":
+                navigate("/StudentDashboard");
+                break;
+              default:
+                showNotification("User role not found!", "error");
+                console.log("User role not found!");
+            }
+          }, 1400);
+          
         } else {
-          setTimeout(()=> navigate("/StudentDashboard"), 1500);
           console.log("User role not found!");
           showNotification("User role not found!", "error");
         }
@@ -113,7 +113,7 @@ export function LoginPage({ onLoginSuccess }) {
 
         console.log(response.token); 
         const userData = await fetchUserData(email);
-        const role = userData.role;
+        const role = await userData.role;
         onLoginSuccess(response.token, userData);
 
         
@@ -126,6 +126,7 @@ export function LoginPage({ onLoginSuccess }) {
           console.log("Login Successful!");
 
           // Redirect to the appropriate dashboard based on the role
+          
           setTimeout(() => {
             switch (role) {
               case "admin":
@@ -143,11 +144,13 @@ export function LoginPage({ onLoginSuccess }) {
               case "student":
                 console.log("Student role found!");
                 navigate("/StudentDashboard");
+                break; 
               default:
                 console.log("User role not found!");
                 showNotification("User role not found!", "error");
             }
-          }, 4400);
+          }, 1400);
+
         } else {
           showNotification("User role not found!", "error");
         }
