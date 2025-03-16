@@ -3,6 +3,7 @@ import {app} from "./firebaseFile/firebaseConfig";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { LoginPage } from "./Login/Login";
+import { SignupPage } from "./test/Signup/SignUp";
 import { Student } from "./Users/Student/Student";
 import { CertificateUploadPage } from "./Users/Upload/Upload";
 import { Certificate } from "./Users/Student/Certificates/Certificate";
@@ -56,6 +57,10 @@ function App() {
     <Router>
       <NotificationContainer />
       <Routes>
+        <Route 
+          path="/signup" 
+          element={<SignupPage onSignUpSuccess={handleLoginSuccess} />}
+        />
         <Route 
           path="/" 
           element={<LoginPage onLoginSuccess={handleLoginSuccess} />} 

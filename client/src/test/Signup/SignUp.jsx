@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { FcGoogle } from "react-icons/fc"
-import { mockAuthApi } from "../../Login/Api"
 import "./SignUp.css"
 
 export function SignupPage({ onSignUpSuccess }) {
