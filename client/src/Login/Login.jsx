@@ -57,7 +57,7 @@ export function LoginPage({ onLoginSuccess }) {
           
           showNotification("Login Successful!", "success");
           console.log("Login Successful!");
-
+          console.log("userData:", userData);
           setTimeout(() => {
             switch (role) {
               case "admin":
