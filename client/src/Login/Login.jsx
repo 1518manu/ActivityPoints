@@ -16,7 +16,7 @@ const fetchUserRole = async (email) => {
     const querySnapshot = await getDocs(q);
 
     if (!querySnapshot.empty) {
-      return querySnapshot.docs[0].data().role; // Assuming the role is stored in the "role" field
+      return (querySnapshot.docs[0].data().role) ? querySnapshot.docs[0].data().role : null; // Assuming the role is stored in the "role" field
     } else {
       throw new Error("Role not found");
     }
