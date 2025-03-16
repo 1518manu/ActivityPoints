@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { FaCheck, FaTimes } from "react-icons/fa";
 import "./Notification.css";
 
 const Notification = ({ message, type, onClose }) => {
@@ -13,7 +13,7 @@ const Notification = ({ message, type, onClose }) => {
   return (
     <div className={`notification ${type}`}>
       <div className="icon">
-        {type === "success" ? <FaCheckCircle className="success-icon" /> : <FaTimesCircle className="error-icon" />}
+        {type === "success" ? <FaCheck className="success-icon" /> : <FaTimes className="error-icon" />}
       </div>
       <div className="message">{message}</div>
     </div>
