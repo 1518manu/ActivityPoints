@@ -1,4 +1,4 @@
-/* Profile.css */
+
 * {
     margin: 0;
     padding: 0;
@@ -132,7 +132,9 @@
     cursor: pointer;
     color: #333;
   }
-  
+  .business-btn:hover{
+    background-color: #b4b598;
+  }
   .business-icon {
     width: 16px;
     height: 16px;

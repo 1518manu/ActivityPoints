@@ -9,6 +9,7 @@ import { getFirestore, collection, addDoc } from "firebase/firestore";
 //import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from "../../firebaseFile/firebaseConfig"; // Firebase config file
 import "./Upload.css";
+
 export function CertificateUploadPage() {
   const [certificateName, setCertificateName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
