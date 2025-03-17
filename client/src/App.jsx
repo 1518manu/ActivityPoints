@@ -89,7 +89,7 @@ function App() {
           path="/StudentDashboard"
           element={
             isLoggedIn && userData ? (isLoading ? ( <Loading /> ) : <Student token={token} userData={userData} onLogout={handleLogout}  />  ) :
-                                                                   ( <LoginPage onLoginSuccess={handleLoginSuccess} /> )
+                                     ( <LoginPage onLoginSuccess={handleLoginSuccess} /> )
           }
         />
         <Route path="/upload-certificate" element={<CertificateUploadPage />} />
