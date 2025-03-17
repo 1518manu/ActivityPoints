@@ -3,6 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { FaSearch, FaEdit, FaUser, FaUniversity, FaUpload } from "react-icons/fa"; 
 import './Student.css';
 
+const getColor = (point) => {
+ 
+  if (point <= 40) return 'red'; 
+  if (point >= 60) return 'green'; 
+  if (point >= 40 && point <= 60) return 'blue'
+};
+
 export const Student = ({ token, userData, onLogout }) => {
 
   console.log("Student Data:", userData);
@@ -70,15 +77,19 @@ export const Student = ({ token, userData, onLogout }) => {
               </div>
 
               <div className="profile-header-info">
-                <h2>{userData?.name || "N/A"}</h2>
-                <div className="profile-username">@{userData?.rollNo || "unknown"}</div>
-                <div className="profile-contact">
+                <div className="profile-name_points">
+                  <h2>{userData?.name || "N/A"}</h2> 
+                  <div className = "points"   style={{ color: getColor(userData?.point || 0)  }}>{userData?.point || 0} </div>
+                  <div className="points_text">points</div>
+                </div>
+                <div className = "profile-username">{userData?.rollNo || "unknown"}</div>
+                <div className = "profile-contact">
                   <span>{userData?.phone || "N/A"}</span>
                   <span className="profile-email">{userData?.email || "N/A"}</span>
                 </div>
                 <div className="profile-education">
                   <FaUniversity style={{ fontSize: "15px", margin: "10px", fontWeight: "100" }} />
-                  <span>TKM College of Engineering, Kerala</span>
+                  <span>{userData?.college || "unknown"}</span>
                 </div>
               </div>
             </div>

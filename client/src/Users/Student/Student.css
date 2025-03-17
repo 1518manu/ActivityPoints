@@ -341,11 +341,24 @@
   .profile-header-info {
     flex: 1;
   }
-  
-  .profile-header-info h2 {
+  .profile-name_points{
+    display: flex;
+    align-items: center;
+  }
+  .profile-name_points h2 {
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 5px;
+  }
+  .points{
+    margin-left: auto;
+    font-size: small;
+    font-weight: bold;
+  }
+  .points_text{
+    font-size: small;
+    margin-left: 2px;
+    color: #5d5d5a;
   }
   
   .profile-username {
