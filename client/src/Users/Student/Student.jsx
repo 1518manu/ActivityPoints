@@ -4,10 +4,9 @@ import { FaSearch, FaEdit, FaUser, FaUniversity, FaUpload } from "react-icons/fa
 import './Student.css';
 
 const getColor = (point) => {
- 
   if (point <= 40) {
      return 'red'; 
-  } else if (point >= 60) {
+  } else if (point >= 75) {
      return 'green'; 
   } else { 
     return 'blue';
