@@ -8,6 +8,7 @@ import { Student } from "./Users/Student/Student";
 import { CertificateUploadPage } from "./Users/Upload/Upload";
 import { Certificate } from "./Users/Student/Certificates/Certificate";
 import { NotificationContainer } from "./Notification/NotificationContainer";
+import { Loading } from "./Loading/Loading";
 import "./App.css";
 
 
@@ -69,6 +70,14 @@ function App() {
      }
    };
 
+  useEffect(() => {
+    if (userData) {
+        console.log('User Data in App :', userData);
+    } else {
+        console.log('No User Data in App');
+    }
+  }, [userData]); 
+
   return (
     <Router>
       <NotificationContainer />
@@ -83,7 +92,7 @@ function App() {
         />
         <Route 
           path="/StudentDashboard" 
-          element={isLoggedIn ? <Student token={token} userData={userData} onLogout={handleLogout} /> : <LoginPage onLoginSuccess={handleLoginSuccess} />}
+          element={isLoggedIn ? (userData ? <Student token={token} userData={userData} onLogout={handleLogout} /> : <Loading/> ) : <LoginPage onLoginSuccess={handleLoginSuccess} />}
         />
         <Route path="/upload-certificate" element={<CertificateUploadPage />} />
         <Route path="/certificate" element={<Certificate />} />
