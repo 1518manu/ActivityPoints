@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaSearch, FaEdit, FaUser, FaUniversity, FaUpload } from "react-icons/fa"; 
+import { FaSearch, FaEdit, FaUser, FaUniversity, FaUpload, FaThLarge, FaCog, FaCalendarAlt, FaBell , FaSignOutAlt } from "react-icons/fa"; 
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import './Student.css';
@@ -67,11 +67,25 @@ export const Student = ({ token, userData, onLogout }) => {
 
       <div className="main-content">
         <div className="sidebar-menu">
-          <button onClick={onCertificate}><img src="dashboard-icon.svg" className="menu-icon" /> Certificates</button>
-          <button><img src="settings-icon.svg" className="menu-icon" /> Settings</button>
-          <button><img src="messages-icon.svg" className="menu-icon" /> Messages <span className="badge">new</span></button>
-          <button><img src="notifications-icon.svg" className="menu-icon" /> Notifications</button>
-          <button onClick={onLogout}  style={{ color : "#df0000"}}><img src="logout-icon.svg" className="menu-icon" /> Logout</button>
+          <button onClick={onCertificate}>
+            <FaThLarge className="menu-icon" /> Certificates
+          </button>
+
+          <button>
+            <FaCog className="menu-icon" /> Settings
+          </button>
+
+          <button>
+            <FaCalendarAlt className="menu-icon" /> Event <span className="badge">new</span>
+          </button>
+
+          <button>
+            <FaBell   className="menu-icon" /> Notifications  <span className="badge">new</span>
+          </button>
+
+          <button onClick={onLogout} style={{ color: "#df0000" }}>
+            <FaSignOutAlt style={{ color: "#df0000" }}className="menu-icon" /> Logout
+          </button>
         </div>
 
         <div className="profile-content">
