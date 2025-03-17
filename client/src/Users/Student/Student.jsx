@@ -71,7 +71,7 @@ export const Student = ({ token, userData, onLogout }) => {
           <button><img src="settings-icon.svg" className="menu-icon" /> Settings</button>
           <button><img src="messages-icon.svg" className="menu-icon" /> Messages <span className="badge">new</span></button>
           <button><img src="notifications-icon.svg" className="menu-icon" /> Notifications</button>
-          <button onClick={onLogout}><img src="logout-icon.svg" className="menu-icon" /> Logout</button>
+          <button onClick={onLogout}  style={{ color : "#df0000"}}><img src="logout-icon.svg" className="menu-icon" /> Logout</button>
         </div>
 
         <div className="profile-content">
