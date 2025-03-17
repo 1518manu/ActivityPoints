@@ -63,7 +63,7 @@ function App() {
       console.error("Error logging out:", error);
     }
   };
-
+// just for develeopment fase to see the user data , u can remove it any time
   useEffect(() => {
     console.log("userDataa");
     if (userData) {
@@ -88,8 +88,8 @@ function App() {
         <Route
           path="/StudentDashboard"
           element={
-            isLoggedIn && userData ? (isLoading ? ( <Loading /> ) : <Student token={token} userData={userData} onLogout={handleLogout}  />  ) :
-                                     ( <LoginPage onLoginSuccess={handleLoginSuccess} /> )
+            isLoading ? ( <Loading /> ) : isLoggedIn && userData ? ( <Student token={token} userData={userData} onLogout={handleLogout}  />  ) :
+                                                                   ( <LoginPage onLoginSuccess={handleLoginSuccess} /> )
           }
         />
         <Route path="/upload-certificate" element={<CertificateUploadPage />} />
