@@ -88,7 +88,7 @@ function App() {
         <Route
           path="/StudentDashboard"
           element={
-            isLoading ? ( <Loading /> ) : isLoggedIn && userData ? ( <Student token={token} userData={userData} onLogout={handleLogout}  />  ) :
+            isLoggedIn && userData ? (isLoading ? ( <Loading /> ) : <Student token={token} userData={userData} onLogout={handleLogout}  />  ) :
                                                                    ( <LoginPage onLoginSuccess={handleLoginSuccess} /> )
           }
         />
