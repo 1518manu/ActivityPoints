@@ -318,7 +318,21 @@
     justify-content: center;
   }
   
-  
+  .progress-bar .CircularProgressbar-path {
+    stroke-dasharray: 100, 100;
+    stroke-dashoffset: 100;
+    animation: progressAnimation 2s ease-out forwards;
+}
+
+@keyframes progressAnimation {
+    from {
+        stroke-dashoffset: 100;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
   .profile-pic-large {
     width: 80px;
     height: 80px;

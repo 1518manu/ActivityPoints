@@ -1,9 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaSearch, FaEdit, FaUser, FaUniversity, FaUpload } from "react-icons/fa"; 
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-
 import './Student.css';
 
 const getColor = (point) => {
@@ -16,11 +15,18 @@ const getColor = (point) => {
   } 
 };
 
+
 export const Student = ({ token, userData, onLogout }) => {
+  const [progress, setProgress] = useState(0);
 
   console.log("Student Data:", userData);
   console.log("Token:", token);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setProgress(userData?.point || 0); // Directly set progress without setInterval
+  }, [userData]);
+  
 
   useEffect(() => {
     if (!token) {
@@ -80,8 +86,9 @@ export const Student = ({ token, userData, onLogout }) => {
             <div className="profile-header">
               <div className="profile-pic-container">
                 <div className="progress-container">
+                  
                   <CircularProgressbar
-                    value={userData?.point || 0}
+                    value={progress }
                     maxValue={100}
                     strokeWidth={4} 
                     styles={buildStyles({
