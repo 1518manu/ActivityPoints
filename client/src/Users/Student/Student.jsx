@@ -5,9 +5,13 @@ import './Student.css';
 
 const getColor = (point) => {
  
-  if (point <= 40) return 'red'; 
-  if (point >= 60) return 'green'; 
-  if (point >= 40 && point <= 60) return 'blue'
+  if (point <= 40) {
+     return 'red'; 
+  } else if (point >= 60) {
+     return 'green'; 
+  } else { 
+    return 'blue';
+  } 
 };
 
 export const Student = ({ token, userData, onLogout }) => {
