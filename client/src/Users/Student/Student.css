@@ -309,7 +309,7 @@
   .profile-pic-container {
     border-radius: 50%;
     position: relative;
-    border: 2px solid #1e67af;
+    border:none;
     margin-right: 20px;
     width: 100px;
     height: 100px;  /* Ensure it's a square for perfect centering */
@@ -337,6 +337,20 @@
     padding: 2px 6px;
     border-radius: 10px;
   }
+  .progress-container {
+    position: relative;
+    width:99px;   /* Adjust size as needed */
+    height: 99px;  /* Adjust size as needed */
+  }
+  
+  .progress-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Perfect center alignment */
+    z-index: 1; /* Ensures icon is on top */
+  }
+  
   
   .profile-header-info {
     flex: 1;

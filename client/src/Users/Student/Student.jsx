@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaSearch, FaEdit, FaUser, FaUniversity, FaUpload } from "react-icons/fa"; 
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+
 import './Student.css';
 
 const getColor = (point) => {
@@ -76,7 +79,21 @@ export const Student = ({ token, userData, onLogout }) => {
           <div className="profile-details">
             <div className="profile-header">
               <div className="profile-pic-container">
-                <FaUser style={{ color: "#ccc", fontSize: "40px", margin: "5px", fontWeight: "100" }} />
+                <div className="progress-container">
+                  <CircularProgressbar
+                    value={userData?.point || 0}
+                    maxValue={100}
+                    strokeWidth={4} 
+                    styles={buildStyles({
+                      pathColor: getColor(userData?.point || 0),
+                      trailColor: '#e5e7eb',
+                      textSize: '16px'
+                    })}
+                  />
+                  <div className="progress-icon">
+                    <FaUser style={{ color: "#ccc", fontSize: "40px", margin: "5px", fontWeight: "100" }} />
+                  </div>
+                </div>
               </div>
 
               <div className="profile-header-info">
