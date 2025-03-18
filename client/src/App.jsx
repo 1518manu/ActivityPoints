@@ -9,6 +9,7 @@ import { CertificateUploadPage } from "./Users/Upload/Upload";
 import { Certificate } from "./Users/Student/Certificates/Certificate";
 import { NotificationContainer } from "./Notification/NotificationContainer";
 import { Loading } from "./Loading/Loading";
+import { Faculty } from "./Users/Faculty/Faculty"
 import "./App.css";
 
 function App() {
@@ -77,6 +78,10 @@ function App() {
     <Router>
       <NotificationContainer />
       <Routes>
+        <Route 
+          path = "/faculty"
+          element = {<Faculty/>}
+        />
         <Route
           path="/signup"
           element={<SignupPage onSignUpSuccess={handleLoginSuccess} />}

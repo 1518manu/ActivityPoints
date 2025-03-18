@@ -1,0 +1,458 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #f8f8f8;
+  }
+  
+  /* Header Styles */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 64px;
+    border: 1px solid #e0e0e0;
+  }
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    width: 100px;
+    height: auto;
+  }
+  
+  .search-bar {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    padding: 5px 15px;
+    margin-left: 15px;
+    width: 240px;
+  }
+  
+  .search-bar input {
+    border: none;
+    outline: none;
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .business-btn {
+    display: flex;
+    align-items: center;
+    background-color: #fff9e6;
+    border: 1px solid #ffd966;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-weight: 500;
+    cursor: pointer;
+    color: #333;
+  }
+  
+  .business-btn:hover {
+    background-color: #b4b598;
+  }
+  
+  /* Main Content */
+  .main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+  
+  /* Sidebar */
+  .sidebar-menu {
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    width: 20vw;
+  }
+  
+  .sidebar-menu button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    color: #333;
+  }
+  
+  .sidebar-menu button:hover {
+    background-color: #ede8e8;
+  }
+  
+  /* Profile Content */
+  .profile-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+  }
+  
+  /* Profile Banner */
+  .profile-banner {
+    position: relative;
+    height: 180px;
+    background-color: #2ba1a5;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 60px;
+  }
+  
+  .edit-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    background-color: rgba(166, 190, 251, 0.363);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  /* Profile Details */
+  .profile-details {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .profile-header {
+    display: flex;
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    position: relative;
+  }
+  
+  .profile-pic-container {
+    border-radius: 50%;
+    position: relative;
+    border: 2px solid #1e67af;
+    margin-right: 20px;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .profile-header-info h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  
+  .profile-username {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+  }
+  
+  .profile-contact {
+    display: flex;
+    gap: 15px;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+  }
+  
+  .profile-education {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  /* Section Container */
+  .section-container {
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .section-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+  
+  /* Student List */
+  .student-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .student-card {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .student-card:hover {
+    background-color: #ede8e8;
+  }
+  
+  /* Certificate List */
+  .certificate-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .certificate-card {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .actions {
+    margin-top: 10px;
+  }
+  
+  .approve-btn, .reject-btn {
+    margin-right: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .approve-btn {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .reject-btn {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .approve-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .reject-btn:hover {
+    background-color: #d32f2f;
+  }
+  
+  /* Reject Popup */
+  .reject-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 999;
+  }
+  
+  .reject-popup h3 {
+    margin-bottom: 10px;
+  }
+  
+  .reject-popup textarea {
+    width: 100%;
+    height: 100px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .popup-buttons {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .popup-buttons button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .popup-buttons button:hover {
+    opacity: 0.8;
+  }
+  
+  .popup-buttons .cancel-btn {
+    background-color: #e0e0e0;
+    color: #333;
+  }
+  
+  .popup-buttons .confirm-btn {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  /* Overall layout */
+  .container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .main-content {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .sidebar-menu {
+    width: 200px;
+    padding: 10px;
+    border-right: 1px solid #e0e0e0;
+  }
+  
+  .profile-content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .student-certificates-container {
+    display: flex;
+    gap: 30px;
+  }
+  
+  /* Student List */
+  .student-list-container {
+    flex: 1;
+  }
+  
+  .student-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .student-card {
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .student-card:hover, .student-card.selected {
+    background-color: #b7acac;
+  }
+  
+  /* Certificates List */
+  .certificate-list-container {
+    flex: 2;
+  }
+  
+  .certificate-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .certificate-card {
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .actions button {
+    margin-right: 10px;
+  }
+  
+  .approve-btn, .reject-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .approve-btn {
+    background-color: green;
+    color: white;
+  }
+  
+  .reject-btn {
+    background-color: red;
+    color: white;
+  }
+  
+  .reject-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  }
+  
+  .reject-popup textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+  }
+  
+  .popup-buttons button {
+    margin-right: 10px;
+  }
+  
+  /* File View */
+  .certificate-file-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 10px;
+  }
+  
+  .certificate-file-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  
+  .certificate-file-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  

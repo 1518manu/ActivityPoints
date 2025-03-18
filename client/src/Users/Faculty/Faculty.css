@@ -132,7 +132,6 @@
     cursor: pointer;
     color: #333;
   }
-  
   .business-btn:hover{
     background-color: #b4b598;
   }
@@ -157,9 +156,6 @@
     border-right: 1px solid #e0e0e0;
     overflow-y: auto;
   }
-  
-
-
   
   .sidebar-profile {
     display: flex;
@@ -240,10 +236,9 @@
   }
   
   .menu-icon {
-    width: 13px;
-    height: 13px;
-    margin-right: 2vw;
-    color: rgb(139, 137, 137);
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
   }
   
   .badge {
@@ -314,7 +309,7 @@
   .profile-pic-container {
     border-radius: 50%;
     position: relative;
-    border:none;
+    border: none;
     margin-right: 20px;
     width: 100px;
     height: 100px;  /* Ensure it's a square for perfect centering */
@@ -323,21 +318,7 @@
     justify-content: center;
   }
   
-  .progress-bar .CircularProgressbar-path {
-    stroke-dasharray: 100, 100;
-    stroke-dashoffset: 100;
-    animation: progressAnimation 2s ease-out forwards;
-}
-
-@keyframes progressAnimation {
-    from {
-        stroke-dashoffset: 100;
-    }
-    to {
-        stroke-dashoffset: 0;
-    }
-}
-
+  
   .profile-pic-large {
     width: 80px;
     height: 80px;
@@ -356,42 +337,15 @@
     padding: 2px 6px;
     border-radius: 10px;
   }
-  .progress-container {
-    position: relative;
-    width:99px;   /* Adjust size as needed */
-    height: 99px;  /* Adjust size as needed */
-  }
-  
-  .progress-icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); /* Perfect center alignment */
-    z-index: 1; /* Ensures icon is on top */
-  }
-  
   
   .profile-header-info {
     flex: 1;
   }
-  .profile-name_points{
-    display: flex;
-    align-items: center;
-  }
-  .profile-name_points h2 {
+  
+  .profile-header-info h2 {
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 5px;
-  }
-  .points{
-    margin-left: auto;
-    font-size: small;
-    font-weight: bold;
-  }
-  .points_text{
-    font-size: small;
-    margin-left: 2px;
-    color: #5d5d5a;
   }
   
   .profile-username {
@@ -682,4 +636,165 @@
     font-weight:bolder;
     box-shadow: 0 7px 4px rgba(0, 0, 0, 0.3);
   }
-
+  
+  
+  /* UPDATION */
+  
+  .boxes-container {
+    display: flex;
+    gap: 20px; /* Space between boxes */
+    margin-top: 20px;
+  }
+  
+  .box {
+    flex: 1; /* Each box takes equal space */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .box p {
+    margin: 0;
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .buttons-container {
+    padding-top: 10px;
+    display: flex;
+    gap: 20px; 
+    justify-content: center; 
+  }
+  .report-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #007bff; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .report-button:hover {
+    background-color: #0056b3; 
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /* Container for the section
+  .section-container {
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 800px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  } */
+  
+  /* Application card styling */
+  .application-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+  }
+  
+  .application-card p {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .view-button {
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .view-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Popup overlay */
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  /* Popup content */
+  .popup-content {
+    background-color: white;
+    padding: 20px 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .popup-content h3 {
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .popup-content p {
+    margin-bottom: 10px;
+    color: #555;
+  }
+  
+  textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+  }
+  
+  button {
+    padding: 8px 15px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  
+  @media (max-width: 600px) {
+    .popup-content {
+      width: 90%;
+    }
+  
+    .application-card {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+  
