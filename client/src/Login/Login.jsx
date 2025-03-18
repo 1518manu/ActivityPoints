@@ -5,30 +5,9 @@ import { mockAuthApi } from "./AuthApi/Api";
 import { signInWithGoogle } from "./AuthApi/GoogleAuth";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import {NotificationContainer } from "../Notification/NotificationContainer";
-import { db } from "../firebaseFile/firebaseConfig"; // Make sure to import your db configuration
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { fetchUserData } from "./dataApi/userDataApi"
 import "./Login.css";
 
-const fetchUserData = async (email) => {
-  try {
-    console.log("Fetching user role for email:", email);
-    const usersRef = await collection(db, "Users"); // Assuming "users" is your collection
-    const q = await query(usersRef, where("email", "==", email));
-    const querySnapshot = await getDocs(q);
-
-    console.log("querySnapshot:" , querySnapshot);
-    
-    if (!querySnapshot.empty) {
-      console.log("Data found:", querySnapshot.docs[0].data());
-      return querySnapshot.docs[0].data(); // Assuming the role is stored in the "role" field
-    } else {
-      throw new Error("Role not found");
-    }
-  } catch (error) {
-    console.error("Error fetching user role:", error);
-    return null;
-  }
-};
 
 export function LoginPage({ onLoginSuccess }) {
   const [email, setEmail] = useState("");

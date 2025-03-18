@@ -12,6 +12,8 @@ import { Loading } from "./Loading/Loading";
 import { Faculty } from "./Users/Faculty/Faculty"
 import "./App.css";
 
+const isTesting = true;
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(null);
@@ -74,33 +76,37 @@ function App() {
     }
   }, [userData]);
 
-  return (
-    <Router>
-      <NotificationContainer />
-      <Routes>
-        <Route 
-          path = "/faculty"
-          element = {<Faculty/>}
-        />
-        <Route
-          path="/signup"
-          element={<SignupPage onSignUpSuccess={handleLoginSuccess} />}
-        />
-        <Route
-          path="/"
-          element={<LoginPage onLoginSuccess={handleLoginSuccess} />}
-        />
-        <Route
-          path="/StudentDashboard"
-          element={
-            isLoading ? ( <Loading /> ) : isLoggedIn && userData ? ( <Student token={token} userData={userData} onLogout={handleLogout}  />  ) :
-                                                                   ( <LoginPage onLoginSuccess={handleLoginSuccess} /> )
-          }
-        />
-        <Route path="/upload-certificate" element={<CertificateUploadPage />} />
-        <Route path="/certificate" element={<Certificate />} />
-      </Routes>
-    </Router>
+  return (    
+    <div>
+      {isTesting ? <Faculty /> : (
+          <Router>
+            <NotificationContainer />
+            <Routes>
+              <Route 
+                path = "/faculty"
+                element = {<Faculty/>}
+              />
+              <Route
+                path="/signup"
+                element={<SignupPage onSignUpSuccess={handleLoginSuccess} />}
+              />
+              <Route
+                path="/"
+                element={<LoginPage onLoginSuccess={handleLoginSuccess} />}
+              />
+              <Route
+                path="/StudentDashboard"
+                element={
+                  isLoading ? ( <Loading /> ) : isLoggedIn && userData ? ( <Student token={token} userData={userData} onLogout={handleLogout}  />  ) :
+                                                                        ( <LoginPage onLoginSuccess={handleLoginSuccess} /> )
+                }
+              />
+              <Route path="/upload-certificate" element={<CertificateUploadPage />} />
+              <Route path="/certificate" element={<Certificate />} />
+            </Routes>
+          </Router>
+        )}
+    </div>
   );
 }
 
