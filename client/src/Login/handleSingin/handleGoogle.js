@@ -1,5 +1,5 @@
 
-import { signInWithGoogle } from "./AuthApi/GoogleAuth";
+import { signInWithGoogle } from "../AuthApi/GoogleAuth";
 
  export const handleGoogleSignIn = async (e) => {
     e.preventDefault();

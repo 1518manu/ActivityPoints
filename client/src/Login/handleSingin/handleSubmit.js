@@ -1,5 +1,5 @@
 
-import { mockAuthApi } from "./AuthApi/Api";
+import { mockAuthApi } from "../AuthApi/Api";
 
   export const handleSubmit = async (e) => {
     e.preventDefault();
