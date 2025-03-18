@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-import { mockAuthApi } from "./AuthApi/Api";
-import { signInWithGoogle } from "./AuthApi/GoogleAuth";
+import { handleGoogleSignIn } from "./handleSingin/handleGoogle";
+import { handleSubmit } from "./handleSingin/handleSubmit"
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import {NotificationContainer } from "../Notification/NotificationContainer";
 import { fetchUserData , fetchUserRole} from "./dataApi/userDataApi"
