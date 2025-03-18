@@ -77,8 +77,7 @@ function App() {
   }, [userData]);
 
   return (    
-    <div>
-      {isTesting ? <Faculty /> : (
+    <>
           <Router>
             <NotificationContainer />
             <Routes>
@@ -105,8 +104,7 @@ function App() {
               <Route path="/certificate" element={<Certificate />} />
             </Routes>
           </Router>
-        )}
-    </div>
+    </>
   );
 }
 
