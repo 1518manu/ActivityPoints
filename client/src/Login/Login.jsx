@@ -5,7 +5,7 @@ import { mockAuthApi } from "./AuthApi/Api";
 import { signInWithGoogle } from "./AuthApi/GoogleAuth";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import {NotificationContainer } from "../Notification/NotificationContainer";
-import { fetchUserData } from "./dataApi/userDataApi"
+import { fetchUserData , fetchUserRole} from "./dataApi/userDataApi"
 import "./Login.css";
 
 
@@ -20,60 +20,71 @@ export function LoginPage({ onLoginSuccess }) {
   const navigate = useNavigate();
   const auth = getAuth();
   
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-
-      if (user) {
-        console.log("User is logged in UseEffect:", user.email);
-        const userData = await fetchUserData(user.email);
-        const role = userData.role;
-        console.log("Role:", role);
-
-        if (role) {
-          localStorage.setItem("token", await user.getIdToken());
-          localStorage.setItem("role", role);
-          localStorage.setItem("userData", JSON.stringify(userData));
-          
-          showNotification("Login Successful!", "success");
-          console.log("Login Successful!");
-          console.log("userData:", userData);
-          setTimeout(() => {
-            switch (role) {
-              case "admin":
-                navigate("/AdminDashboard");
-                break;
-              case "faculty":
-                navigate("/FacultyDashboard");
-                break;
-              case "club":
-                navigate("/ClubDashboard");
-                break;
-              case "student":
-                navigate("/StudentDashboard");
-                break;
-              default:
-                showNotification("User role not found!", "error");
-                console.log("User role not found!");
-            }
-          }, 1400);
-          
-        } else {
-          console.log("User role not found!");
-          showNotification("User role not found!", "error");
-        }
-      } else {
-        console.log("User is logged out");
-      }
-    });
-
-    return () => unsubscribe();
-  }, [auth, navigate]);
-
   const showNotification = (message, type) => {
     setNotification({ message, type, show: true });
     setTimeout(() => setNotification({ message: "", type: "", show: false }), 3000);
   };
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+  
+      if (user) {
+        console.log("User logged in:", user.email);
+        const role = await fetchUserRole(user.email); // Get role first
+        if (!role) {
+          showNotification("User role not found!", "error");
+          return;
+        }
+  
+       
+        if (role) {
+            const userData = await fetchUserData(user.email, role); // Fetch student data if role is student
+        
+  
+            const userId = userData?.rollNo || user.uid; // Default to Firebase UID if no rollNo
+            localStorage.setItem("token", await user.getIdToken());
+            localStorage.setItem("role", role);
+            localStorage.setItem("userData", JSON.stringify(userData || {}));
+            localStorage.setItem("user_id", userId);
+  
+            showNotification("Login Successful!", "success");
+            console.log("Login Successful!");
+            console.log("userData:", userData);
+  
+            setTimeout(() => {
+              switch (role) {
+                case "admin":
+                  navigate("/AdminDashboard");
+                  break;
+                case "faculty":
+                  navigate("/FacultyDashboard");
+                  break;
+                case "club":
+                  navigate("/ClubDashboard");
+                  break;
+                case "student":
+                  navigate("/StudentDashboard");
+                  console.log("student nav");
+                  break;
+                default:
+                  showNotification("User role not found!", "error");
+                  console.log("User role not found!");
+              }
+            }, 1400);
+          } else {
+                    console.log("User role not found!");
+                    showNotification("User role not found!", "error");
+                  }
+                
+          } else {
+            console.log("User is logged out");
+          }
+        });
+  
+    return () => unsubscribe();
+  }, [auth, navigate]);
+  
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -91,8 +102,8 @@ export function LoginPage({ onLoginSuccess }) {
         // Fetch the role after login
 
         console.log(response.token); 
-        const userData = await fetchUserData(email);
-        const role = await userData.role;
+        const role = await fetchUserRole(user.email);
+        const userData = await fetchUserData(email, role);
         onLoginSuccess(response.token, userData);
 
         
@@ -158,8 +169,8 @@ export function LoginPage({ onLoginSuccess }) {
         
         // Fetch the role after login
         console.log(response.token); 
-        const userData = await fetchUserData(email);
-        const role = userData.role;
+        const role = await fetchUserRole(user.email);
+        const userData = await fetchUserData(email, role);
         onLoginSuccess(response.token, userData);
 
         if (role) {
@@ -197,6 +208,7 @@ export function LoginPage({ onLoginSuccess }) {
     }
     
   };
+
 
   const handleForgotPassword = () => {
     showNotification("Password reset link sent!", "info");

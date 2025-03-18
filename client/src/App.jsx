@@ -12,7 +12,6 @@ import { Loading } from "./Loading/Loading";
 import { Faculty } from "./Users/Faculty/Faculty"
 import "./App.css";
 
-const isTesting = true;
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -82,7 +81,7 @@ function App() {
             <NotificationContainer />
             <Routes>
               <Route 
-                path = "/faculty"
+                path = "/FacultyDashboard"
                 element = {<Faculty/>}
               />
               <Route
