@@ -80,10 +80,6 @@ function App() {
           <Router>
             <NotificationContainer />
             <Routes>
-              <Route 
-                path = "/FacultyDashboard"
-                element = {<Faculty/>}
-              />
               <Route
                 path="/signup"
                 element={<SignupPage onSignUpSuccess={handleLoginSuccess} />}
@@ -96,6 +92,13 @@ function App() {
                 path="/StudentDashboard"
                 element={
                   isLoading ? ( <Loading /> ) : isLoggedIn && userData ? ( <Student token={token} userData={userData} onLogout={handleLogout}  />  ) :
+                                                                        ( <LoginPage onLoginSuccess={handleLoginSuccess} /> )
+                }
+              />
+              <Route 
+                path = "/FacultyDashboard"
+                element={
+                  isLoading ? ( <Loading /> ) : isLoggedIn && userData ? ( <Faculty token={token} userData={userData} onLogout={handleLogout}  />  ) :
                                                                         ( <LoginPage onLoginSuccess={handleLoginSuccess} /> )
                 }
               />
