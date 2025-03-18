@@ -101,8 +101,10 @@ export function LoginPage({ onLoginSuccess }) {
       if (response.success) {
         // Fetch the role after login
 
-        console.log(response.token); 
-        const role =  await fetchUserRole(user.email);
+        const email = response?.token?.email;
+        console.log("email:", email);
+
+        const role =  await fetchUserRole(email);
         console.log(role);
         const userData = await fetchUserData(email, role);
         onLoginSuccess(response.token, userData);
@@ -173,8 +175,12 @@ export function LoginPage({ onLoginSuccess }) {
         
         // Fetch the role after login
         console.log(response.token); 
-
-        const userData = await fetchUserData(email, await fetchUserRole(user.email));
+        const role = await fetchUserRole(user.email);
+        console.log("role:",role);
+        const email = response?.token?.email;
+        console.log("email:",email);
+        const userData = await fetchUserData(email, role);
+        
         onLoginSuccess(response.token, userData);
 
         if (role) {
