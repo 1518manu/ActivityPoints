@@ -102,7 +102,8 @@ export function LoginPage({ onLoginSuccess }) {
         // Fetch the role after login
 
         console.log(response.token); 
-        const role = await fetchUserRole(user.email);
+        const role =  await fetchUserRole(user.email);
+        console.log(role);
         const userData = await fetchUserData(email, role);
         onLoginSuccess(response.token, userData);
 
@@ -136,19 +137,22 @@ export function LoginPage({ onLoginSuccess }) {
                 navigate("/StudentDashboard");
                 break; 
               default:
-                console.log("User role not found!");
                 showNotification("User role not found!", "error");
+                console.log("User role not found!");
             }
           }, 1400);
 
         } else {
           showNotification("User role not found!", "error");
+          console.log("User role not found!");
         }
       } else {
         showNotification(response.message || "Login Failed!", "error");
+        console.log(response.message || "Login Failed!");
       }
     } catch (error) {
       showNotification("An error occurred. Please try again.", "error");
+      console.log("An error occurred. Please try again");
     } finally {
       setIsLoading(false);
     }
@@ -169,8 +173,8 @@ export function LoginPage({ onLoginSuccess }) {
         
         // Fetch the role after login
         console.log(response.token); 
-        const role = await fetchUserRole(user.email);
-        const userData = await fetchUserData(email, role);
+
+        const userData = await fetchUserData(email, await fetchUserRole(user.email));
         onLoginSuccess(response.token, userData);
 
         if (role) {
@@ -179,6 +183,7 @@ export function LoginPage({ onLoginSuccess }) {
           localStorage.setItem("userData", JSON.stringify(userData));
 
           showNotification("Login Successful!", "success");
+          console.log("Login Successful");
 
           // Redirect to the appropriate dashboard based on the role
           setTimeout(() => {
@@ -188,21 +193,27 @@ export function LoginPage({ onLoginSuccess }) {
               navigate("/FacultyDashboard");
             } else if (role === "club") {
               navigate("/ClubDashboard");
-            } else {
+            } else if (role == "student"){
               navigate("/StudentDashboard");
+            }else{
+              showNotification("User role not found!", "error");
+              console.log("User role not found!");
             }
           }, 1400);
         } else {
           showNotification("User role not found!", "error");
+          console.log("User role not found!");
         }
 
         console.log("Google Sign In");
       } else {
         showNotification(response.error || "Login Failed!", "error");
+        console.log("Login Failed");
       }
 
     } catch (error) {
       showNotification("An error occurred. Please try again.", "error");
+      console.log("An error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -212,6 +223,7 @@ export function LoginPage({ onLoginSuccess }) {
 
   const handleForgotPassword = () => {
     showNotification("Password reset link sent!", "info");
+    console.log("Password reset link sent!");
   };
 
   return (
