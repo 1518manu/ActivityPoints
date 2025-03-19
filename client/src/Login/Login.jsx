@@ -38,7 +38,7 @@ export function LoginPage({ onLoginSuccess }) {
   
        
         if (role) {
-            const userData = await fetchUserData(user.email, role); // Fetch student data if role is student
+            const userData = await fetchUserData(user.email, role); // Fetch Student data if role is Student
         
   
             const userId = userData?.rollNo || user.uid; // Default to Firebase UID if no rollNo
@@ -56,15 +56,15 @@ export function LoginPage({ onLoginSuccess }) {
                 case "admin":
                   navigate("/AdminDashboard");
                   break;
-                case "faculty":
+                case "Faculty":
                   navigate("/FacultyDashboard");
                   break;
                 case "club":
                   navigate("/ClubDashboard");
                   break;
-                case "student":
+                case "Student":
                   navigate("/StudentDashboard");
-                  console.log("student nav");
+                  console.log("Student nav");
                   break;
                 default:
                   showNotification("User role not found!", "error");
@@ -132,7 +132,7 @@ const handleGoogleSignIn = async (e) => {
               console.log("Club role found!");
               navigate("/ClubDashboard");
               break;
-            case "student":
+            case "Student":
               console.log("Student role found!");
               navigate("/StudentDashboard");
               break; 
@@ -200,7 +200,7 @@ const handleSubmit = async (e) => {
               console.log("Admin role found!");
               navigate("/AdminDashboard");
               break;
-            case "faculty":
+            case "Faculty":
               console.log("Faculty role found!");
               navigate("/FacultyDashboard");
               break;
@@ -208,7 +208,7 @@ const handleSubmit = async (e) => {
               console.log("Club role found!");
               navigate("/ClubDashboard");
               break;
-            case "student":
+            case "Student":
               console.log("Student role found!");
               navigate("/StudentDashboard");
               break; 

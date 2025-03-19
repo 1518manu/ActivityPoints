@@ -9,7 +9,8 @@ import { CertificateUploadPage } from "./Users/Upload/Upload";
 import { Certificate } from "./Users/Student/Certificates/Certificate";
 import { NotificationContainer } from "./Notification/NotificationContainer";
 import { Loading } from "./Loading/Loading";
-import { Faculty } from "./Users/Faculty/Faculty"
+import { Faculty } from "./Users/Faculty/Faculty";
+import { Validate } from "./Users/Faculty/validate/Validate"
 import "./App.css";
 
 
@@ -95,6 +96,8 @@ function App() {
                                                                         ( <LoginPage onLoginSuccess={handleLoginSuccess} /> )
                 }
               />
+              <Route path="/upload-certificate" element={<CertificateUploadPage />} />
+              <Route path="/certificate" element={<Certificate />} />
               <Route 
                 path = "/FacultyDashboard"
                 element={
@@ -102,8 +105,12 @@ function App() {
                                                                         ( <LoginPage onLoginSuccess={handleLoginSuccess} /> )
                 }
               />
-              <Route path="/upload-certificate" element={<CertificateUploadPage />} />
-              <Route path="/certificate" element={<Certificate />} />
+              <Route
+                path = "/Validate"
+                element ={
+                  <Validate/>
+                }
+              />
             </Routes>
           </Router>
     </>
