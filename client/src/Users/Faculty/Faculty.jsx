@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchUserData, fetchUserRole } from "../../Login/dataApi/userDataApi"
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaUser, FaUniversity, FaCheck, FaTimes } from "react-icons/fa";
+import { FaSearch, FaAward, FaUpload, FaThLarge, FaCheckCircle , FaCog, FaCalendarAlt, FaBell , FaSignOutAlt, FaEdit, FaUser, FaUniversity, FaCheck, FaTimes } from "react-icons/fa";
 import "./Faculty.css";
 
 export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
@@ -127,10 +127,11 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
 
       <div className="main-content-faculty">
         <div className="sidebar-menu-faculty">
-          <button onClick={onValidate}><img src="settings-icon.svg" className="menu-icon-faculty" /> Validate</button>
-          <button><img src="messages-icon.svg" className="menu-icon-faculty" /> Messages <span className="badge">new</span></button>
-          <button><img src="notifications-icon.svg" className="menu-icon-faculty" /> Notifications</button>
-          <button onClick={onLogout}><img src="logout-icon.svg" className="menu-icon-faculty" /> Logout</button>
+          <button onClick={onValidate}><FaCheckCircle  className="menu-icon-faculty" />Validate</button>
+          <button><FaCalendarAlt className="menu-icon-faculty" /> Event <span className="badge">new</span></button>
+          <button> <FaBell   className="menu-icon-faculty" /> Notifications  <span className="badge">new</span></button>
+          <button> <FaCog className="menu-icon-faculty" /> Settings </button>
+          <button onClick={onLogout} style={{ color: "#df0000" }}><FaSignOutAlt style={{ color: "#df0000" }}className="menu-icon-faculty" /> Logout</button>
         </div>
 
         <div className="profile-content-faculty">
