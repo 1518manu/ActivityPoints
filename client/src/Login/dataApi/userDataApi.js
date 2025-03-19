@@ -5,7 +5,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 export const fetchUserData = async (email, role) => {
   try {
     console.log(`Fetching user role '${role}' for email:`, email);
-    const usersRef = await collection(db, "Students"); // Assuming "users" is your collection
+    const usersRef = await collection(db, role); // Assuming "users" is your collection
     const q = await query(usersRef, where("email", "==", email));
     const querySnapshot = await getDocs(q);
 

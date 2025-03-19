@@ -4,9 +4,11 @@ import { FaEdit, FaUser, FaUniversity, FaCheck, FaTimes } from "react-icons/fa";
 import "./Faculty.css";
 
 export const Faculty = ({ token, userData, onLogout }) => {
-  const navigate = useNavigate();
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [rejectionReason, setRejectionReason] = useState("");
+
+  
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!token) {
@@ -132,16 +134,16 @@ export const Faculty = ({ token, userData, onLogout }) => {
               </div>
               <div className="profile-header-info">
                 <h2>{userData?.name || "N/A"}</h2>
-                <div className="profile-username">@{userData?.rollNo || "unknown"}</div>
+                <div className="profile-username">{userData?.faculty_id || "unknown"}</div>
                 <div className="profile-username">{userData?.faculty_type || "unknown"}, {userData?.email || "N/A"}</div>
                 <div className="profile-education">
                   <FaUniversity style={{ fontSize: "15px", margin: "10px", fontWeight: "100" }} />
-                  <span>TKM College of Engineering, Kerala</span>
+                  <span>userData?.college</span>
                 </div>
               </div>
             </div>
             
-<div className="section-container">
+            <div className="section-container">
               <div className="section-header">
                 <h3>WORKS</h3>
               </div>

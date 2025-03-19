@@ -17,7 +17,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(null);
   const [userData, setUserData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);  // <-- Added loading state
+  const [isLoading, setIsLoading] = useState(true);  
 
   const auth = getAuth(app);
 

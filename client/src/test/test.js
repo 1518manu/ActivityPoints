@@ -1,67 +1,47 @@
+import { db } from "../../firebaseFile/firebaseConfig"; // Make sure to import your db configuration
+import { collection, query, where, getDocs } from "firebase/firestore";
 
-const handleGoogleSignIn = async (e) => {
-  e.preventDefault();
-  
-  setIsLoading(true);
-  
+export const fetchUserData = async (email, role) => {
   try {
-    const response = await signInWithGoogle("login");
-    
-    console.log(response);
-    if (response.success) {
-      
-      // Fetch the role after login
-      console.log(response.token); 
-      
-      const email = response?.token?.email;
-      console.log("email:",email);
-
-      const role = await fetchUserRole(user.email);
-      console.log("role:",role);
-
-      const userData = await fetchUserData(email, role);
-
-      onLoginSuccess(response.token, userData);
-
-      if (role) {
-        localStorage.setItem("token", response.token);
-        localStorage.setItem("role", role);
-        localStorage.setItem("userData", JSON.stringify(userData));
-
-        showNotification("Login Successful!", "success");
-        console.log("Login Successful");
-
-        // Redirect to the appropriate dashboard based on the role
-        setTimeout(() => {
-          if (role === "admin") {
-            navigate("/AdminDashboard");
-          } else if (role === "faculty") {
-            navigate("/FacultyDashboard");
-          } else if (role === "club") {
-            navigate("/ClubDashboard");
-          } else if (role == "student"){
-            navigate("/StudentDashboard");
-          }else{
-            showNotification("User role not found!", "error");
-            console.log("User role not found!");
-          }
-        }, 1400);
-      } else {
-        showNotification("User role not found!", "error");
-        console.log("User role not found!");
-      }
-
-      console.log("Google Sign In");
-    } else {
-      showNotification(response.error || "Login Failed!", "error");
-      console.log("Login Failed");
-    }
-
-  } catch (error) {
-    showNotification("An error occurred. Please try again.", "error");
-    console.log("An error occurred. Please try again.");
-  } finally {
-    setIsLoading(false);
-  }
+    console.log(`Fetching user role '${role}' for email:`, email);
+    let collectionName = "Students"; // Default
+      if (role === "faculty") collectionName = "Faculty";
+      else if (role === "club") collectionName = "Clubs";
   
+      const userRef = await collection(db, collectionName);
+    
+    const q = await query(userRef, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+
+    console.log("querySnapshot:" , querySnapshot);
+    
+    if (!querySnapshot.empty) {
+      console.log("Data found:", querySnapshot.docs[0].data());
+      return querySnapshot.docs[0].data(); // Assuming the role is stored in the "role" field
+    } else {
+      throw new Error("Role not found");
+    }
+  } catch (error) {
+    console.error(`Error fetching user role ${role}:`, error);
+    return null;
+  }
+};
+
+
+export const fetchUserRole = async (email) => {
+  try {
+    const usersRef = collection(db, "Users");
+    const q = query(usersRef, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      return querySnapshot.docs[0].data().role; // Only return the role
+    } else {
+      console.error("Role not found for email:", email);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user role:", error);
+    return null;
+  }
 };
