@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUpload, FaFile, FaTimes } from "react-icons/fa";
 import { NotificationContainer } from "../../Notification/NotificationContainer";
-//import GoogleDriveAuth from '../../components/GoogleDriveAuth.jsx'; // Ensure the correct extension
- // Import GoogleDriveAuth component
 import { getAuth } from "firebase/auth";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
-//import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from "../../firebaseFile/firebaseConfig"; // Firebase config file
 import "./Upload.css";
 
@@ -21,10 +19,11 @@ export function CertificateUploadPage() {
   const [prize, setPrize] = useState("");
   const [eventDate, setEventDate] = useState(""); // Event Date
   const [certificateDate, setCertificateDate] = useState(""); // Certificate Date
+  const [semester, setSemester] = useState(""); // State for semester
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
-
+  
   const auth = getAuth(); // Get authenticated user
   const db = getFirestore(app);
   const activityOptions = {
@@ -62,6 +61,9 @@ export function CertificateUploadPage() {
   const rolesForLeadership = ["Core Coordinator", "Sub Coordinator", "Volunteer"]; // Default roles for Leadership & Management
   const rolesForElectedRepresentatives = ["Chairman", "Secretary", "Other Council Members"]; // Roles for Elected Student Representatives
   const prizeOptions = ["None", "1st Prize", "2nd Prize", "3rd Prize"];
+  // const semesterOptions = Array.from({ length: 8 }, (_, i) => Semester ${i + 1}); // Semester options from 1 to 8
+  const semesterOptions = Array.from({ length: 8 }, (_, i) => `Semester ${i + 1}`);
+
 
   const eligibleForLevels = [
     "Sports & Games",
@@ -87,85 +89,99 @@ export function CertificateUploadPage() {
       setError("");
     }
   };
+
   const handleSubmit = async () => {
-      if (
-        !certificateName ||
-        !selectedFile ||
-        !activityHead ||
-        !activity ||
-        (isLevelRequired() && !achievementLevel) ||
-        (isRoleRequired() && !role) ||
-        !eventDate ||
-        !certificateDate
-      ) {
-        setError("Please fill all fields before submitting.");
-        return;
-      }
-    
-      const user = auth.currentUser;
-      if (!user) {
-        setError("User not logged in!");
-        return;
-      }
-    
-      const user_id = "B22CSB75";
+    if (
+      !certificateName ||
+      !selectedFile ||
+      !activityHead ||
+      !activity ||
+      (isLevelRequired() && !achievementLevel) ||
+      (isRoleRequired() && !role) ||
+      !eventDate ||
+      !certificateDate ||
+      !semester // Ensure semester is selected
+    ) {
+      setError("Please fill all fields before submitting.");
+      return;
+    }
+
+    const user = auth.currentUser;
+    if (!user) {
+      setError("User not logged in!");
+      return;
+    }
+
+    // const user_id = "B22CSB75";
+    // const formData = new FormData();
+    // formData.append("file", selectedFile);
+    // formData.append("fileName", selectedFile.name);
+    // formData.append("folder", certificates/${user_id});
+    // formData.append("publicKey", "public_dGrtJlwx1cYmPGWcjN5Ybdp0bYw=");
+    console.log("data in local storage", localStorage.getItem("userData"));
+    //const user_id = "B22CSB75";
+    const userData = JSON.parse(localStorage.getItem("userData"));
+const user_id = userData.rollNo;
+console.log(user_id);  // Output: B22CSB75
+
       const formData = new FormData();
       formData.append("file", selectedFile);
       formData.append("fileName", selectedFile.name);
       formData.append("folder", `certificates/${user_id}`); 
       formData.append("publicKey", "public_dGrtJlwx1cYmPGWcjN5Ybdp0bYw="); 
 
-  try {
-    const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
-      method: "POST",
-      headers: {
-        Authorization: Basic `${btoa("private_6doDUpitrkkv73i9cZvUYrviuDg=:")}`, // Fixed API Key format
-      },
-      body: formData,
-    });
+    try {
+      const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
+              method: "POST",
+              headers: {
+                Authorization: `Basic ${btoa("private_6doDUpitrkkv73i9cZvUYrviuDg=:")}`, // Fixed API Key format
+              },
+              body: formData,
+            });
 
-    if (!response.ok) {
-      const errorDetails = await response.json();
-      console.error("Error Details:", errorDetails); // Log detailed error
-      throw new Error("ImageKit upload failed");
-    }
+      if (!response.ok) {
+        const errorDetails = await response.json();
+        console.error("Error Details:", errorDetails); // Log detailed error
+        throw new Error("ImageKit upload failed");
+      }
 
-    //const data = await response.json();
-    const data = await response.json();
-        if (data.url) {
-          const fileURL = data.url; // This is the uploaded file's URL
-    
-          // Save certificate details & file URL to Firestore
-          const docRef = await addDoc(collection(db, "certificates"), {
-            user_id,
-            certificateName: certificateName || null,
-            fileURL,
-            activityHead: activityHead || null,
-            activity: activity || null,
-            achievementLevel: achievementLevel || null,
-            role: role || null,
-            prize: prize || null,
-            eventDate: eventDate || null,
-            certificateDate: certificateDate || null,
-            uploadedAt: new Date(),
-          });
-    
-          console.log("Certificate uploaded with ID:", docRef.id);
-          alert("Certificate uploaded successfully!");
+      const data = await response.json();
+      if (data.url) {
+        const fileURL = data.url; // This is the uploaded file's URL
+
+        // Save certificate details & file URL to Firestore
+        const docRef = await addDoc(collection(db, "certificates"), {
+          user_id,
+          certificateName: certificateName || null,
+          fileURL,
+          activityHead: activityHead || null,
+          activity: activity || null,
+          achievementLevel: achievementLevel || null,
+          role: role || null,
+          prize: prize || null,
+          eventDate: eventDate || null,
+          certificateDate: certificateDate || null,
+          semester: semester || null, // Include semester in Firestore data
+          uploadedAt: new Date(),
+        });
+
+        console.log("Certificate uploaded with ID:", docRef.id);
+        alert("Certificate uploaded successfully!");
         resetForm();
-    
-          setTimeout(() => {
-            navigate("/StudentDashboard");
-          }, 1500);
-        } else {
-          setError("File upload failed!");
-        }
-      } catch (error) {
-        console.error("Upload failed:", error);
+
+        setTimeout(() => {
+          navigate("/StudentDashboard");
+        }, 1500);
+      } else {
         setError("File upload failed!");
       }
-    };
-const resetForm = () => {
+    } catch (error) {
+      console.error("Upload failed:", error);
+      setError("File upload failed!");
+    }
+  };
+
+  const resetForm = () => {
     setCertificateName("");
     setSelectedFile(null);
     setPreviewUrl("");
@@ -176,9 +192,10 @@ const resetForm = () => {
     setPrize("");
     setEventDate("");
     setCertificateDate("");
+    setSemester(""); // Reset semester
     setError("");
   };
-  
+
   // Helper functions remain unchanged
   const isLevelRequired = () => {
     return (
@@ -187,22 +204,30 @@ const resetForm = () => {
       eligibleForLevels.includes(activity)
     );
   };
-  
+
   const isRoleRequired = () => {
     return activityHead === "Leadership & Management";
   };
-  
+
   const isPrizeRequired = () => {
     return activityHead === "Sports & Games" || activityHead === "Cultural Activities";
   };
-  
+
   const getRoles = () => {
     if (activity === "Elected student representatives") {
       return rolesForElectedRepresentatives;
     }
     return rolesForLeadership;
   };
-  
+
+  // Get today's date in YYYY-MM-DD format
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
 
   return (
     <div className="upload-container">
@@ -244,6 +269,7 @@ const resetForm = () => {
           type="date"
           value={eventDate}
           onChange={(e) => setEventDate(e.target.value)}
+          max={getTodayDate()} // Restrict to today's date or earlier
           aria-label="Event Date"
         />
       </div>
@@ -255,8 +281,24 @@ const resetForm = () => {
           type="date"
           value={certificateDate}
           onChange={(e) => setCertificateDate(e.target.value)}
+          max={getTodayDate()} // Restrict to today's date or earlier
           aria-label="Certificate Date"
         />
+      </div>
+
+      {/* Semester Dropdown */}
+      <div className="input-group">
+        <label>Semester:</label>
+        <select value={semester} onChange={(e) => setSemester(e.target.value)} aria-label="Semester">
+          <option value="" disabled>
+            Select Semester
+          </option>
+          {semesterOptions.map((sem) => (
+            <option key={sem} value={sem}>
+              {sem}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="input-group">
