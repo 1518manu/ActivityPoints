@@ -17,9 +17,9 @@ export const Certificate = () => {
 
           // 🔹 Ensure PDF file extension in URL
           const fixedFileURL = data.fileURL;
-          if (!fixedFileURL.endsWith(".pdf")) {
-            fixedFileURL += ".pdf";
-          }
+          // if (!fixedFileURL.endsWith(".pdf")) {
+          //   fixedFileURL += ".pdf";
+          // }
 
           return { id: doc.id, ...data, fileURL: fixedFileURL };
         });
