@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaSearch, FaEdit, FaUser, FaUniversity, FaUpload, FaThLarge, FaCog, FaCalendarAlt, FaBell , FaSignOutAlt } from "react-icons/fa"; 
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import { fetchUserData, fetchUserRole } from "../../Login/dataApi/userDataApi"
 import 'react-circular-progressbar/dist/styles.css';
 import './Student.css';
 
@@ -16,35 +17,44 @@ const getColor = (point) => {
 };
 
 
-export const Student = ({ token, userData, onLogout }) => {
-  const [progress, setProgress] = useState(0);
+export const Student = ({ token, userData: initialUserData, onLogout }) => {
+  const [progress, setProgress] = useState(0); 
+  const [userData, setUserData] = useState(initialUserData);
+  const navigate = useNavigate();
 
   console.log("Student Data:", userData);
   console.log("Token:", token);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    setProgress(userData?.point || 0); // Directly set progress without setInterval
-  }, [userData]);
-  
 
   useEffect(() => {
     if (!token) {
       navigate("/");
+      return;
     }
 
-    if (userData) {
-      console.log("Student Data Loaded:", userData);
-    } else {
-      console.warn("No user data available!");
-    }
-  }, [token, userData, navigate]);
+    const fetchData = async () => {
+      try {
+        console.log("Fetching user data... email:", initialUserData?.email);
+        const role = await fetchUserRole(initialUserData?.email); // Fetch role first
+        if (role) {
+          const updatedUserData = await fetchUserData(initialUserData?.email, role);
+          if (updatedUserData) {
+            setUserData(updatedUserData);
+            setProgress(updatedUserData?.point || 0);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchData();
+  }, [token, initialUserData?.email, navigate]);
 
   const openUploadPage = () => navigate("/upload-certificate");
-
   const onCertificate = () => navigate("/certificate");
+
   if (!userData) {
-    return <div>Loading user data...</div>; // Prevent render until data is ready
+    return <div>Loading user data...</div>;
   }
   
   return (
