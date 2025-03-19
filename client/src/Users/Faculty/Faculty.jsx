@@ -99,7 +99,7 @@ export const Faculty = ({ token, userData, onLogout }) => {
   }
 
   return (
-    <div className="container">
+    <div className="container-faculty">
       <header className="header">
         <div className="header-left">
           <div className="logo-container">
