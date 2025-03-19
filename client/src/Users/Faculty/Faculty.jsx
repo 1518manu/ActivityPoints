@@ -100,94 +100,94 @@ export const Faculty = ({ token, userData, onLogout }) => {
 
   return (
     <div className="container-faculty">
-      <header className="header">
-        <div className="header-left">
-          <div className="logo-container">
+      <header className="header-faculty">
+        <div className="header-left-faculty">
+          <div className="logo-container-faculty">
             <img src="/api/placeholder/100/40" alt="Logo" className="logo" />
           </div>
         </div>
-        <div className="header-right">
+        <div className="header-right-faculty">
           <button className="business-btn" onClick={onLogout}>Logout</button>
         </div>
       </header>
 
-      <div className="main-content">
-        <div className="sidebar-menu">
-          <button onClick={onValidate}><img src="settings-icon.svg" className="menu-icon" /> Validate</button>
-          <button><img src="messages-icon.svg" className="menu-icon" /> Messages <span className="badge">new</span></button>
-          <button><img src="notifications-icon.svg" className="menu-icon" /> Notifications</button>
-          <button onClick={onLogout}><img src="logout-icon.svg" className="menu-icon" /> Logout</button>
+      <div className="main-content-faculty">
+        <div className="sidebar-menu-faculty">
+          <button onClick={onValidate}><img src="settings-icon.svg" className="menu-icon-faculty" /> Validate</button>
+          <button><img src="messages-icon.svg" className="menu-icon-faculty" /> Messages <span className="badge">new</span></button>
+          <button><img src="notifications-icon.svg" className="menu-icon-faculty" /> Notifications</button>
+          <button onClick={onLogout}><img src="logout-icon.svg" className="menu-icon-faculty" /> Logout</button>
         </div>
 
-        <div className="profile-content">
-          <div className="profile-banner">
-            <div className="banner-background"></div>
-            <div className="edit-button">
+        <div className="profile-content-faculty">
+          <div className="profile-banner-faculty">
+            <div className="banner-background-faculty"></div>
+            <div className="edit-button-faculty">
               <FaEdit style={{ color: "#ccc", fontSize: "15px", margin: "5px", fontWeight: "100" }} />
             </div>
           </div>
 
-          <div className="profile-details">
-            <div className="profile-header">
-              <div className="profile-pic-container">
+          <div className="profile-details-faculty">
+            <div className="profile-header-faculty">
+              <div className="profile-pic-container-faculty">
                 <FaUser style={{ color: "#ccc", fontSize: "40px", margin: "5px", fontWeight: "100" }} />
               </div>
-              <div className="profile-header-info">
+              <div className="profile-header-info-faculty">
                 <h2>{userData?.name || "N/A"}</h2>
-                <div className="profile-username">{userData?.faculty_id || "unknown"}</div>
-                <div className="profile-username">{userData?.faculty_type  || "unknown"}   {userData?.email || "N/A"}</div>
-                <div className="profile-education">
+                <div className="profile-username-faculty">{userData?.faculty_id || "unknown"}</div>
+                <div className="profile-username-faculty">{userData?.faculty_type  || "unknown"}   {userData?.email || "N/A"}</div>
+                <div className="profile-education-faculty">
                   <FaUniversity style={{ fontSize: "15px", margin: "10px", fontWeight: "100" }} />
                   <span>{userData?.college}</span>
                 </div>
               </div>
             </div>
             
-            <div className="section-container">
-              <div className="section-header">
+            <div className="section-container-faculty">
+              <div className="section-heade-facultyr">
                 <h3>WORKS</h3>
               </div>
-              <div className="boxes-container">
-                <div className="box">
+              <div className="boxes-container-faculty">
+                <div className="box-faculty">
                   <p>total no of students</p>
                 </div>
-                <div className="box">
+                <div className="box-faculty">
                   <p>Pending Validation</p>
                 </div>
-                <div className="box">
+                <div className="box-faculty">
                   <p>Completed</p>
                 </div>
               </div>
             </div>
-            <div className="section-container">
-              <div className="section-header">
+            <div className="section-container-faculty">
+              <div className="section-header-faculty">
                 <h3>Generate Report</h3>
                 <p>Analysis based on student performance semester-wise or year-wise</p>
               </div>
-              <div className="buttons-container">
-                <button className="report-button" onClick={() => handleSemesterReport()}>
+              <div className="buttons-container-faculty">
+                <button className="report-button-faculty" onClick={() => handleSemesterReport()}>
                   Semester-wise Report
                 </button>
-                <button className="report-button" onClick={() => handleYearReport()}>
+                <button className="report-button-faculty" onClick={() => handleYearReport()}>
                   Year-wise Report
                 </button>
               </div>
             </div>
               
-            <div className="section-container">
+            <div className="section-container-faculty">
               <h3>Duty-Leave Applications</h3>
               {dutyLeaveApplications.map((app) => (
-                <div key={app.id} className="application-card">
+                <div key={app.id} className="application-card-faculty">
                   <p><strong>Name:</strong> {app.studentName}</p>
                   <p><strong>Roll No:</strong> {app.rollNo}</p>
-                  <button className="view-button" onClick={() => handleViewApplication(app)}>View Application</button>
+                  <button className="view-button-faculty" onClick={() => handleViewApplication(app)}>View Application</button>
                 </div>
               ))}
             </div>
 
             {selectedApplication && (
-              <div className="popup-overlay">
-                <div className="popup-content">
+              <div className="popup-overlay-faculty">
+                <div className="popup-content-faculty">
                   <h3>Application Details</h3>
                   <p><strong>Name:</strong> {selectedApplication.studentName}</p>
                   <p><strong>Reason:</strong> {selectedApplication.reason}</p>
@@ -202,8 +202,8 @@ export const Faculty = ({ token, userData, onLogout }) => {
                 </div>
               </div>
             )}
-            <div className="section-container">
-              <div className="section-header">
+            <div className="section-container-faculty">
+              <div className="section-header-faculty">
                 <h3>Recent Activities</h3>
               </div>
             </div>
