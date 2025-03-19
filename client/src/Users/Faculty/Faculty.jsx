@@ -135,7 +135,7 @@ export const Faculty = ({ token, userData, onLogout }) => {
               <div className="profile-header-info-faculty">
                 <h2>{userData?.name || "N/A"}</h2>
                 <div className="profile-username-faculty">{userData?.faculty_id || "unknown"}</div>
-                <div className="profile-username-faculty">{userData?.faculty_type  || "unknown"}   {userData?.email || "N/A"}</div>
+                <div className="profile-username-faculty">{userData?.faculty_type  || "unknown"} <div>|</div>  {userData?.email || "N/A"}</div>
                 <div className="profile-education-faculty">
                   <FaUniversity style={{ fontSize: "15px", margin: "10px", fontWeight: "100" }} />
                   <span>{userData?.college}</span>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaSearch, FaEdit, FaUser, FaUniversity, FaUpload, FaThLarge, FaCog, FaCalendarAlt, FaBell , FaSignOutAlt } from "react-icons/fa"; 
+import { FaSearch, FaAward, FaEdit, FaUser, FaUniversity, FaUpload, FaThLarge, FaCog, FaCalendarAlt, FaBell , FaSignOutAlt } from "react-icons/fa"; 
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import { fetchUserData, fetchUserRole } from "../../Login/dataApi/userDataApi"
 import 'react-circular-progressbar/dist/styles.css';
@@ -135,7 +135,7 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
                 </div>
                 <div className = "profile-username">{userData?.rollNo || "unknown"}</div>
                 <div className = "profile-contact">
-                  <span>{userData?.phone || "N/A"}</span>
+                  <span>{userData?.phone || "N/A"}</span><div>|</div>
                   <span className="profile-email">{userData?.email || "N/A"}</span>
                 </div>
                 <div className="profile-education">
@@ -150,8 +150,7 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
                 <h3>About</h3>
               </div>
               <p className="section-prompt">
-                Craft an engaging story in your bio and make meaningful connections with peers and recruiters alike!
-              </p>
+               {userData?.about || "Craft an engaging story in your bio and make meaningful connections with peers and recruiters alike!" } </p>
               <button className="add-button">Add About</button>
             </div>
 
