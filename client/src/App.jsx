@@ -108,7 +108,7 @@ function App() {
               <Route
                 path = "/Validate"
                 element ={
-                  <Validate/>
+                  <Validate token={token} userData={userData} onLogout={handleLogout} />
                 }
               />
             </Routes>

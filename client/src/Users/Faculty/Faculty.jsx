@@ -36,7 +36,7 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
     fetchData();
   }, [token, initialUserData?.email, navigate]);
 
-  const onValidate = () => navigate("/validate");
+  const onValidate = () => { navigate("/Validate"); }
 
   const handleSemesterReport = () => {
     console.log("Generating Semester-wise Report...");

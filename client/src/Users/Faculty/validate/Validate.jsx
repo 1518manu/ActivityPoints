@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaEye } from "react-icons/fa";
+import { certificatesFetch } from "../certificatesFetch/certificatesFetch"
 import './Validate.css';
 
 export const Validate = ({ token, userData, onLogout }) => {
