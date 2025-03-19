@@ -643,10 +643,8 @@
   .box-faculty {
     flex: 1; /* Each box takes equal space */
     padding: 20px;
-    border: 1px solid #ddd;
     border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border:1px solid #555  ;
     text-align: center;
   }
   

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { fetchUserData, fetchUserRole } from "../../Login/dataApi/userDataApi"
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaUser, FaUniversity, FaCheck, FaTimes } from "react-icons/fa";
 import "./Faculty.css";
 
-export const Faculty = ({ token, userData, onLogout }) => {
+export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [rejectionReason, setRejectionReason] = useState("");
+  const [userData, setUserData] = useState(initialUserData);
 
   
   const navigate = useNavigate();
@@ -15,12 +17,24 @@ export const Faculty = ({ token, userData, onLogout }) => {
       navigate("/");
     }
 
-    if (userData) {
-      console.log("Student Data Loaded:", userData);
-    } else {
-      console.warn("No user data available!");
-    }
-  }, [token, userData, navigate]);
+
+    const fetchData = async () => {
+      try {
+        console.log("Fetching user data... email:", initialUserData?.email);
+        const role = await fetchUserRole(initialUserData?.email); // Fetch role first
+        if (role) {
+          const updatedUserData = await fetchUserData(initialUserData?.email, role);
+          if (updatedUserData) {
+            setUserData(updatedUserData);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchData();
+  }, [token, initialUserData?.email, navigate]);
 
   const onValidate = () => navigate("/validate");
 
@@ -135,7 +149,7 @@ export const Faculty = ({ token, userData, onLogout }) => {
               <div className="profile-header-info-faculty">
                 <h2>{userData?.name || "N/A"}</h2>
                 <div className="profile-username-faculty">{userData?.faculty_id || "unknown"}</div>
-                <div className="profile-username-faculty">{userData?.faculty_type  || "unknown"} <div>|</div>  {userData?.email || "N/A"}</div>
+                <div className="profile-username-faculty">{userData?.faculty_type +"   |   "  || "unknown"}  {userData?.email || "N/A"}</div>
                 <div className="profile-education-faculty">
                   <FaUniversity style={{ fontSize: "15px", margin: "10px", fontWeight: "100" }} />
                   <span>{userData?.college}</span>
@@ -147,14 +161,14 @@ export const Faculty = ({ token, userData, onLogout }) => {
               <div className="section-heade-facultyr">
                 <h3>WORKS</h3>
               </div>
-              <div className="boxes-container-faculty">
-                <div className="box-faculty">
+              <div className="boxes-container-faculty ">
+                <div className="box-faculty box1">
                   <p>total no of students</p>
                 </div>
-                <div className="box-faculty">
+                <div className="box-faculty box2">
                   <p>Pending Validation</p>
                 </div>
-                <div className="box-faculty">
+                <div className="box-faculty box3">
                   <p>Completed</p>
                 </div>
               </div>
