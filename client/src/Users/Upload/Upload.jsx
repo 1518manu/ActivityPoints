@@ -7,6 +7,7 @@ import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from "../../firebaseFile/firebaseConfig"; // Firebase config file
 import "./Upload.css";
+import { setLogLevel } from "firebase/app";
 
 export function CertificateUploadPage() {
   const [certificateName, setCertificateName] = useState("");
@@ -21,8 +22,18 @@ export function CertificateUploadPage() {
   const [certificateDate, setCertificateDate] = useState(""); // Certificate Date
   const [semester, setSemester] = useState(""); // State for semester
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [notification, setNotification] = useState({ message: "", type: "", show: false });
+  
 
   const navigate = useNavigate();
+
+  
+  const showNotification = (message, type) => {
+    setNotification({ message, type, show: true });
+    setTimeout(() => setNotification({ message: "", type: "", show: false }), 3000);
+  };
+
   
   const auth = getAuth(); // Get authenticated user
   const db = getFirestore(app);
@@ -78,10 +89,15 @@ export function CertificateUploadPage() {
       if (file.size > 5 * 1024 * 1024) {
         // 5MB limit
         setError("File size should be less than 5MB.");
+        console.log("File size should be less than 5MB.");
+        showNotification("File size should be less than 5MB.","info");
         return;
       }
       if (!["image/jpeg", "image/png", "application/pdf"].includes(file.type)) {
         setError("Only JPEG, PNG, and PDF files are allowed.");
+        console.log("Only JPEG, PNG, and PDF files are allowed.");
+        showNotification("Only JPEG, PNG, and PDF files are allowed.","info");
+        
         return;
       }
       setSelectedFile(file);
@@ -91,6 +107,8 @@ export function CertificateUploadPage() {
   };
 
   const handleSubmit = async () => {
+
+    setIsLoading(true);
     if (
       !certificateName ||
       !selectedFile ||
@@ -103,12 +121,18 @@ export function CertificateUploadPage() {
       !semester // Ensure semester is selected
     ) {
       setError("Please fill all fields before submitting.");
+      console.log("Please fill all fields before submitting.");
+      showNotification("Please fill all fields before submitting.","info");
+      setIsLoading(false);
       return;
     }
 
     const user = auth.currentUser;
     if (!user) {
       setError("User not logged in!");
+      console.log("User not logged in!");
+      showNotification("User not logged in!","error");
+      setIsLoading(false);
       return;
     }
 
@@ -121,14 +145,14 @@ export function CertificateUploadPage() {
     console.log("data in local storage", localStorage.getItem("userData"));
     //const user_id = "B22CSB75";
     const userData = JSON.parse(localStorage.getItem("userData"));
-const user_id = userData.rollNo;
-console.log(user_id);  // Output: B22CSB75
+    const user_id = userData.rollNo;
+    console.log(user_id);  // Output: B22CSB75
 
-      const formData = new FormData();
-      formData.append("file", selectedFile);
-      formData.append("fileName", selectedFile.name);
-      formData.append("folder", `certificates/${user_id}`); 
-      formData.append("publicKey", "public_dGrtJlwx1cYmPGWcjN5Ybdp0bYw="); 
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("fileName", selectedFile.name);
+    formData.append("folder", `certificates/${user_id}`); 
+    formData.append("publicKey", "public_dGrtJlwx1cYmPGWcjN5Ybdp0bYw="); 
 
     try {
       const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
@@ -166,18 +190,25 @@ console.log(user_id);  // Output: B22CSB75
         });
 
         console.log("Certificate uploaded with ID:", docRef.id);
-        alert("Certificate uploaded successfully!");
+        showNotification("Certificate uploaded successfully!","success");
         resetForm();
 
         setTimeout(() => {
           navigate("/StudentDashboard");
         }, 1500);
       } else {
+        showNotification("File upload failed!","error");
         setError("File upload failed!");
+        console.log("File upload failed!")
       }
     } catch (error) {
       console.error("Upload failed:", error);
+      showNotification("File upload failed!","error");
+      console.log("File upload failed!")
       setError("File upload failed!");
+    } finally {
+      console.log("false");
+      setIsLoading(false);
     }
   };
 
@@ -231,6 +262,7 @@ console.log(user_id);  // Output: B22CSB75
 
   return (
     <div className="upload-container">
+      <NotificationContainer message={notification.message} type={notification.type} show={notification.show} />
       <h2>Upload Your Certificate</h2>
 
       {error && <div className="error-message">{error}</div>}
@@ -379,8 +411,8 @@ console.log(user_id);  // Output: B22CSB75
         </div>
       )}
 
-      <button onClick={handleSubmit} className="upload-button">
-        Upload <FaUpload />
+      <button onClick={handleSubmit} className = "upload-button" disabled={isLoading}>
+      {isLoading ? "Wait.." : "Upload"} <FaUpload />
       </button>
     </div>
   );

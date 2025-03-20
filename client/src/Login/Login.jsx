@@ -4,7 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import { signInWithGoogle } from "./AuthApi/GoogleAuth";
 import { mockAuthApi } from "./AuthApi/Api";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import {NotificationContainer } from "../Notification/NotificationContainer";
+import { NotificationContainer } from "../Notification/NotificationContainer";
 import { fetchUserData , fetchUserRole} from "./dataApi/userDataApi"
 import "./Login.css";
 
