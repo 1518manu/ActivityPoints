@@ -2,27 +2,122 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaEye } from "react-icons/fa";
 import { certificatesFetch } from "../certificatesFetch/certificatesFetch"
+import { db } from '../../../firebaseFile/firebaseConfig'; // Adjust your path to firebase config
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
+
 import './Validate.css';
 
 export const Validate = ({ token, userData, onLogout }) => {
   const navigate = useNavigate();
+  const [validationData, setValidationData] = useState([]);
+  //---------------------------------------fetching certificates from the database-------------------------------------
+const fetchValidationData = async () => {
+  try {
+    const userDataString = localStorage.getItem('userData'); 
+    let facultyId = null;
+    if (userDataString) {
+      const userData = JSON.parse(userDataString);
+      facultyId = userData.faculty_id;
+      console.log("Faculty ID inside IF:", facultyId);
+    }
 
+    console.log("Faculty ID for query:", facultyId);
+    
+    const validationQuery = query(
+      collection(db, "Validation"),
+      where("faculty_id", "==", facultyId),
+      where("validation_status", "==", "not validated")
+    );
+
+    const querySnapshot = await getDocs(validationQuery);
+
+    if (querySnapshot.empty) {
+      console.log("No pending validations found.");
+      setValidationData([]);
+      return;
+    }
+
+    // Now fetch the certificates related to the validation
+    const validationWithCertificates = [];
+    for (const doc of querySnapshot.docs) {
+      const validationData = doc.data();
+      const certRef = doc.data().cert_id;  // Assuming cert_id is the document ID of Certificates
+      console.log("type of certRef",certRef, typeof certRef);
+
+
+      const certDoc = await getDocs(
+        query(collection(db, "certificates"), where("__name__", "==", certRef))
+      );
+
+      if (!certDoc.empty) {
+        const certData = certDoc.docs[0].data();
+        validationWithCertificates.push({
+          id: doc.id,
+          ...validationData,
+          certificateDetails: certData,
+        });
+      } else {
+        console.log(`Certificate not found for cert_id: ${certRef}`);
+      }
+    }
+
+    setValidationData(validationWithCertificates);
+    console.log("Validation Data with Certificates:", validationWithCertificates);
+
+  } catch (error) {
+    console.error("Error fetching validation data:", error);
+  }
+};
   useEffect(() => {
     if (!token) {
       navigate("/");
     }
 
     if (userData) {
-      console.log("Student Data Loaded:", userData);
+      console.log("Faculty Data Loaded:", userData);
     } else {
       console.warn("No user data available!");
     }
 
     // Load certificates from localStorage if available
-    const savedCertificates = JSON.parse(localStorage.getItem("certificates"));
-    if (savedCertificates) {
-      setUpdatedCertificates(savedCertificates);
-    }
+    // const savedCertificates = JSON.parse(localStorage.getItem("certificates"));
+    // if (savedCertificates) {
+    //   setUpdatedCertificates(savedCertificates);
+    // }
+    //------------------------------
+    //const fetchValidationData = async () => {
+//       try {
+//         const userDataString = localStorage.getItem('userData'); 
+//         //const facultyId = null;
+//         if (userDataString) {
+//           const userData = JSON.parse(userDataString);
+//           const facultyId = userData.faculty_id;
+//           console.log("Faculty ID:", facultyId);
+// } // fetch faculty ID from local storage
+//         console.log("Faculty ID:", facultyId);
+//         const q = query(
+//           collection(db, "Validation"),
+//           where("faculty_id", "==", facultyId),
+//           where("validation_status", "==", "Not Validated")
+//         );
+  
+//         const querySnapshot = await getDocs(q);
+//         const validations = [];
+//         querySnapshot.forEach((doc) => {
+//           validations.push({ id: doc.id, ...doc.data() });
+//         });
+//         setValidationData(validations);
+//         console.log("Validation Data:", validations);
+//       } catch (error) {
+//         console.error("Error fetching validation data:", error);
+//       }
+
+
+
+  
+    fetchValidationData();
+    //}, []);
   }, [token, userData, navigate]);
 
   if (!userData) {
@@ -57,6 +152,15 @@ export const Validate = ({ token, userData, onLogout }) => {
     setSelectedStudent(studentId);
   };
 
+  const getValidatableCertificates = (studentId) => {
+    const studentCerts = updatedCertificates[studentId] || [];
+    const certsToValidate = studentCerts.filter(cert =>
+      validationData.some(validation => validation.cert_id === cert.id && validation.validation_status === "Not Validated")
+    );
+    return certsToValidate;
+  };
+  
+
   const handleAcceptCertificate = (studentId, certificateId) => {
     const updatedCerts = { ...updatedCertificates };
     const studentCertificates = updatedCerts[studentId];
@@ -70,24 +174,48 @@ export const Validate = ({ token, userData, onLogout }) => {
     setUpdatedCertificates(updatedCerts);
   };
 
-  const handleRejectCertificate = (studentId, certificateId) => {
-    const updatedCerts = { ...updatedCertificates };
-    const studentCertificates = updatedCerts[studentId];
-    const certificateIndex = studentCertificates.findIndex(cert => cert.id === certificateId);
-    studentCertificates[certificateIndex].status = "Rejected";
-    studentCertificates[certificateIndex].rejectReason = rejectReason;
-    studentCertificates[certificateIndex].validatedBy = userData.name;
-    studentCertificates[certificateIndex].validationTime = new Date().toLocaleString();
+  // const handleRejectCertificate = (studentId, certificateId) => {
+  //   const updatedCerts = { ...updatedCertificates };
+  //   const studentCertificates = updatedCerts[studentId];
+  //   const certificateIndex = studentCertificates.findIndex(cert => cert.id === certificateId);
+  //   studentCertificates[certificateIndex].status = "Rejected";
+  //   studentCertificates[certificateIndex].rejectReason = rejectReason;
+  //   studentCertificates[certificateIndex].validatedBy = userData.name;
+  //   studentCertificates[certificateIndex].validationTime = new Date().toLocaleString();
 
-    // Save to localStorage to persist data
-    localStorage.setItem("certificates", JSON.stringify(updatedCerts));
-    setUpdatedCertificates(updatedCerts);
-    setRejectPopup(null); // Close the popup
-    setRejectReason(""); // Reset the reject reason
+  //   // Save to localStorage to persist data
+  //   localStorage.setItem("certificates", JSON.stringify(updatedCerts));
+  //   setUpdatedCertificates(updatedCerts);
+  //   setRejectPopup(null); // Close the popup
+  //   setRejectReason(""); // Reset the reject reason
 
-    // Send email to student (simulated here)
-    sendRejectionEmail(studentId, rejectReason);
-  };
+  //   // Send email to student (simulated here)
+  //   sendRejectionEmail(studentId, rejectReason);
+  // };
+
+const handleRejectCertificate = async (validationId) => {
+  try {
+    // Update the Firestore Validation document
+    const validationRef = doc(db, "Validation", validationId);
+    await updateDoc(validationRef, {
+      validation_status: "rejected",
+      rejectReason: rejectReason,
+      validatedBy: userData.name, // Optional: track who rejected
+      validationTime: new Date().toISOString()
+    });
+
+    console.log("Validation rejected and updated in Firestore");
+
+    // Refresh validation data to reflect the update
+    setRejectPopup(null);
+    setRejectReason("");
+    fetchValidationData();
+
+  } catch (error) {
+    console.error("Error updating validation status:", error);
+  }
+};
+
 
   const sendRejectionEmail = (studentId, reason) => {
     const student = students.find(s => s.id === studentId);
@@ -154,57 +282,44 @@ export const Validate = ({ token, userData, onLogout }) => {
 
             {/* Certificates List Section */}
             <div className="certificate-list-container">
-              <div className="section-header">
-                <h3>Certificates for {students.find(s => s.id === selectedStudent)?.name}</h3>
-              </div>
-              {selectedStudent && updatedCertificates[selectedStudent]?.length > 0 ? (
-                <div className="certificate-list">
-                  {updatedCertificates[selectedStudent].map((cert) => (
-                    <div key={cert.id} className="certificate-card">
-                      <p><strong>{cert.name}</strong></p>
-                      <p>{cert.description}</p>
-                      <p>Status: {cert.status}</p>
+  <div className="section-header">
+    <h3>Pending Certificates</h3>
+  </div>
 
-                      {cert.status === "Pending" && (
-                        <div className="actions">
+  {validationData.length > 0 ? (
+    <div className="certificate-list">
+      {validationData.map((validation) => (
+        <div key={validation.id} className="certificate-card">
+          <p><strong>Certificate Name:</strong> {validation.certificateDetails.certificateName}</p>
+          <p><strong>Description:</strong> {validation.certificateDetails.description}</p>
+          <p>Status: {validation.validation_status}</p>
+
+          {/* View Certificate Option */}
+          <div className="view-cert">
+            <FaEye onClick={() => handleViewCertificate(validation.certificateDetails.fileURL)} style={{ cursor: "pointer", color: "blue" }} />
+            <a 
+              href={validation.certificateDetails.fileURL} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="certificate-link"
+              style={{ marginLeft: "10px" }}
+            >
+              View Certificate
+            </a>
+          </div>
+
+          <div className="actions">
                           <button className="approve-btn" onClick={() => handleAcceptCertificate(selectedStudent, cert.id)}>Approve</button>
-                          <button className="reject-btn" onClick={() => setRejectPopup(cert.id)}>Reject</button>
+                          <button className="reject-btn" onClick={() => setRejectPopup(validation.id)}>Reject</button>
                         </div>
-                      )}
+        </div>
+      ))}
+    </div>
+  ) : (
+    <p>No pending validations assigned.</p>
+  )}
+</div>
 
-                      {cert.status === "Rejected" && (
-                        <p><strong>Rejected Reason:</strong> {cert.rejectReason}</p>
-                      )}
-
-                      {/* View Certificate Option */}
-                      <div className="view-cert">
-                        <FaEye onClick={() => handleViewCertificate(cert.file)} style={{ cursor: "pointer", color: "blue" }} />
-                        <a 
-                          href={cert.file} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="certificate-link"
-                          style={{ marginLeft: "10px" }}
-                        >
-                          View Certificate
-                        </a>
-                      </div>
-
-                      {/* Optional: Embed PDF Preview */}
-                      {/* <iframe 
-                        src={cert.file} 
-                        width="100%" 
-                        height="500px"
-                        title={cert.name}
-                        style={{ border: "none", marginTop: "10px" }}
-                      ></iframe> */}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p>No certificates available for this student.</p>
-              )}
-            </div>
           </div>
 
           {/* Reject Popup */}
@@ -217,7 +332,9 @@ export const Validate = ({ token, userData, onLogout }) => {
                 placeholder="Enter reason..."
               ></textarea>
               <div className="popup-buttons">
-                <button onClick={() => handleRejectCertificate(selectedStudent, rejectPopup)}>Confirm</button>
+                {/* <button onClick={() => handleRejectCertificate(selectedStudent, rejectPopup)}>Confirm</button> */}
+                <button onClick={() => handleRejectCertificate(rejectPopup)}>Confirm</button>
+
                 <button onClick={() => setRejectPopup(null)}>Cancel</button>
               </div>
             </div>
