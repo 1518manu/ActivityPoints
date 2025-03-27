@@ -7,6 +7,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { doc, updateDoc, addDoc ,getDoc } from 'firebase/firestore';
 import './Validate.css';
 
+
 export const Validate = ({ token, userData, onLogout }) => {
   const navigate = useNavigate();
   const [validationData, setValidationData] = useState([]);
@@ -14,7 +15,7 @@ export const Validate = ({ token, userData, onLogout }) => {
   const [calculatedPoints, setCalculatedPoints] = useState(0);
   const [selectedValidation, setSelectedValidation] = useState(null);
   //---------------------------------------fetching students from the database-------------------------------------
-const [students, setStudents] = useState([]);
+  const [students, setStudents] = useState([]);
 
 // Fetch students and set the state
 const fetchStudents = async () => {
@@ -120,7 +121,7 @@ const fetchValidationData = async () => {
     
     fetchStudents();
     fetchValidationData();
-    //}, []);
+    
   }, [token, userData, navigate]);
 
   if (!userData) {

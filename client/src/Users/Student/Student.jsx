@@ -68,6 +68,7 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
 
   const openUploadPage = () => navigate("/upload-certificate");
   const onCertificate = () => navigate("/certificate");
+  const onNotification = () => navigate("/Notification");
 
   if (!userData) {
     return <div>Loading user data...</div>;
@@ -108,7 +109,7 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
           {/* <button>
             <FaBell   className="menu-icon" /> Notifications  <span className="badge">new</span>
           </button> */}
-          <button>
+          <button onClick={onNotification} >
           <FaBell className="menu-icon" /> Notifications  
           {notificationCount > 0 && <span className="badge">{notificationCount}</span>}
         </button>

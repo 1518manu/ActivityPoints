@@ -11,7 +11,7 @@
 
 h2, .Upload-Your-Certificate {
   text-align: left;
-  color: #007bff;
+  color: #1e67af;
   margin-bottom: 15px;
 }
 
@@ -22,7 +22,7 @@ h2, .Upload-Your-Certificate {
   gap: 10px;
   height: 140px;
   padding: 15px;
-  border: 2px dashed #007bff;
+  border: 2px dashed #1e67af;
   border-radius: 10px;
   background-color: #f9f9f9;
   cursor: pointer;
@@ -63,7 +63,7 @@ h2, .Upload-Your-Certificate {
 
 .input-group select:focus,
 .input-group input:focus {
-  border-color: #007bff;
+  border-color: #1e67af;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
@@ -73,7 +73,7 @@ h2, .Upload-Your-Certificate {
 }
 
 .upload-button {
-  background-color: #007bff;
+  background-color: #1e67af;
   color: white;
   padding: 12px 18px;
   border: none;
@@ -98,7 +98,7 @@ h2, .Upload-Your-Certificate {
   border-radius: 8px;
   height: 200px;
   padding: 20px;
-  border: 2px dashed #007bff;
+  border: 2px dashed #1e67af;
   cursor: pointer;
   background-color: #fafafa;
   margin: 15px 0px;
@@ -129,7 +129,7 @@ h2, .Upload-Your-Certificate {
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
-  border: 1.5px solid #007bff;
+  border: 1.5px solid #1e67af;
   transition: 0.3s ease-in-out;
 }
 
@@ -139,7 +139,7 @@ h2, .Upload-Your-Certificate {
   text-align: center;
   font-size: 13px;
   line-height: 40px;
-  color: #007bff;
+  color: #1e67af;
   font-weight: 600;
   transition: color 0.3s ease;
   position: relative;
@@ -152,7 +152,7 @@ h2, .Upload-Your-Certificate {
   left: 0;
   width: 50%;
   height: 100%;
-  background: #007bff;
+  background: #1e67af;
   border-radius: 10px;
   transition: left 0.3s ease-in-out;
   z-index: 1;

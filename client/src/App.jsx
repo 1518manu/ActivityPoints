@@ -10,8 +10,9 @@ import { Certificate } from "./Users/Student/Certificates/Certificate";
 import { NotificationContainer } from "./Notification/NotificationContainer";
 import { Loading } from "./Loading/Loading";
 import { Faculty } from "./Users/Faculty/Faculty";
-import { Validate } from "./Users/Faculty/validate/Validate"
-import { StudentList } from "./Users/Faculty/StudentList/StudentList"
+import { Validate } from "./Users/Faculty/validate/Validate";
+import { StudentList } from "./Users/Faculty/StudentList/StudentList";
+import { NotificationPage } from "./Users/Student/Notification/NotificationStudent";
 import "./App.css";
 
 
@@ -38,7 +39,7 @@ function App() {
         setToken(null);
         setUserData(null);
       }
-      setIsLoading(false); // <-- Mark loading complete
+      setIsLoading(false); //  Mark loading complete
     });
 
     return () => unsubscribe();
@@ -117,6 +118,13 @@ function App() {
                 path = "/StudentList"
                 element ={
                   <StudentList token={token} userData={userData} onLogout={handleLogout} />
+                }
+              />
+              
+              <Route
+                path = "/Notification"
+                element ={
+                  <NotificationPage token={token} userData={userData} onLogout={handleLogout} />
                 }
               />
             </Routes>
