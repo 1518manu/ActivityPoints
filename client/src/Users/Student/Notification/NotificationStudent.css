@@ -12,6 +12,7 @@
   background-color: #f8f8f8;
   display: flex;
 }
+
 .sidebar-menu {
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -127,8 +128,14 @@
 .notification-modal-content {
   text-align: left;
 }
+.certificate-details h3 {
+  color: #076fe5;
+}
+.certificate-details, p{
+  margin: 20px;
+  color: rgb(97, 90, 90);
+}
 .date {
-  
   position: absolute;
   bottom: 4%;
   right:20px;

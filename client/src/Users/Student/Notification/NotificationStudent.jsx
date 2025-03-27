@@ -3,37 +3,42 @@ import { collection, getDocs, query, where, doc, getDoc } from "firebase/firesto
 import { db } from "../../../firebaseFile/firebaseConfig";
 import { FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { Loading } from "../../../Loading/Loading";
 import "./NotificationStudent.css";
 
 export const NotificationPage = ({ token, userData, onLogout }) => {
   const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [selectedCertificate, setSelectedCertificate] = useState(null);
   const navigate = useNavigate();
 
   // Function to fetch certificate by ID
   const fetchCertificateById = async (certId) => {
-    try {
-      if (!certId) return null;
+    if (!certId) return null;
 
+    try {
       const certRef = doc(db, "certificates", certId);
       const certDoc = await getDoc(certRef);
 
+      if (!certDoc.exists()) return null;
+
       const certData = certDoc.data();
-      console.log(certData);
-
-      return certDoc.exists() ? {
+      return {
         id: certDoc.id,
-        certificateName: certData.certificateName?.stringValue || "N/A",
-        activity: certData.activity?.stringValue || "N/A",
-        role: certData.role?.stringValue || "N/A",
-        eventDate: certData.eventDate?.stringValue || "N/A",
-        certificateDate: certData.certificateDate?.stringValue || "N/A",
-        fileURL: certData.fileURL?.stringValue || null,
-        semester: certData.semester?.stringValue || "N/A",
-        uploadedAt: certData.uploadedAt?.timestampValue || "N/A",
-      } : null;
-
+        certificateName: certData.certificateName || "N/A",
+        activity: certData.activity || "N/A",
+        role: certData.role || "N/A",
+        eventDate: certData.eventDate || "N/A",
+        certificateDate: certData.certificateDate || "N/A",
+        fileURL: certData.fileURL || null,
+        semester: certData.semester || "N/A",
+        uploadedAt: certData.uploadedAt?.toDate().toLocaleString() || "N/A",
+        issuedBy: certData.issuedBy || "N/A",
+        dateIssued: certData.dateIssued || "N/A",
+        category: certData.category || "N/A",
+        description: certData.description || "N/A",
+      };
     } catch (error) {
       console.error("Error fetching certificate:", error);
       return null;
@@ -42,6 +47,7 @@ export const NotificationPage = ({ token, userData, onLogout }) => {
 
   // Function to fetch notifications and related certificates
   const fetchNotifications = async (userData) => {
+    setLoading(true);
     try {
       const rollNo = userData.rollNo;
       const notificationsQuery = query(collection(db, "Notifications"), where("user_id", "==", rollNo));
@@ -52,8 +58,7 @@ export const NotificationPage = ({ token, userData, onLogout }) => {
           const notificationData = { id: doc.id, ...doc.data() };
 
           if (notificationData.cert_id) {
-            const certificate = await fetchCertificateById(notificationData.cert_id);
-            notificationData.certificate = certificate;
+            notificationData.certificate = await fetchCertificateById(notificationData.cert_id);
           }
 
           return notificationData;
@@ -64,24 +69,25 @@ export const NotificationPage = ({ token, userData, onLogout }) => {
     } catch (error) {
       console.error("Error fetching notifications:", error);
       onLogout();
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!token) {
-      navigate("/");
-    }
-    if (userData) {
-      fetchNotifications(userData);
-    }
+    if (!token) navigate("/");
+    if (userData) fetchNotifications(userData);
   }, [token, userData, navigate]);
 
   const onCertificate = () => navigate("/certificate");
   const onNotification = () => navigate("/Notification");
 
-  return (
+  return (loading ? (
+    <Loading />
+  ) :(
     <div className="notification-container1">
-      <div className="sidebar-menu">
+      {/* Sidebar Menu */}
+      <div className={`sidebar-menu  ${selectedNotification ? "blur-background" : ""}`}>
         <button onClick={onCertificate}>
           <FaThLarge className="menu-icon" /> Certificates
         </button>
@@ -99,9 +105,11 @@ export const NotificationPage = ({ token, userData, onLogout }) => {
         </button>
       </div>
 
+      {/* Notifications List */}
       <div className={`notification-container2 ${selectedNotification ? "blur-background" : ""}`}>
         <h2 className="notification-title">Notifications</h2>
-        {notifications.length === 0 ? (
+
+        { notifications.length === 0 ? (
           <p className="no-notifications">No notifications available.</p>
         ) : (
           <ul className="notification-list">
@@ -116,7 +124,9 @@ export const NotificationPage = ({ token, userData, onLogout }) => {
                 >
                   <h3 className="notification-heading">{notification.title || "Notification"}</h3>
                   <p className="notification-message">{notification.msg}</p>
-                  <p className="notification-date">{notification.timestamp}</p>
+                  <p className="notification-date">
+                    {notification.timestamp ? new Date(notification.timestamp).toLocaleString() : "N/A"}
+                  </p>
                 </button>
               </li>
             ))}
@@ -124,6 +134,7 @@ export const NotificationPage = ({ token, userData, onLogout }) => {
         )}
       </div>
 
+      {/* Notification Modal */}
       {selectedNotification && (
         <div className="notification-modal">
           <div className="notification-modal-content">
@@ -135,21 +146,31 @@ export const NotificationPage = ({ token, userData, onLogout }) => {
             </button>
             <h2>{selectedNotification.title}</h2>
             <p><strong>Message:</strong> {selectedNotification.msg}</p>
-            <p className="date"><strong>Date:</strong> {selectedNotification.timestamp}</p>
+            <p className="date"><strong>Date:</strong> {selectedNotification.timestamp ? new Date(selectedNotification.timestamp).toLocaleString() : "N/A"}</p>
 
             {selectedCertificate && (
               <div className="certificate-details">
                 <h3>Certificate Details</h3>
-                <p><strong>Certificate ID:</strong> {selectedCertificate.id}</p>
-                <p><strong>Issued By:</strong> {selectedCertificate.issuedBy}</p>
-                <p><strong>Date Issued:</strong> {selectedCertificate.dateIssued}</p>
-                <p><strong>Category:</strong> {selectedCertificate.category}</p>
-                <p><strong>Description:</strong> {selectedCertificate.description}</p>
+                <iframe
+                    src={selectedCertificate.fileURL}
+                    className="pdf-preview"
+                    title={`Preview of ${selectedCertificate.certificateName}`}
+                    style={{ border: "none" }}
+                  ></iframe>
+                {selectedCertificate.fileURL && (
+                  <p><strong>Download:</strong> <a href={selectedCertificate.fileURL} target="_blank" rel="noopener noreferrer">View Certificate</a></p>
+                )}
+                <p className="name"><strong>Certificate Name:</strong> {selectedCertificate.certificateName}</p>
+                <p className="issuedBy"><strong>Issued By:</strong> {selectedCertificate.issuedBy}</p>
+                <p className="DateIssued"><strong>Date Issued:</strong> {selectedCertificate.dateIssued}</p>
+                <p className="category"><strong>Category:</strong> {selectedCertificate.category}</p>
+                <p className="Description"><strong>Description:</strong> {selectedCertificate.description}</p>
+               
               </div>
             )}
           </div>
         </div>
       )}
-    </div>
+    </div>)
   );
 };
