@@ -11,8 +11,6 @@ import { NotificationContainer } from "./Notification/NotificationContainer";
 import { Loading } from "./Loading/Loading";
 import { Faculty } from "./Users/Faculty/Faculty";
 import { Validate } from "./Users/Faculty/validate/Validate"
-import { Events } from "./Users/Student/Events/Events";
-import { EventUploadPage } from "./Users/Club/upload/Upload";
 import "./App.css";
 
 
