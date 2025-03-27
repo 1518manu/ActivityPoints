@@ -1,67 +1,185 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
 .notification-container1 {
-    max-width: 700px;
-    margin: 50px auto;
-    padding: 20px;
-    background: #fff;
-    box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-  }
+  display: flex;
+  height: 100vh;
+  background-color: #f8f8f8;
+  display: flex;
+}
+.sidebar-menu {
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 0;
+  width: 20vw;
+}
+
+.sidebar-menu button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #333;
+}
+
+.sidebar-menu button:hover {
+  background-color: #ede8e8;
+}
+
+.menu-icon {
+  width: 13px;
+  height: 13px;
+  margin-right: 2vw;
+  color: rgb(139, 137, 137);
+}
+
+.badge {
+  margin-left: auto;
+  background-color: #ff5722;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+/* Container */
+
+
+.notification-container2 {
+  width: 100%;
+  margin: 0;
+  padding: 20px;
+  box-shadow: 3px 4px 12px rgba(0, 0, 0, 0.2);
+  transition: filter 0.3s ease-in-out;
+}
+
+/* Blur effect when modal is open */
+.blur-background {
+  filter: blur(5px);
+  pointer-events: none;
+}
+
+/* Title */
+.notification-title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* List */
+.notification-list {
+  list-style: none;
+  padding: 0;
+}
+
+/* Notification item */
+.notification-item {
+  margin-bottom: 15px;
+}
+
+/* Button styling */
+.notification-button {
+  width: 100%;
+  padding: 15px;
+  text-align: left;
+  border: none;
+  border-radius: 8px;
+  background: #e3e3e3;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.notification-button:hover {
+  background: #d1d1d1;
+}
+
+/* Modal popup */
+.notification-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width:70%;
+  height: 90%;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
+  border:2px solid rgb(201, 198, 198);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Modal content */
+.notification-modal-content {
+  text-align: left;
+}
+.date {
   
-  .notification-title {
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 15px;
+  position: absolute;
+  bottom: 4%;
+  right:20px;
+}
+.close-button {
+  background:transparent;
+  color: rgb(82, 81, 81);
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  border-radius: 0px 6px 0px 0px;
+  padding: 0px 5px;
+  top: -5px;
+  right: -5px;
+  font-size: 30px;
+}
+
+.close-button:hover {
+  color: rgb(255, 255, 255);
+  background-color: rgb(198, 0, 0);
+}
+
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -55%);
   }
-  
-  .no-notifications {
-    text-align: center;
-    color: #666;
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
   }
-  
-  .notification-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .notification-item {
-    padding: 15px;
-    margin-bottom: 10px;
-    background: #f9f9f9;
-    border-left: 5px solid #007bff;
-    border-radius: 5px;
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .notification-heading {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .notification-message {
-    color: #333;
-  }
-  
-  .notification-date {
-    font-size: 12px;
-    color: #888;
-  }
-  
-  .back-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-    font-size: 16px;
-  }
-  
-  .back-button:hover {
-    background: #0056b3;
-  }
-  
+}
+
+/* Dark overlay */
+.notification-modal::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  z-index: -1;
+}
+
+
+.close-button , 
+ .notification-modal-content,
+ .notification-modal {
+  columns: same;
+
+}

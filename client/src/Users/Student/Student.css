@@ -213,6 +213,9 @@
     font-size: 14px;
     color: #333;
   }
+  
+  /* Sidebar Menu */
+
   .sidebar-menu {
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
     display: flex;
