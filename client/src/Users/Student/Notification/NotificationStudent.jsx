@@ -19,7 +19,8 @@ export const NotificationPage = ({ token, userData, onLogout }) => {
       const certRef = doc(db, "certificates", certId);
       const certDoc = await getDoc(certRef);
 
-      console.log(certDoc.data());
+      const certData = certDoc.data();
+      console.log(certData);
 
       return certDoc.exists() ? {
         id: certDoc.id,
@@ -32,7 +33,7 @@ export const NotificationPage = ({ token, userData, onLogout }) => {
         semester: certData.semester?.stringValue || "N/A",
         uploadedAt: certData.uploadedAt?.timestampValue || "N/A",
       } : null;
-      
+
     } catch (error) {
       console.error("Error fetching certificate:", error);
       return null;
