@@ -5,9 +5,9 @@ import { certificatesFetch } from "../certificatesFetch/certificatesFetch"
 import { db } from '../../../firebaseFile/firebaseConfig'; 
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { doc, updateDoc, addDoc ,getDoc } from 'firebase/firestore';
-import './Validate.css';
+import './StudentList.css';
 
-export const Validate = ({ token, userData, onLogout }) => {
+export const StudentList = ({ token, userData, onLogout }) => {
   const navigate = useNavigate();
   const [validationData, setValidationData] = useState([]);
   const [pointsPopup, setPointsPopup] = useState(false);

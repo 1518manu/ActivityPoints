@@ -11,6 +11,7 @@ import { NotificationContainer } from "./Notification/NotificationContainer";
 import { Loading } from "./Loading/Loading";
 import { Faculty } from "./Users/Faculty/Faculty";
 import { Validate } from "./Users/Faculty/validate/Validate"
+import { StudentList } from "./Users/Faculty/StudentList/StudentList"
 import "./App.css";
 
 
@@ -109,6 +110,13 @@ function App() {
                 path = "/Validate"
                 element ={
                   <Validate token={token} userData={userData} onLogout={handleLogout} />
+                }
+              />
+              
+              <Route
+                path = "/StudentList"
+                element ={
+                  <StudentList token={token} userData={userData} onLogout={handleLogout} />
                 }
               />
             </Routes>

@@ -108,6 +108,7 @@ for (const sem in semesterData) {
   }, [token, initialUserData?.email, navigate]);
 
   const onValidate = () => { navigate("/Validate"); }
+  const onStudentList = () => { navigate("/StudentList"); }
 
   const handleSemesterReport = () => {
     console.log("Generating Semester-wise Report...");
@@ -199,6 +200,7 @@ for (const sem in semesterData) {
       <div className="main-content-faculty">
         <div className="sidebar-menu-faculty">
           <button onClick={onValidate}><FaCheckCircle  className="menu-icon-faculty" />Validate</button>
+          <button onClick={onStudentList}><FaThLarge className="menu-icon-faculty" /> Student List</button>
           <button><FaCalendarAlt className="menu-icon-faculty" /> Event <span className="badge">new</span></button>
           <button> <FaBell   className="menu-icon-faculty" /> Notifications  <span className="badge">new</span></button>
           <button> <FaCog className="menu-icon-faculty" /> Settings </button>
