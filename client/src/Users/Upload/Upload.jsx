@@ -190,6 +190,19 @@ export function CertificateUploadPage() {
         });
 
         console.log("Certificate uploaded with ID:", docRef.id);
+        
+        await addDoc(collection(db, "Validation"), {
+          cert_id: docRef.id,
+          faculty_id: userData.mentor,  // Assuming userData.mentor is available in scope
+          points: 0,
+          rejectReason: null,
+          validatedBy: null,
+          validationTime: null,
+          validation_status: "not validated",
+          createdAt: new Date(),
+        });
+
+        console.log("Certificate uploaded with ID:", docRef.id);
         showNotification("Certificate uploaded successfully!","success");
         resetForm();
 
