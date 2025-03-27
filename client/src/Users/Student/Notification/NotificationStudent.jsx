@@ -24,6 +24,7 @@ export const NotificationPage = ({ token, userData, onLogout }) => {
       if (!certDoc.exists()) return null;
 
       const certData = certDoc.data();
+      console.log(certData.dateIssued);
       return {
         id: certDoc.id,
         certificateName: certData.certificateName || "N/A",
@@ -64,7 +65,7 @@ export const NotificationPage = ({ token, userData, onLogout }) => {
           return notificationData;
         })
       );
-
+      console.log(notificationDataArray);
       setNotifications(notificationDataArray);
     } catch (error) {
       console.error("Error fetching notifications:", error);
@@ -148,29 +149,72 @@ export const NotificationPage = ({ token, userData, onLogout }) => {
             <p><strong>Message:</strong> {selectedNotification.msg}</p>
             <p className="date"><strong>Date:</strong> {selectedNotification.timestamp ? new Date(selectedNotification.timestamp).toLocaleString() : "N/A"}</p>
 
+            {/* Certificate Details */}
             {selectedCertificate && (
               <div className="certificate-details">
                 <h3>Certificate Details</h3>
+                
                 <iframe
                     src={selectedCertificate.fileURL}
                     className="pdf-preview"
                     title={`Preview of ${selectedCertificate.certificateName}`}
                     style={{ border: "none" }}
                   ></iframe>
-                {selectedCertificate.fileURL && (
-                  <p><strong>Download:</strong> <a href={selectedCertificate.fileURL} target="_blank" rel="noopener noreferrer">View Certificate</a></p>
-                )}
-                <p className="name"><strong>Certificate Name:</strong> {selectedCertificate.certificateName}</p>
-                <p className="issuedBy"><strong>Issued By:</strong> {selectedCertificate.issuedBy}</p>
-                <p className="DateIssued"><strong>Date Issued:</strong> {selectedCertificate.dateIssued}</p>
-                <p className="category"><strong>Category:</strong> {selectedCertificate.category}</p>
-                <p className="Description"><strong>Description:</strong> {selectedCertificate.description}</p>
-               
+                <table className="certificate-table">
+                  <tbody>
+                    <tr>
+                      <td><strong>Certificate Name:</strong></td>
+                      <td>{selectedCertificate.certificateName}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Activity:</strong></td>
+                      <td>{selectedCertificate.activity}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Role:</strong></td>
+                      <td>{selectedCertificate.role}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Event Date:</strong></td>
+                      <td>{selectedCertificate.eventDate}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Certificate Date:</strong></td>
+                      <td>{selectedCertificate.certificateDate}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Semester:</strong></td>
+                      <td>{selectedCertificate.semester}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Uploaded At:</strong></td>
+                      <td>{selectedCertificate.uploadedAt}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Issued By:</strong></td>
+                      <td>{selectedCertificate.issuedBy}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Date Issued:</strong></td>
+                      <td>{selectedCertificate.dateIssued}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Category:</strong></td>
+                      <td>{selectedCertificate.category}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Description:</strong></td>
+                      <td>{selectedCertificate.description}</td>
+                    </tr>
+                    
+                  </tbody>
+                </table>
               </div>
             )}
           </div>
         </div>
       )}
+
     </div>)
   );
 };

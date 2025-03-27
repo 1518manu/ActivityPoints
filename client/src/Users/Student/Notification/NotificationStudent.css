@@ -114,7 +114,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width:70%;
-  height: 90%;
+  height: auto;
   background: white;
   padding: 20px;
   border-radius: 10px;
@@ -131,9 +131,8 @@
 .certificate-details h3 {
   color: #076fe5;
 }
-.certificate-details, p{
-  margin: 20px;
-  color: rgb(97, 90, 90);
+.certificate-table tbody tr td{
+  padding: 2px;
 }
 .date {
   position: absolute;
