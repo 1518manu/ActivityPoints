@@ -4,7 +4,7 @@ import { FaEdit, FaEye } from "react-icons/fa";
 import { certificatesFetch } from "../certificatesFetch/certificatesFetch"
 import { db } from '../../../firebaseFile/firebaseConfig'; 
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, addDoc ,getDoc } from 'firebase/firestore';
 
 import './Validate.css';
 
@@ -253,6 +253,25 @@ const handleRejectCertificate = async (validationId) => {
   try {
     // Update the Firestore Validation document
     const validationRef = doc(db, "Validation", validationId);
+    const validationSnap = await getDoc(validationRef);
+
+    if (!validationSnap.exists()) {
+      console.error("Validation document not found");
+      return;
+    }
+
+    const { cert_id } = validationSnap.data(); // Extract cert_id
+
+    // Step 2: Fetch user_id from Certificates collection using cert_id
+    const certRef = doc(db, "certificates", cert_id);
+    const certSnap = await getDoc(certRef);
+
+    if (!certSnap.exists()) {
+      console.error("Certificate document not found");
+      return;
+    }
+
+    const { user_id } = certSnap.data(); // Extract user_id
     await updateDoc(validationRef, {
       validation_status: "rejected",
       rejectReason: rejectReason,
@@ -261,7 +280,18 @@ const handleRejectCertificate = async (validationId) => {
     });
 
     console.log("Validation rejected and updated in Firestore");
+    const notificationsRef = collection(db, "Notifications");
+    await addDoc(notificationsRef, {
+      cert_id: cert_id,
+      for: "student",
+      msg: rejectReason,
+      status: "not viewed",
+      type: "reject",
+      user_id: user_id,
+      timestamp: new Date().toISOString(),
+    });
 
+    console.log("Notification added to Firestore");
     // Refresh validation data to reflect the update
     setRejectPopup(null);
     setRejectReason("");

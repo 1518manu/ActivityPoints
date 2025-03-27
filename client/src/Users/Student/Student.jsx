@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { FaSearch, FaAward, FaEdit, FaUser, FaUniversity, FaUpload, FaThLarge, FaCog, FaCalendarAlt, FaBell , FaSignOutAlt } from "react-icons/fa"; 
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import { fetchUserData, fetchUserRole } from "../../Login/dataApi/userDataApi"
+//--------
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { db } from "../../firebaseFile/firebaseConfig";
 import 'react-circular-progressbar/dist/styles.css';
 import './Student.css';
 
@@ -20,6 +23,7 @@ const getColor = (point) => {
 export const Student = ({ token, userData: initialUserData, onLogout }) => {
   const [progress, setProgress] = useState(0); 
   const [userData, setUserData] = useState(initialUserData);
+  const [notificationCount, setNotificationCount] = useState(0);
   const navigate = useNavigate();
 
   console.log("Student Data:", userData);
@@ -49,6 +53,18 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
 
     fetchData();
   }, [token, initialUserData?.email, navigate]);
+  useEffect(() => {
+    if (!userData?.rollNo) return;
+
+    const notificationsRef = collection(db, "Notifications");
+    const q = query(notificationsRef, where("user_id", "==", userData.rollNo));
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setNotificationCount(snapshot.size); // Update notification count
+    });
+
+    return () => unsubscribe();
+  }, [userData?.rollNo]);
 
   const openUploadPage = () => navigate("/upload-certificate");
   const onCertificate = () => navigate("/certificate");
@@ -89,9 +105,13 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
             <FaCalendarAlt className="menu-icon" /> Event <span className="badge">new</span>
           </button>
 
-          <button>
+          {/* <button>
             <FaBell   className="menu-icon" /> Notifications  <span className="badge">new</span>
-          </button>
+          </button> */}
+          <button>
+          <FaBell className="menu-icon" /> Notifications  
+          {notificationCount > 0 && <span className="badge">{notificationCount}</span>}
+        </button>
 
           <button onClick={onLogout} style={{ color: "#df0000" }}>
             <FaSignOutAlt style={{ color: "#df0000" }}className="menu-icon" /> Logout
