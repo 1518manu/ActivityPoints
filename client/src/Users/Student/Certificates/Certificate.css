@@ -4,10 +4,13 @@
   padding: 20px;
   text-align: center;
 }
-
+.certificate-container  h2 {
+  color: #1e67af;
+}
 /* Scrollable Certificate List */
 .certificate-list {
   display: grid;
+  padding: 30px;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   justify-content: center;
@@ -39,7 +42,7 @@
   background: #f9f9f9;
   padding: 15px;
   border-radius: 10px;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 5px 5px 15px #0003;
   text-align: center;
 }
 
@@ -68,7 +71,7 @@
   display: inline-block;
   margin-top: 10px;
   padding: 8px 12px;
-  background: #007bff;
+  background: #1e67af;
   color: white;
   text-decoration: none;
   border-radius: 5px;
@@ -76,7 +79,7 @@
 }
 
 .certificate-link:hover {
-  background: #0056b3;
+  background: #1e67af;
 }
 
 /* Responsive Adjustments */
@@ -144,7 +147,7 @@
 }
 
 .apply-btn {
-  background: #007bff;
+  background: #1e67af;
   color: white;
 }
 
@@ -154,7 +157,7 @@
 
 /* Filter & Sort Button */
 .filter-sort-btn {
-  background: #007bff;
+  background: #1e67af;
   color: white;
   border: none;
   padding: 8px 12px;
@@ -166,7 +169,7 @@
 }
 
 .filter-sort-btn:hover {
-  background: #0056b3;
+  background: #1e67af;
 }
 
 
