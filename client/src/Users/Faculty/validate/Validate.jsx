@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaEye } from "react-icons/fa";
 import { certificatesFetch } from "../certificatesFetch/certificatesFetch"
-import { db } from '../../../firebaseFile/firebaseConfig'; // Adjust your path to firebase config
+import { db } from '../../../firebaseFile/firebaseConfig'; 
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { doc, updateDoc } from 'firebase/firestore';
 
@@ -11,6 +11,45 @@ import './Validate.css';
 export const Validate = ({ token, userData, onLogout }) => {
   const navigate = useNavigate();
   const [validationData, setValidationData] = useState([]);
+  const [pointsPopup, setPointsPopup] = useState(false);
+  const [calculatedPoints, setCalculatedPoints] = useState(0);
+  const [selectedValidation, setSelectedValidation] = useState(null);
+  //---------------------------------------fetching students from the database-------------------------------------
+const [students, setStudents] = useState([]);
+
+// Fetch students and set the state
+const fetchStudents = async () => {
+  try {
+    const userDataString1 = localStorage.getItem('userData'); 
+    let facultyId = null;
+
+    if (userDataString1) {
+      const userData1 = JSON.parse(userDataString1);
+      facultyId = userData1.faculty_id;
+      console.log("Faculty ID inside IF:", facultyId);
+    }
+
+    const viewStudents = query(
+      collection(db, "Students"),
+      where("mentor", "==", facultyId)
+    );
+
+    const studDoc = await getDocs(viewStudents);
+    const studDataArray = [];
+
+    for (const doc of studDoc.docs) {
+      const studData = { id: doc.id, ...doc.data() };  // Include document ID for 'key'
+      console.log("Student Data:", studData);
+      studDataArray.push(studData);
+    }
+
+    setStudents(studDataArray);  // Set the data to state
+  } catch (error) {
+    console.error("Error fetching students:", error);
+  }
+};
+
+
   //---------------------------------------fetching certificates from the database-------------------------------------
 const fetchValidationData = async () => {
   try {
@@ -24,12 +63,12 @@ const fetchValidationData = async () => {
 
     console.log("Faculty ID for query:", facultyId);
     
+
     const validationQuery = query(
       collection(db, "Validation"),
       where("faculty_id", "==", facultyId),
       where("validation_status", "==", "not validated")
     );
-
     const querySnapshot = await getDocs(validationQuery);
 
     if (querySnapshot.empty) {
@@ -79,43 +118,8 @@ const fetchValidationData = async () => {
     } else {
       console.warn("No user data available!");
     }
-
-    // Load certificates from localStorage if available
-    // const savedCertificates = JSON.parse(localStorage.getItem("certificates"));
-    // if (savedCertificates) {
-    //   setUpdatedCertificates(savedCertificates);
-    // }
-    //------------------------------
-    //const fetchValidationData = async () => {
-//       try {
-//         const userDataString = localStorage.getItem('userData'); 
-//         //const facultyId = null;
-//         if (userDataString) {
-//           const userData = JSON.parse(userDataString);
-//           const facultyId = userData.faculty_id;
-//           console.log("Faculty ID:", facultyId);
-// } // fetch faculty ID from local storage
-//         console.log("Faculty ID:", facultyId);
-//         const q = query(
-//           collection(db, "Validation"),
-//           where("faculty_id", "==", facultyId),
-//           where("validation_status", "==", "Not Validated")
-//         );
-  
-//         const querySnapshot = await getDocs(q);
-//         const validations = [];
-//         querySnapshot.forEach((doc) => {
-//           validations.push({ id: doc.id, ...doc.data() });
-//         });
-//         setValidationData(validations);
-//         console.log("Validation Data:", validations);
-//       } catch (error) {
-//         console.error("Error fetching validation data:", error);
-//       }
-
-
-
-  
+    
+    fetchStudents();
     fetchValidationData();
     //}, []);
   }, [token, userData, navigate]);
@@ -123,31 +127,11 @@ const fetchValidationData = async () => {
   if (!userData) {
     return <div>Loading user data...</div>;
   }
-
-  const students = [
-    { id: 1, name: "Alice Johnson", rollNo: "S101" },
-    { id: 2, name: "Bob Smith", rollNo: "S102" },
-    { id: 3, name: "Charlie Brown", rollNo: "S103" },
-    { id: 4, name: "David Williams", rollNo: "S104" },
-    { id: 5, name: "Eva Green", rollNo: "S105" },
-    { id: 6, name: "Frank White", rollNo: "S106" },
-  ];
-
-  const certificates = {
-    1: [
-      { id: 1, name: "NSS Volunteer (2 Years)", status: "Pending", description: "Active participation in NSS for 2 years.", validatedBy: "", validationTime: "", file: "/path/to/certificate1.pdf" },
-      { id: 2, name: "Tech Fest Participation", status: "Pending", description: "Presented a project in a state-level tech fest.", validatedBy: "", validationTime: "", file: "/path/to/certificate2.jpg" },
-    ],
-    2: [
-      { id: 1, name: "Football Team", status: "Pending", description: "Represented in football team.", validatedBy: "", validationTime: "", file: "/path/to/certificate3.pdf" },
-    ],
-  };
-
+  
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [rejectPopup, setRejectPopup] = useState(null);
   const [rejectReason, setRejectReason] = useState("");
-  const [updatedCertificates, setUpdatedCertificates] = useState(certificates);
-
+  
   const handleSelectStudent = (studentId) => {
     setSelectedStudent(studentId);
   };
@@ -159,40 +143,112 @@ const fetchValidationData = async () => {
     );
     return certsToValidate;
   };
+  const handleAcceptCertificate = (validation) => {
+    const cert = validation.certificateDetails;
   
+    console.log("Certificate Name:", cert.certificateName);
+    console.log("Description:", cert.description);
+    console.log("Status:", validation.validation_status);
+    console.log("Activity:", cert.activity);
+    console.log("Activity Head:", cert.activityHead);
+    console.log("Sub-Activity:", cert.subActivity);
+    console.log("Level:", cert.achievementLevel);
+    console.log("Role:", cert.role);
+    console.log("Event Date:", cert.eventDate);
+    console.log("Certificate Date:", cert.certificateDate);
+    console.log("Semester:", cert.semester);
+    console.log("Prize:", cert.prize);
+    console.log("Full Data:", validation);
+  
+    // ✅ Calculate Points
+    const { activity, activityHead, achievementLevel ,role} = cert;
+    let points = 0;
+  
+    if (activity === "NSS" || activity === "NCC") {
+      points = 60;
+    }
+    else if (activityHead === "Sports & Games" || activityHead === "Cultural Activities") {
+      if (achievementLevel === "I") points = 8;
+      else if (achievementLevel === "II") points = 12;
+      else if (achievementLevel === "III") points = 20;
+      else if (achievementLevel === "IV") points = 40;
+      else if (achievementLevel === "V") points = 60;
+    }
+    else if (activityHead === "Professional Self Initiatives") {
+      if (activity === "MOOC") {
+        points = 50;
+      } else if (activity === "Tech Fest" || activity === "Tech Quiz") {
+        if (achievementLevel === "I") points = 10;
+        else if (achievementLevel === "II") points = 20;
+        else if (achievementLevel === "III") points = 30;
+        else if (achievementLevel === "IV") points = 40;
+        else if (achievementLevel === "V") points = 50;
+      }
+      else if (activity === "Competitions conducted by Professional Societies - (IEEE,IET, ASME, SAE, NASA etc.)") {
+        if (achievementLevel === "I") points += 10;
+        else if (achievementLevel === "II") points += 15;
+        else if (achievementLevel === "III") points += 20;
+        else if (achievementLevel === "IV") points += 30;
+        else if (achievementLevel === "V") points += 40;
+      }
+      else if (
+        activity === "Attending Full time Conference/ Seminars / Exhibitions/ Workshop/ STTP conducted at IITs /NITs " || 
+        activity === "Poster Presentation at IITs /NITs " || 
+        activity === "Industrial Training/Internship (atleast for 5 full days)"
+      ) {
+        points = 20;
+      }
+      else if(activity==="Paper presentation/publication at IITs/NITs "){
+        points = 30;
+      }
+    }
+    else if (activityHead === "Entrepreneurship and Innovation" ) {
+      if (activity === "Prototype  Developed and tested" ||
+      activity === "Awards for Products developed "||
+      activity === "Innovative technologies developed and used by industries/users " ||
+      activity === "Startup Company-Registered legally "
+    ) {
+        points = 60;
+      }
+      else if (activity === "Societal innovations " ||
+              activity=== "Patent- Approved "||
+              activity==="Foreign Language Skill (TOEFL/ IELTS/ BEC exams etc.)"  ) {
+        points=50;
+      }
+      else if (activity === "Patent- Licensed"||
+        activity=== "Got venture capital funding for innovative ideas/products"||
+        activity==="Startup Employment (Offering jobs to two persons not less than Rs. 15000/- per month) "
+      ) {
+        points = 80;
+      }
+      else if (activity ==="Patent-Filed") {
+        points = 30;
+      }
+      else if (activity ==="Patent - Published") {
+        points = 35
+      }
 
-  const handleAcceptCertificate = (studentId, certificateId) => {
-    const updatedCerts = { ...updatedCertificates };
-    const studentCertificates = updatedCerts[studentId];
-    const certificateIndex = studentCertificates.findIndex(cert => cert.id === certificateId);
-    studentCertificates[certificateIndex].status = "Approved";
-    studentCertificates[certificateIndex].validatedBy = userData.name; // Assume userData contains the name of the person approving
-    studentCertificates[certificateIndex].validationTime = new Date().toLocaleString(); // Add current timestamp
-
-    // Save to localStorage to persist data
-    localStorage.setItem("certificates", JSON.stringify(updatedCerts));
-    setUpdatedCertificates(updatedCerts);
+    }
+    else if (activityHead === "Leadership & Management" ) {
+      if (
+        activity === "Student Societies" || 
+        activity === "College Association" || 
+        activity === "Festival & Technical Events") 
+      {
+        if ( role === "Core coodinator" || role ==="Other Council Members") points = 15;
+        else if ( role === "Sub Coordinator") points = 10;
+        else if ( role === "Volunteer") points = 5;
+        else if (role === "Chairman") points =30;
+        else if (role === "Secretary") points=25;
+      }
+    }
+  
+    console.log("Calculated Points:", points);
+    setCalculatedPoints(points);
+  setSelectedValidation(validation);
+  setPointsPopup(true);
   };
-
-  // const handleRejectCertificate = (studentId, certificateId) => {
-  //   const updatedCerts = { ...updatedCertificates };
-  //   const studentCertificates = updatedCerts[studentId];
-  //   const certificateIndex = studentCertificates.findIndex(cert => cert.id === certificateId);
-  //   studentCertificates[certificateIndex].status = "Rejected";
-  //   studentCertificates[certificateIndex].rejectReason = rejectReason;
-  //   studentCertificates[certificateIndex].validatedBy = userData.name;
-  //   studentCertificates[certificateIndex].validationTime = new Date().toLocaleString();
-
-  //   // Save to localStorage to persist data
-  //   localStorage.setItem("certificates", JSON.stringify(updatedCerts));
-  //   setUpdatedCertificates(updatedCerts);
-  //   setRejectPopup(null); // Close the popup
-  //   setRejectReason(""); // Reset the reject reason
-
-  //   // Send email to student (simulated here)
-  //   sendRejectionEmail(studentId, rejectReason);
-  // };
-
+  
 const handleRejectCertificate = async (validationId) => {
   try {
     // Update the Firestore Validation document
@@ -239,7 +295,6 @@ const handleRejectCertificate = async (validationId) => {
         </div>
 
         <div className="header-right">
-          <button className="business-btn" onClick={onLogout}>Logout</button>
         </div>
       </header>
 
@@ -249,7 +304,6 @@ const handleRejectCertificate = async (validationId) => {
           <button><img src="settings-icon.svg" className="menu-icon" /> Validate</button>
           <button><img src="notifications-icon.svg" className="menu-icon" /> Manage Faculty</button>
           <button><img src="notifications-icon.svg" className="menu-icon" /> Notifications</button>
-          <button onClick={onLogout}><img src="logout-icon.svg" className="menu-icon" /> Logout</button>
         </div>
 
         <div className="profile-content">
@@ -263,22 +317,23 @@ const handleRejectCertificate = async (validationId) => {
           <div className="student-certificates-container">
             {/* Students List Section */}
             <div className="student-list-container">
-              <div className="section-header">
-                <h3>Student List</h3>
-              </div>
-              <div className="student-list">
-                {students.map((student) => (
-                  <div
-                    key={student.id}
-                    className={`student-card ${selectedStudent === student.id ? "selected" : ""}`}
-                    onClick={() => handleSelectStudent(student.id)}
-                  >
-                    <p><strong>{student.name}</strong></p>
-                    <p>Roll No: {student.rollNo}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+  <div className="section-header">
+    <h3>Student List</h3>
+  </div>
+  <div className="student-list">
+    {students.map((student) => (
+      <div
+        key={student.id}
+        className={`student-card ${selectedStudent === student.id ? "selected" : ""}`}
+        onClick={() => handleSelectStudent(student.id)}
+      >
+        <p><strong>{student.name}</strong></p>
+        <p>Roll No: {student.rollNo}</p>
+        <p>Points: {student.point}</p>
+      </div>
+    ))}
+  </div>
+</div>
 
             {/* Certificates List Section */}
             <div className="certificate-list-container">
@@ -293,6 +348,13 @@ const handleRejectCertificate = async (validationId) => {
           <p><strong>Certificate Name:</strong> {validation.certificateDetails.certificateName}</p>
           <p><strong>Description:</strong> {validation.certificateDetails.description}</p>
           <p>Status: {validation.validation_status}</p>
+          <p><strong>Activity:</strong> {validation.certificateDetails.activity}</p>
+        <p><strong>Achievement Level:</strong> {validation.certificateDetails.achievementLevel}</p>
+        <p><strong>Role:</strong> {validation.certificateDetails.role}</p>
+        <p><strong>Event Date:</strong> {validation.certificateDetails.eventDate}</p>
+        <p><strong>Certificate Date:</strong> {validation.certificateDetails.certificateDate}</p>
+        <p><strong>Semester:</strong> {validation.certificateDetails.semester}</p>
+        <p><strong>Prize:</strong> {validation.certificateDetails.prize}</p>
 
           {/* View Certificate Option */}
           <div className="view-cert">
@@ -309,7 +371,8 @@ const handleRejectCertificate = async (validationId) => {
           </div>
 
           <div className="actions">
-                          <button className="approve-btn" onClick={() => handleAcceptCertificate(selectedStudent, cert.id)}>Approve</button>
+                          {/* <button className="approve-btn" onClick={() => handleAcceptCertificate(selectedStudent, cert.id)}>Approve</button> */}
+                          <button className="approve-btn" onClick={() => handleAcceptCertificate(validation)}>Approve</button>
                           <button className="reject-btn" onClick={() => setRejectPopup(validation.id)}>Reject</button>
                         </div>
         </div>
@@ -321,6 +384,38 @@ const handleRejectCertificate = async (validationId) => {
 </div>
 
           </div>
+          {/* poinys popup */}
+          {pointsPopup && (
+  <div className="points-popup">
+    <h3>Points Calculated</h3>
+    <p>Certificate Name: <strong>{selectedValidation.certificateDetails.certificateName}</strong></p>
+    
+    <label>
+      Calculated Points:
+      <input
+        type="number"
+        value={calculatedPoints}
+        onChange={(e) => setCalculatedPoints(e.target.value)}
+        className="points-input"
+      />
+    </label>
+
+    <div className="popup-buttons">
+      <button 
+        onClick={() => {
+          console.log("Final Approved Points:", calculatedPoints);
+          // You can now update Firestore / local state here with final points
+          setPointsPopup(false);
+        }}
+      >
+        Confirm Approval
+      </button>
+
+      <button onClick={() => setPointsPopup(false)}>Cancel</button>
+    </div>
+  </div>
+)}
+
 
           {/* Reject Popup */}
           {rejectPopup !== null && (
@@ -344,3 +439,7 @@ const handleRejectCertificate = async (validationId) => {
     </div>
   );
 };
+
+
+  
+  
