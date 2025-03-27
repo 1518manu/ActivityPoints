@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebaseFile/firebaseConfig";
 import { useNavigate } from "react-router-dom";
-import { FaSearch, FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaFilter, FaSort, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaSearch, FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaFilter, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Loading } from "../../../Loading/Loading";
 import "./Certificate.css";
 
@@ -51,7 +51,10 @@ export const Certificate = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("");
   const [showFilterPanel, setShowFilterPanel] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(0);
+
   const [expandedSections, setExpandedSections] = useState({
+    sort: false,
     activityHead: true,
     activity: false,
     achievementLevel: false,
@@ -59,7 +62,9 @@ export const Certificate = () => {
     prize: false,
     semester: false,
   });
-
+  
+  const onNotification = () => navigate("/Notification");
+  
   const [filters, setFilters] = useState({
     activityHead: [],
     activity: [],
@@ -67,7 +72,6 @@ export const Certificate = () => {
     role: [],
     prize: [],
     semester: [],
-    selectedActivityHead: null,
   });
 
   const navigate = useNavigate();
@@ -137,16 +141,7 @@ export const Certificate = () => {
     });
   };
 
-  // Handle activity head selection (to show corresponding activities)
-  const handleActivityHeadSelect = (head) => {
-    setFilters(prev => ({
-      ...prev,
-      selectedActivityHead: prev.selectedActivityHead === head ? null : head
-    }));
-    setExpandedSections(prev => ({ ...prev, activity: true }));
-  };
-
-  // Apply all selected filters
+  // Apply all selected filters and close panel
   const applyFilters = () => {
     let filtered = certificates;
     
@@ -193,9 +188,10 @@ export const Certificate = () => {
     }
     
     setFilteredCertificates(filtered);
+    setShowFilterPanel(false); // Close the filter panel
   };
 
-  // Clear all filters
+  // Clear all filters and close panel
   const clearFilters = () => {
     setFilters({
       activityHead: [],
@@ -204,10 +200,10 @@ export const Certificate = () => {
       role: [],
       prize: [],
       semester: [],
-      selectedActivityHead: null,
     });
     setFilteredCertificates(certificates);
     setSortOrder("");
+    setShowFilterPanel(false); // Close the filter panel
   };
 
   // Close filter panel on ESC key press
@@ -255,12 +251,15 @@ export const Certificate = () => {
       <div className="main-content">
         {/* Sidebar */}
         <div className="sidebar-menu">
-          <button onClick={() => navigate("/certificate")}>
-            <FaThLarge className="menu-icon" /> Certificates
+          <button onClick={() => navigate("/StudentDashboard")}>
+            <FaThLarge className="menu-icon" /> Dashboard
           </button>
           <button><FaCog className="menu-icon" /> Settings</button>
           <button><FaCalendarAlt className="menu-icon" /> Events <span className="badge">new</span></button>
-          <button><FaBell className="menu-icon" /> Notifications <span className="badge">new</span></button>
+          <button onClick={onNotification}>
+            <FaBell className="menu-icon" /> Notifications  
+            {notificationCount > 0 && <span className="badge">{notificationCount}</span>}
+          </button>
           <button onClick={() => navigate("/")} style={{ color: "#df0000" }}>
             <FaSignOutAlt className="menu-icon" /> Logout
           </button>
