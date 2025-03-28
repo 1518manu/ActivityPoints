@@ -149,7 +149,7 @@ function App() {
               />
               <Route 
                 path="/student-details" 
-                element={<StudentDetails studentdata={selectedStudent} />} 
+                element={<StudentDetails />} 
               />
               <Route
                 path = "/Notification-faculty"
