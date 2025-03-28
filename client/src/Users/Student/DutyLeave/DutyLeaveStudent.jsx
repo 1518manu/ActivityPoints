@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaPaperPlane, FaUndo, FaUpload, FaTimes } from 'react-icons/fa';
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebaseFile/firebaseConfig";
+import { Loading } from "../../../Loading/Loading";
 import './DutyLeaveStudent.css';
 
 export const DutyLeaveForm = ({ userData }) => {
@@ -19,7 +20,7 @@ export const DutyLeaveForm = ({ userData }) => {
     selectedCertificate: '',
     newCertificate: null
   });
-
+  const [loading, setLoading] = useState(true);
   const [certificates, setCertificates] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showUploadOption, setShowUploadOption] = useState(false);
@@ -36,6 +37,8 @@ export const DutyLeaveForm = ({ userData }) => {
     } catch (error) {
       console.error("Error fetching certificates:", error);
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -118,6 +121,9 @@ export const DutyLeaveForm = ({ userData }) => {
     setFormData(prev => ({ ...prev, newCertificate: null }));
   };
 
+  if (loading) {
+    return <Loading />; 
+  }
   return (
     <div className="duty-leave-container">
       <div className="college-header">
