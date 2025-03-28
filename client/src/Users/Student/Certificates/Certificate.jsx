@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebaseFile/firebaseConfig";
 import { useNavigate } from "react-router-dom";
-import { FaSearch, FaPoint, FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaFilter, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaSearch, FaCoins, FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaFilter, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Loading } from "../../../Loading/Loading";
 import "./Certificate.css";
 import { use } from "react";
@@ -54,6 +54,7 @@ export const Certificate = ({ token, userData, onLogout } ) => {
   const [sortOrder, setSortOrder] = useState("");
   const [showFilterPanel, setShowFilterPanel] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
+  const [showPointModal, setShowPointModal] = useState(false);
   const [expandedSections, setExpandedSections] = useState({
     sort: false,
     activityHead: true,
@@ -227,7 +228,7 @@ export const Certificate = ({ token, userData, onLogout } ) => {
   if (isLoading) return <Loading />;
 
   return (
-    <div className="container">
+    <div className={`container ${showPointModal ? 'modal-open' : ''}`}>
       {/* Navbar */}
       <header className="header">
         <div className="header-left">
@@ -246,8 +247,8 @@ export const Certificate = ({ token, userData, onLogout } ) => {
         </div>
 
         <div className="header-right">
-          <button className="filter-sort-btn" >
-            <FaPoint/> Get Point
+          <button className="filter-sort-btn" onClick={() => setShowPointModal(true)}>
+            <FaCoins/> Get Point
           </button>
           <button className="filter-sort-btn" onClick={() => setShowFilterPanel(true)}>
             <FaFilter /> Filter & Sort
@@ -501,6 +502,78 @@ export const Certificate = ({ token, userData, onLogout } ) => {
           </div>
         </div>
       </div>
+      {showPointModal && (
+        <>
+          <div className="modal-overlay" onClick={() => setShowPointModal(false)}></div>
+          <div className="point-modal">
+            <div className="modal-header">
+              <h3>Select Certificates to Claim Points</h3>
+              <button className="close-btn" onClick={() => setShowPointModal(false)}>
+                <FaTimes />
+              </button>
+            </div>
+            <div className="modal-content">
+              <div className="certificate-checklist">
+                {certificates.length > 0 ? (
+                  <table className="certificate-table">
+                    <thead>
+                      <tr>
+                        <th>Select</th>
+                        <th>Certificate</th>
+                        <th>Activity</th>
+                        <th>Date</th>
+                        <th>Points</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {certificates.map((cert) => (
+                        <tr key={cert.id}>
+                          <td>
+                            <input 
+                              type="checkbox" 
+                              id={`cert-${cert.id}`}
+                              // You'll need to add state management for selected certificates
+                            />
+                          </td>
+                          <td>
+                            <label htmlFor={`cert-${cert.id}`}>
+                              {cert.certificateName}
+                            </label>
+                          </td>
+                          <td>{cert.activityHead || "N/A"}</td>
+                          <td>{cert.eventDate || "N/A"}</td>
+                          <td>
+                            <input 
+                              type="number" 
+                              min="0"
+                              defaultValue={cert.points || 0}
+                              className="points-input"
+                              // You'll need to add state management for point values
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <p>No certificates available for claiming points.</p>
+                )}
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button 
+                className="set-point-btn"
+                onClick={() => {
+                  // Add your logic to save the points
+                  setShowPointModal(false);
+                }}
+              >
+                Set Points
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
