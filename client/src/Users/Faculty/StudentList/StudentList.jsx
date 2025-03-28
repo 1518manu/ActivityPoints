@@ -40,7 +40,7 @@ const fetchStudents = async () => {
       console.log("Student Data:", studData);
       studDataArray.push(studData);
     }
-
+    console.log("Student Data Array:", studDataArray);
     setStudents(studDataArray);  // Set the data to state
   } catch (error) {
     console.error("Error fetching students:", error);
@@ -113,15 +113,15 @@ const fetchStudents = async () => {
   </div>
   <div className="student-list">
     {students.map((student) => (
-      <div
+      <button
         key={student.id}
-        className={`student-card ${selectedStudent === student.id ? "selected" : ""}`}
+        className=  { "student-item" `student-card ${selectedStudent === student.id ? "selected" : ""}`}
         onClick={() => handleSelectStudent(student.id)}
       >
         <p><strong>{student.name}</strong></p>
         <p>Roll No: {student.rollNo}</p>
         <p>Points: {student.point}</p>
-      </div>
+      </button>
     ))}
   </div>
 </div>
