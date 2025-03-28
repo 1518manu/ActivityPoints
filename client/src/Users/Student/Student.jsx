@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaSearch, FaAward, FaEdit, FaUser, FaUniversity, FaUpload, FaThLarge, FaCog, FaCalendarAlt, FaBell , FaSignOutAlt } from "react-icons/fa"; 
+import { FaSearch, FaAward, FaFileAlt, FaEdit, FaUser, FaUniversity, FaUpload, FaThLarge, FaCog, FaCalendarAlt, FaBell , FaSignOutAlt } from "react-icons/fa"; 
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import { fetchUserData, fetchUserRole } from "../../Login/dataApi/userDataApi"
 import { collection, query, where, onSnapshot } from "firebase/firestore";
@@ -68,7 +68,7 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
   const openUploadPage = () => navigate("/upload-certificate");
   const onCertificate = () => navigate("/certificate");
   const onNotification = () => navigate("/Notification");
-
+  const onDutyLeave = () => navigate("/duty-leave");
   if (!userData) {
     return <div>Loading user data...</div>;
   }
@@ -98,7 +98,11 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
           </button>
 
           <button>
-            <FaCalendarAlt className="menu-icon" /> Event <span className="badge">new</span>
+            <FaFileAlt className="menu-icon" /> Event <span className="badge">new</span>
+          </button>
+          
+          <button onClick={onDutyLeave}>
+            <FaCalendarAlt className="menu-icon" /> Duty leave 
           </button>
 
           <button onClick={onNotification} >

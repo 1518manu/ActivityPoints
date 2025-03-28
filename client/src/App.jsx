@@ -14,6 +14,7 @@ import { Validate } from "./Users/Faculty/validate/Validate";
 import { StudentList } from "./Users/Faculty/StudentList/StudentList";
 import { NotificationPageStudent } from "./Users/Student/Notification/NotificationStudent";
 import { NotificationPageFaculty } from "./Users/Faculty/Notification/NotificationFaculty";
+import { DutyLeaveForm } from "./Users/Student/DutyLeave/DutyLeaveStudent";
 import "./App.css";
 
 
@@ -114,6 +115,15 @@ function App() {
                   <NotificationPageStudent token={token} userData={userData} onLogout={handleLogout} />
                 }
               />
+              
+                
+              <Route
+                path = "/duty-leave"
+                element ={
+                  <DutyLeaveForm userData={userData}/>
+                }
+              />
+              /duty-leave
 
               <Route 
                 path = "/FacultyDashboard"
