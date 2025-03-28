@@ -54,6 +54,7 @@ export const StudentList = ({ token, userData, onLogout }) => {
 
   const fetchStudentCertificates = async (rollNo) => {
     try {
+      console.log("Fetching certificates for rollNo:", rollNo);
       setLoadingCertificates(true);
       const q = query(collection(db, "certificates"), where("user_id", "==", rollNo));
       const querySnapshot = await getDocs(q);
@@ -61,6 +62,7 @@ export const StudentList = ({ token, userData, onLogout }) => {
         id: doc.id,
         ...doc.data(),
       }));
+      console.log("Certificates fetched:", certs);
       setStudentCertificates(certs);
     } catch (error) {
       console.error("Error fetching certificates:", error);
@@ -71,6 +73,7 @@ export const StudentList = ({ token, userData, onLogout }) => {
 
   const handleStudentClick = async (student) => {
     setSelectedStudent(student);
+    console.log("Student clicked:", student);
     console.log("Selected Student:", student);
     await fetchStudentCertificates(student.rollNo);
   };
@@ -91,9 +94,6 @@ export const StudentList = ({ token, userData, onLogout }) => {
     return <div>Loading user data...</div>;
   }
 
-  const calculateTotalPoints = () => {
-    return studentCertificates.reduce((total, cert) => total + (parseInt(cert.points) || 0), 0);
-  };
 
   return (
     <div className="container">
@@ -209,11 +209,11 @@ export const StudentList = ({ token, userData, onLogout }) => {
               </div>
               <div className="info-row">
                 <span className="info-label">Department:</span>
-                <span>{selectedStudent.department}</span>
+                <span>{selectedStudent.dept}</span>
               </div>
               <div className="info-row">
                 <span className="info-label">Total Points:</span>
-                <span>{calculateTotalPoints()}</span>
+                <span style = {{color:`${getColor(selectedStudent.point)}`}}>{selectedStudent.point || 0}</span>
               </div>
             </div>
 
@@ -228,15 +228,15 @@ export const StudentList = ({ token, userData, onLogout }) => {
                   {studentCertificates.map((cert) => (
                     <div key={cert.id} className="certificate-item">
                       <div className="certificate-header">
-                        <strong>{cert.event_name || 'Unnamed Event'}</strong>
+                        <strong>{cert.certificateName || 'Unnamed Event'}</strong>
                         <span className={`status ${cert.status?.toLowerCase()}`}>
                           {cert.status || 'Pending'}
                         </span>
                       </div>
                       <div className="certificate-details">
-                        <p>Organization: {cert.organization || 'N/A'}</p>
-                        <p>Date: {cert.date || 'Unknown'}</p>
-                        <p>Points: {cert.points || 0}</p>
+                        <p>Organization: {cert.activity || 'N/A'}</p>
+                        <p>Date: {cert.eventDate || 'Unknown'}</p>
+                        <p>Points: <span style = {{color:`blue`}}>{cert.points || 0}</span></p>
                         {cert.fileUrl && (
                           <a href={cert.fileUrl} target="_blank" rel="noopener noreferrer">
                             View Certificate
