@@ -24,7 +24,7 @@ export const NotificationPage = ({ token, userData, onLogout }) => {
       if (!certDoc.exists()) return null;
 
       const certData = certDoc.data();
-      console.log(certData.dateIssued);
+      console.log(certData);
       return {
         id: certDoc.id,
         certificateName: certData.certificateName || "N/A",
@@ -50,6 +50,7 @@ export const NotificationPage = ({ token, userData, onLogout }) => {
   const fetchNotifications = async (userData) => {
     setLoading(true);
     try {
+      console.log("Fetching notifications for user:", userData);
       const rollNo = userData.rollNo;
       const notificationsQuery = query(collection(db, "Notifications"), where("user_id", "==", rollNo));
       const notificationDocs = await getDocs(notificationsQuery);
@@ -97,7 +98,7 @@ export const NotificationPage = ({ token, userData, onLogout }) => {
         <button>
           <FaCalendarAlt className="menu-icon" /> Event <span className="badge">new</span>
         </button>
-        <button onClick={onNotification}>
+        <button >
           <FaBell className="menu-icon" /> Notifications
         </button>
         <button onClick={onLogout} style={{ color: "#df0000" }}>
