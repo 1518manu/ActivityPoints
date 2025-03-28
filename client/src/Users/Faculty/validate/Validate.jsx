@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaThLarge, FaCheckCircle, FaCog,
+import { FaEdit, FaEye, FaThLarge, FaCheckCircle, FaCog,
    FaCalendarAlt, FaBell, FaSignOutAlt,
      FaUser, FaUniversity, FaCheck, FaTimes } from "react-icons/fa";
 import { certificatesFetch } from "../certificatesFetch/certificatesFetch"
