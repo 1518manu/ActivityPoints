@@ -104,6 +104,7 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
     const q = query(notificationsRef, where("user_id", "==", userData.faculty_id)); 
   
     const unsubscribe = onSnapshot(q, (snapshot) => {
+      console.log(snapshot.docs);
       setNotificationCount(snapshot.size); // Real-time update
     });
   
@@ -591,6 +592,7 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
 
   const onValidate = () => { navigate("/Validate"); }
   const onStudentList = () => { navigate("/StudentList"); }
+  const onNotification = () => { navigate("/Notification-faculty"); }
 
   const handleViewApplication = (application) => {
     setSelectedApplication(application);
@@ -678,7 +680,7 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
           <button onClick={onValidate}><FaCheckCircle className="menu-icon-faculty" /> Validate</button>
           <button onClick={onStudentList}><FaThLarge className="menu-icon-faculty" /> Student List</button>
           <button><FaCalendarAlt className="menu-icon-faculty" /> Events <span className="badge">new</span></button>
-          <button> <FaBell   className="menu-icon-faculty" /> Notifications  {notificationCount > 0 && <span className="badge">{notificationCount}</span>}</button>
+          <button  onClick={onNotification}> <FaBell   className="menu-icon-faculty" /> Notifications  {notificationCount > 0 && <span className="badge">{notificationCount}</span>}</button>
           <button><FaCog className="menu-icon-faculty" /> Settings</button>
           <button onClick={onLogout} style={{ color: "#df0000" }}>
             <FaSignOutAlt className="menu-icon-faculty" /> Logout

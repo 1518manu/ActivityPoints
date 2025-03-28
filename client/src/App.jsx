@@ -12,7 +12,8 @@ import { Loading } from "./Loading/Loading";
 import { Faculty } from "./Users/Faculty/Faculty";
 import { Validate } from "./Users/Faculty/validate/Validate";
 import { StudentList } from "./Users/Faculty/StudentList/StudentList";
-import { NotificationPage } from "./Users/Student/Notification/NotificationStudent";
+import { NotificationPageStudent } from "./Users/Student/Notification/NotificationStudent";
+import { NotificationPageFaculty } from "./Users/Faculty/Notification/NotificationFaculty";
 import "./App.css";
 
 
@@ -98,8 +99,22 @@ function App() {
                                                                         ( <LoginPage onLoginSuccess={handleLoginSuccess} /> )
                 }
               />
-              <Route path="/upload-certificate" element={<CertificateUploadPage />} />
-              <Route path="/certificate" element={<Certificate  token={token} userData={userData} onLogout={handleLogout} />} />
+
+              <Route path="/upload-certificate"
+               element={<CertificateUploadPage />} />
+
+              <Route path="/certificate"
+               element={<Certificate  token={token} userData={userData} onLogout={handleLogout} />}
+                />
+
+                
+              <Route
+                path = "/Notification"
+                element ={
+                  <NotificationPageStudent token={token} userData={userData} onLogout={handleLogout} />
+                }
+              />
+
               <Route 
                 path = "/FacultyDashboard"
                 element={
@@ -107,6 +122,7 @@ function App() {
                                                                         ( <LoginPage onLoginSuccess={handleLoginSuccess} /> )
                 }
               />
+
               <Route
                 path = "/Validate"
                 element ={
@@ -120,11 +136,10 @@ function App() {
                   <StudentList token={token} userData={userData} onLogout={handleLogout} />
                 }
               />
-              
               <Route
-                path = "/Notification"
+                path = "/Notification-faculty"
                 element ={
-                  <NotificationPage token={token} userData={userData} onLogout={handleLogout} />
+                  <NotificationPageFaculty token={token} userData={userData} onLogout={handleLogout} />
                 }
               />
             </Routes>

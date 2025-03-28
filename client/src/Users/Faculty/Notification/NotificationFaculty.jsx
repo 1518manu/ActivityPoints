@@ -4,64 +4,29 @@ import { db } from "../../../firebaseFile/firebaseConfig";
 import { FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { Loading } from "../../../Loading/Loading";
-import "./NotificationStudent.css";
+import "./NotificationFaculty.css";
 
-export const NotificationPageStudent = ({ token, userData, onLogout }) => {
+export const NotificationPageFaculty = ({ token, userData, onLogout }) => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [selectedCertificate, setSelectedCertificate] = useState(null);
   const navigate = useNavigate();
 
-  // Function to fetch certificate by ID
-  const fetchCertificateById = async (certId) => {
-    if (!certId) return null;
-
-    try {
-      const certRef = doc(db, "certificates", certId);
-      const certDoc = await getDoc(certRef);
-
-      if (!certDoc.exists()) return null;
-
-      const certData = certDoc.data();
-      console.log(certData);
-      return {
-        id: certDoc.id,
-        certificateName: certData.certificateName || "N/A",
-        activity: certData.activity || "N/A",
-        role: certData.role || "N/A",
-        eventDate: certData.eventDate || "N/A",
-        certificateDate: certData.certificateDate || "N/A",
-        fileURL: certData.fileURL || null,
-        semester: certData.semester || "N/A",
-        uploadedAt: certData.uploadedAt?.toDate().toLocaleString() || "N/A",
-        issuedBy: certData.issuedBy || "N/A",
-        dateIssued: certData.dateIssued || "N/A",
-        category: certData.category || "N/A",
-        description: certData.description || "N/A",
-      };
-    } catch (error) {
-      console.error("Error fetching certificate:", error);
-      return null;
-    }
-  };
-
   // Function to fetch notifications and related certificates
   const fetchNotifications = async (userData) => {
     setLoading(true);
     try {
       console.log("Fetching notifications for user:", userData);
-      const rollNo = userData.rollNo;
-      const notificationsQuery = query(collection(db, "Notifications"), where("user_id", "==", rollNo));
+      const facultyId = userData.faculty_id;
+      const notificationsQuery = query(collection(db, "Notifications"), where("user_id", "==", facultyId));
       const notificationDocs = await getDocs(notificationsQuery);
 
       const notificationDataArray = await Promise.all(
         notificationDocs.docs.map(async (doc) => {
           const notificationData = { id: doc.id, ...doc.data() };
 
-          if (notificationData.cert_id) {
-            notificationData.certificate = await fetchCertificateById(notificationData.cert_id);
-          }
+          
 
           return notificationData;
         })
