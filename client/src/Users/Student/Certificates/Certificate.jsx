@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FaSearch, FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaFilter, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Loading } from "../../../Loading/Loading";
 import "./Certificate.css";
+import { use } from "react";
 
 // Activity data structure
 const activityData = {
@@ -78,7 +79,7 @@ export const Certificate = ({ token, userData, onLogout } ) => {
 
     const fetchCertificates = async (userData) => {
       try {
-        
+        console.log(userData);
         const userId = userData.rollNo;
         const q = query(collection(db, "certificates"), where("user_id", "==", userId));
         const querySnapshot = await getDocs(q);
@@ -218,7 +219,7 @@ export const Certificate = ({ token, userData, onLogout } ) => {
   
     useEffect(() => {
       if (!token) navigate("/");
-      if (userData) fetchCertificates();
+      if (userData) fetchCertificates(userData);
     }, [token, userData, navigate]);
   
 
