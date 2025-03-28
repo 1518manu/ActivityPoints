@@ -64,8 +64,7 @@ export const StudentList = ({ token, userData, onLogout }) => {
   
   const handleStudentClick = (student) => {
     console.log("Student clicked:", student);
-    navigate("/student-details", { state: { studentdata: selectedStudent } });
-  
+    navigate("/student-details", { state: { studentdata: student } }); // Changed selectedStudent to student
   };
 
   const onValidate = () => { navigate("/Validate"); }

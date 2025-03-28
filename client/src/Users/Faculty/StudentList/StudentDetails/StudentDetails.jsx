@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaArrowLeft, FaFileAlt, FaChartLine } from "react-icons/fa";
+import { useNavigate, useLocation } from "react-router-dom";
+import { FaArrowLeft, FaFileAlt, FaChartLine, FaSpinner } from "react-icons/fa";
 import { Bar } from 'react-chartjs-2';
 import { 
   Chart as ChartJS, 
@@ -25,16 +25,23 @@ ChartJS.register(
   Legend
 );
 
-export const StudentDetails = ({ studentdata }) => {
+export const StudentDetails = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [certificates, setCertificates] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [chartData, setChartData] = useState(null);
- 
-  console.log("Student Data:", studentdata);
+  
+  // Get studentdata from location state
+  const { studentdata } = location.state || {};
+
   const fetchUserCertificates = async (rollNo) => {
     try {
-      const q = query(collection(db, "certificates"), where("user_id", "==", rollNo));
+      const q = query(
+        collection(db, "certificates"), 
+        where("user_id", "==", rollNo)
+      );
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -46,23 +53,36 @@ export const StudentDetails = ({ studentdata }) => {
     }
   };
 
-  // Process certificate data for chart
-  const processChartData = (certs) => {
-    const dateCounts = certs.reduce((acc, cert) => {
-      // Assuming cert has a date field in format 'YYYY-MM-DD' or similar
-      const date = cert.date ? cert.date.split('T')[0] : 'Unknown';
-      acc[date] = (acc[date] || 0) + 1;
-      return acc;
-    }, {});
-
-    const sortedDates = Object.keys(dateCounts).sort();
+  const processChartData = (certs = []) => {
+    const initialCounts = {};
     
+    const monthCounts = certs.reduce((acc, cert) => {
+      if (!cert?.date) return acc;
+      
+      try {
+        const date = new Date(cert.date);
+        const monthYear = `${date.toLocaleString('default', { month: 'short' })} ${date.getFullYear()}`;
+        acc[monthYear] = (acc[monthYear] || 0) + 1;
+      } catch (e) {
+        console.error("Invalid date format:", cert.date);
+      }
+      return acc;
+    }, initialCounts);
+
+    const sortedMonths = Object.keys(monthCounts).sort((a, b) => {
+      try {
+        return new Date(a) - new Date(b);
+      } catch {
+        return 0;
+      }
+    });
+
     return {
-      labels: sortedDates,
+      labels: sortedMonths,
       datasets: [
         {
           label: 'Certificates Uploaded',
-          data: sortedDates.map(date => dateCounts[date]),
+          data: sortedMonths.map(month => monthCounts[month]),
           backgroundColor: '#4e73df',
           borderColor: '#2e59d9',
           borderWidth: 1,
@@ -80,11 +100,15 @@ export const StudentDetails = ({ studentdata }) => {
     const loadData = async () => {
       try {
         setLoading(true);
+        setError(null);
         const certs = await fetchUserCertificates(studentdata.rollNo);
-        setCertificates(certs);
+        setCertificates(certs || []);
         setChartData(processChartData(certs));
-      } catch (error) {
-        console.error("Failed to load data:", error);
+      } catch (err) {
+        console.error("Failed to load data:", err);
+        setError("Failed to load certificate data. Please try again.");
+        setCertificates([]);
+        setChartData(processChartData([]));
       } finally {
         setLoading(false);
       }
@@ -93,8 +117,18 @@ export const StudentDetails = ({ studentdata }) => {
     loadData();
   }, [studentdata, navigate]);
 
+  // Safely calculate total points
+  const totalPoints = certificates.reduce((sum, cert) => {
+    const points = parseInt(cert?.points) || 0;
+    return sum + points;
+  }, 0);
+
   if (!studentdata) {
-    return <div className="container">No student data available. Redirecting...</div>;
+    return (
+      <div className="container error-container">
+        <p>No student data available. Redirecting...</p>
+      </div>
+    );
   }
 
   return (
@@ -105,13 +139,11 @@ export const StudentDetails = ({ studentdata }) => {
             <img src="/api/placeholder/100/40" alt="Logo" className="logo" />
           </div>
         </div>
-        <div className="header-right">
-        </div>
       </header>
 
       <div className="main-content">
         <div className="sidebar-menu-faculty">
-          {/* Sidebar content same as StudentList */}
+          {/* Sidebar navigation buttons */}
         </div>
 
         <div className="profile-content">
@@ -124,13 +156,20 @@ export const StudentDetails = ({ studentdata }) => {
 
           <h2>Student Details</h2>
           
+          {/* Student Information Section */}
           <div className="student-info-card">
             <div className="student-basic-info">
-              <h3>{studentdata.name}</h3>
-              <p><strong>Roll No:</strong> {studentdata.rollNo}</p>
-              <p><strong>Email:</strong> {studentdata.email}</p>
-              <p><strong>Total Points:</strong> {studentdata.point || 0}</p>
-              <p><strong>Department:</strong> {studentdata.department}</p>
+              <h3>{studentdata.name || 'N/A'}</h3>
+              <div className="info-grid">
+                <div>
+                  <p><strong>Roll No:</strong> {studentdata.rollNo || 'N/A'}</p>
+                  <p><strong>Email:</strong> {studentdata.email || 'N/A'}</p>
+                </div>
+                <div>
+                  <p><strong>Department:</strong> {studentdata.department || 'N/A'}</p>
+                  <p><strong>Batch:</strong> {studentdata.batch || 'N/A'}</p>
+                </div>
+              </div>
             </div>
             
             <div className="student-stats">
@@ -144,37 +183,50 @@ export const StudentDetails = ({ studentdata }) => {
               <div className="stat-card">
                 <FaChartLine className="stat-icon" />
                 <div>
-                  <h4>{certificates.reduce((sum, cert) => sum + (cert.points || 0), 0)}</h4>
-                  <p>Points from Certificates</p>
+                  <h4>{totalPoints}</h4>
+                  <p>Total Points</p>
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Certificate Activity Chart */}
           <div className="chart-section">
             <h3>Certificate Activity</h3>
             {loading ? (
-              <p>Loading chart data...</p>
-            ) : chartData && chartData.labels.length > 0 ? (
+              <div className="loading-spinner">
+                <FaSpinner className="spinner-icon" />
+                <p>Loading chart data...</p>
+              </div>
+            ) : error ? (
+              <div className="error-message">
+                <p>{error}</p>
+              </div>
+            ) : chartData?.labels?.length > 0 ? (
               <div className="chart-container">
                 <Bar
                   data={chartData}
                   options={{
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                       legend: {
                         position: 'top',
                       },
-                      title: {
-                        display: true,
-                        text: 'Certificates Uploaded by Date',
-                      },
+                      tooltip: {
+                        callbacks: {
+                          label: (context) => {
+                            return `${context.parsed.y} certificate${context.parsed.y !== 1 ? 's' : ''}`;
+                          }
+                        }
+                      }
                     },
                     scales: {
                       y: {
                         beginAtZero: true,
                         ticks: {
-                          stepSize: 1,
+                          precision: 0,
+                          stepSize: 1
                         },
                       },
                     },
@@ -182,40 +234,59 @@ export const StudentDetails = ({ studentdata }) => {
                 />
               </div>
             ) : (
-              <p>No certificate data available for visualization.</p>
+              <p className="no-data-message">No certificate data available for visualization.</p>
             )}
           </div>
 
+          {/* Certificates List */}
           <div className="certificates-section">
-            <h3>Certificates</h3>
+            <div className="section-header">
+              <h3>Certificates</h3>
+              <p className="total-points">Total Points: {totalPoints}</p>
+            </div>
+            
             {loading ? (
-              <p>Loading certificates...</p>
+              <div className="loading-spinner">
+                <FaSpinner className="spinner-icon" />
+                <p>Loading certificates...</p>
+              </div>
+            ) : error ? (
+              <div className="error-message">
+                <p>{error}</p>
+              </div>
             ) : certificates.length === 0 ? (
-              <p>No certificates found for this student.</p>
+              <p className="no-data-message">No certificates found for this student.</p>
             ) : (
               <div className="certificate-grid">
                 {certificates.map((cert) => (
                   <div key={cert.id} className="certificate-card">
                     <div className="certificate-header">
                       <h4>{cert.event_name || 'Unnamed Event'}</h4>
-                      <span className={`status-badge ${cert.status?.toLowerCase()}`}>
+                      <span className={`status-badge ${cert.status?.toLowerCase() || 'pending'}`}>
                         {cert.status || 'Pending'}
                       </span>
                     </div>
                     <div className="certificate-details">
                       <p><strong>Organization:</strong> {cert.organization || 'N/A'}</p>
-                      <p><strong>Date:</strong> {cert.date || 'Unknown date'}</p>
+                      <p><strong>Date:</strong> {cert.date ? new Date(cert.date).toLocaleDateString() : 'Unknown date'}</p>
                       <p><strong>Points:</strong> {cert.points || 0}</p>
+                      {cert.description && (
+                        <p className="certificate-description">
+                          <strong>Description:</strong> {cert.description}
+                        </p>
+                      )}
                     </div>
                     {cert.fileUrl && (
-                      <a 
-                        href={cert.fileUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="view-certificate-btn"
-                      >
-                        View Certificate
-                      </a>
+                      <div className="certificate-actions">
+                        <a 
+                          href={cert.fileUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="view-certificate-btn"
+                        >
+                          View Certificate
+                        </a>
+                      </div>
                     )}
                   </div>
                 ))}
