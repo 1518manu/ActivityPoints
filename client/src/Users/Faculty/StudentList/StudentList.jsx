@@ -115,7 +115,7 @@ const fetchStudents = async () => {
     {students.map((student) => (
       <button
         key={student.id}
-        className=  { "student-item" `student-card ${selectedStudent === student.id ? "selected" : ""}`}
+        className= {`student-card ${selectedStudent === student.id ? "selected" : ""}`}
         onClick={() => handleSelectStudent(student.id)}
       >
         <p><strong>{student.name}</strong></p>
