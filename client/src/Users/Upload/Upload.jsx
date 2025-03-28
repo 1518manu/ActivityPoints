@@ -206,6 +206,18 @@ export function CertificateUploadPage() {
         showNotification("Certificate uploaded successfully!","success");
         resetForm();
 
+        await addDoc(collection(db, "Notifications"), {
+          cert_id: docRef.id,
+          for: "faculty",
+          msg: `${userData.name} uploaded a new certificate`,
+          status: "not viewed",
+          type: "upload",
+          user_id: userData.mentor, // Assigning the faculty ID as recipient
+          timestamp: new Date().toISOString(),
+        });
+    
+        console.log("Notification sent to faculty:", userData.mentor);
+
         setTimeout(() => {
           navigate("/StudentDashboard");
         }, 1500);

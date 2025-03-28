@@ -1,3 +1,5 @@
+
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaEye } from "react-icons/fa";
@@ -7,47 +9,13 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { doc, updateDoc, addDoc ,getDoc } from 'firebase/firestore';
 import './Validate.css';
 
-
 export const Validate = ({ token, userData, onLogout }) => {
   const navigate = useNavigate();
   const [validationData, setValidationData] = useState([]);
   const [pointsPopup, setPointsPopup] = useState(false);
   const [calculatedPoints, setCalculatedPoints] = useState(0);
   const [selectedValidation, setSelectedValidation] = useState(null);
-  //---------------------------------------fetching students from the database-------------------------------------
-  const [students, setStudents] = useState([]);
-
-// Fetch students and set the state
-const fetchStudents = async () => {
-  try {
-    const userDataString1 = localStorage.getItem('userData'); 
-    let facultyId = null;
-
-    if (userDataString1) {
-      const userData1 = JSON.parse(userDataString1);
-      facultyId = userData1.faculty_id;
-      console.log("Faculty ID inside IF:", facultyId);
-    }
-
-    const viewStudents = query(
-      collection(db, "Students"),
-      where("mentor", "==", facultyId)
-    );
-
-    const studDoc = await getDocs(viewStudents);
-    const studDataArray = [];
-
-    for (const doc of studDoc.docs) {
-      const studData = { id: doc.id, ...doc.data() };  // Include document ID for 'key'
-      console.log("Student Data:", studData);
-      studDataArray.push(studData);
-    }
-
-    setStudents(studDataArray);  // Set the data to state
-  } catch (error) {
-    console.error("Error fetching students:", error);
-  }
-};
+  
 
 
   //---------------------------------------fetching certificates from the database-------------------------------------
@@ -119,22 +87,19 @@ const fetchValidationData = async () => {
       console.warn("No user data available!");
     }
     
-    fetchStudents();
+   
     fetchValidationData();
-    
+   
   }, [token, userData, navigate]);
 
   if (!userData) {
     return <div>Loading user data...</div>;
   }
   
-  const [selectedStudent, setSelectedStudent] = useState(null);
+  
   const [rejectPopup, setRejectPopup] = useState(null);
   const [rejectReason, setRejectReason] = useState("");
   
-  const handleSelectStudent = (studentId) => {
-    setSelectedStudent(studentId);
-  };
 
   const getValidatableCertificates = (studentId) => {
     const studentCerts = updatedCertificates[studentId] || [];
@@ -345,25 +310,7 @@ const handleRejectCertificate = async (validationId) => {
           </div>
 
           <div className="student-certificates-container">
-            {/* Students List Section */}
-            <div className="student-list-container">
-  <div className="section-header">
-    <h3>Student List</h3>
-  </div>
-  <div className="student-list">
-    {students.map((student) => (
-      <div
-        key={student.id}
-        className={`student-card ${selectedStudent === student.id ? "selected" : ""}`}
-        onClick={() => handleSelectStudent(student.id)}
-      >
-        <p><strong>{student.name}</strong></p>
-        <p>Roll No: {student.rollNo}</p>
-        <p>Points: {student.point}</p>
-      </div>
-    ))}
-  </div>
-</div>
+            
 
             {/* Certificates List Section */}
             <div className="certificate-list-container">
@@ -457,7 +404,6 @@ const handleRejectCertificate = async (validationId) => {
                 placeholder="Enter reason..."
               ></textarea>
               <div className="popup-buttons">
-                {/* <button onClick={() => handleRejectCertificate(selectedStudent, rejectPopup)}>Confirm</button> */}
                 <button onClick={() => handleRejectCertificate(rejectPopup)}>Confirm</button>
 
                 <button onClick={() => setRejectPopup(null)}>Cancel</button>
@@ -470,6 +416,3 @@ const handleRejectCertificate = async (validationId) => {
   );
 };
 
-
-  
-  
