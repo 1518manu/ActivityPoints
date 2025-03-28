@@ -12,6 +12,7 @@ import { Loading } from "./Loading/Loading";
 import { Faculty } from "./Users/Faculty/Faculty";
 import { Validate } from "./Users/Faculty/validate/Validate";
 import { StudentList } from "./Users/Faculty/StudentList/StudentList";
+import { StudentDetails } from './Users/Faculty/StudentList/StudentDetails/StudentDetails';
 import { NotificationPageStudent } from "./Users/Student/Notification/NotificationStudent";
 import { NotificationPageFaculty } from "./Users/Faculty/Notification/NotificationFaculty";
 import { DutyLeaveForm } from "./Users/Student/DutyLeave/DutyLeaveStudent";
@@ -145,6 +146,10 @@ function App() {
                 element ={
                   <StudentList token={token} userData={userData} onLogout={handleLogout} />
                 }
+              />
+              <Route 
+                path="/student-details" 
+                element={<StudentDetails studentdata={selectedStudent} />} 
               />
               <Route
                 path = "/Notification-faculty"

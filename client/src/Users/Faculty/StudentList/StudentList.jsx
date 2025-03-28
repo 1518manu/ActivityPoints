@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { FaEdit, FaThLarge, FaCheckCircle, FaCog,
    FaCalendarAlt, FaBell, FaSignOutAlt,
      FaUser, FaUniversity, FaCheck, FaTimes } from "react-icons/fa";
-
 import { db } from '../../../firebaseFile/firebaseConfig'; 
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { doc, updateDoc, addDoc ,getDoc } from 'firebase/firestore';
@@ -12,41 +11,38 @@ import './StudentList.css';
 export const StudentList = ({ token, userData, onLogout }) => {
   const navigate = useNavigate();
   
-  //---------------------------------------fetching students from the database-------------------------------------
-const [students, setStudents] = useState([]);
+  const [students, setStudents] = useState([]);
 
-// Fetch students and set the state
-const fetchStudents = async () => {
-  try {
-    const userDataString1 = localStorage.getItem('userData'); 
-    let facultyId = null;
+  const fetchStudents = async () => {
+    try {
+      const userDataString1 = localStorage.getItem('userData'); 
+      let facultyId = null;
 
-    if (userDataString1) {
-      const userData1 = JSON.parse(userDataString1);
-      facultyId = userData1.faculty_id;
-      console.log("Faculty ID inside IF:", facultyId);
+      if (userDataString1) {
+        const userData1 = JSON.parse(userDataString1);
+        facultyId = userData1.faculty_id;
+        console.log("Faculty ID inside IF:", facultyId);
+      }
+
+      const viewStudents = query(
+        collection(db, "Students"),
+        where("mentor", "==", facultyId)
+      );
+
+      const studDoc = await getDocs(viewStudents);
+      const studDataArray = [];
+
+      for (const doc of studDoc.docs) {
+        const studData = { id: doc.id, ...doc.data() };
+        console.log("Student Data:", studData);
+        studDataArray.push(studData);
+      }
+      console.log("Student Data Array:", studDataArray);
+      setStudents(studDataArray);
+    } catch (error) {
+      console.error("Error fetching students:", error);
     }
-
-    const viewStudents = query(
-      collection(db, "Students"),
-      where("mentor", "==", facultyId)
-    );
-
-    const studDoc = await getDocs(viewStudents);
-    const studDataArray = [];
-
-    for (const doc of studDoc.docs) {
-      const studData = { id: doc.id, ...doc.data() };  // Include document ID for 'key'
-      console.log("Student Data:", studData);
-      studDataArray.push(studData);
-    }
-    console.log("Student Data Array:", studDataArray);
-    setStudents(studDataArray);  // Set the data to state
-  } catch (error) {
-    console.error("Error fetching students:", error);
-  }
-};
-
+  };
 
   useEffect(() => {
     if (!token) {
@@ -60,18 +56,19 @@ const fetchStudents = async () => {
     }
     
     fetchStudents();
-    
   }, [token, userData, navigate]);
 
   if (!userData) {
     return <div>Loading user data...</div>;
   }
   
-  const [selectedStudent, setSelectedStudent] = useState(null);
- 
-  
-  const handleSelectStudent = (studentId) => {
-    setSelectedStudent(studentId);
+  const handleStudentClick = (student) => {
+    console.log("Student clicked:", student);
+    navigate("/student-details", { 
+      state: { 
+        studentData: student 
+      } 
+    });
   };
 
   const onValidate = () => { navigate("/Validate"); }
@@ -106,31 +103,25 @@ const fetchStudents = async () => {
           <h2>Student List</h2>
 
           <div className="student-certificates-container">
-            {/* Students List Section */}
             <div className="student-list-container">
-  <div className="section-header">
-    <h3>Student List</h3>
-  </div>
-  <div className="student-list">
-    {students.map((student) => (
-      <button
-        key={student.id}
-        className= {`student-card ${selectedStudent === student.id ? "selected" : ""}`}
-        onClick={() => handleSelectStudent(student.id)}
-      >
-        <p><strong>{student.name}</strong></p>
-        <p>Roll No: {student.rollNo}</p>
-        <p>Points: {student.point}</p>
-      </button>
-    ))}
-  </div>
-</div>
-
-           
-                      
-
- </div>
-          
+              <div className="section-header">
+                <h3>Student List</h3>
+              </div>
+              <div className="student-list">
+                {students.map((student) => (
+                  <button
+                    key={student.id}
+                    className="student-card"
+                    onClick={() => handleStudentClick(student)}
+                  >
+                    <p><strong>{student.name}</strong></p>
+                    <p>Roll No: {student.rollNo}</p>
+                    <p>Points: {student.point}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
