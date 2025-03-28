@@ -3,7 +3,8 @@ import { collection, getDocs, query, where, doc, getDoc } from "firebase/firesto
 import { db } from "../../../firebaseFile/firebaseConfig";
 import { FaEdit, FaThLarge, FaCheckCircle, FaCog,
    FaCalendarAlt, FaBell, FaSignOutAlt,
-     FaUser, FaUniversity, FaCheck, FaTimes } from "react-icons/fa";
+     FaUser, FaUniversity, FaCheck, FaTimes, 
+     FaUserTie} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { Loading } from "../../../Loading/Loading";
 import "./NotificationFaculty.css";
@@ -50,18 +51,31 @@ export const NotificationPageFaculty = ({ token, userData, onLogout }) => {
 
   const onValidate = () => { navigate("/Validate"); }
   const onStudentList = () => { navigate("/StudentList"); }
-  const onNotification = () => { navigate("/Notification-faculty"); }
+  const onDashboard = () => { navigate("/FacultyDashboard"); }
 
   return (loading ? (
     <Loading />
   ) :(
+    <div className="container">
+      {/* Header/Navbar */}
+      <header className="header">
+        <div className="header-left">
+          <div className="logo-container">
+            <img src="/api/placeholder/100/40" alt="Logo" className="logo" />
+          </div>
+        </div>
+
+        <div className="header-right">
+          <button className="business-btn" onClick={onLogout}>Logout</button>
+        </div>
+      </header>
     <div className="notification-container1">
       {/* Sidebar Menu */}
       <div className={`sidebar-menu  ${selectedNotification ? "blur-background" : ""}`}>
+      <button  onClick={onDashboard}> <FaUserTie   className="menu-icon-faculty" /> Dashboard  </button>
           <button onClick={onValidate}><FaCheckCircle className="menu-icon-faculty" /> Validate</button>
           <button onClick={onStudentList}><FaThLarge className="menu-icon-faculty" /> Student List</button>
           <button><FaCalendarAlt className="menu-icon-faculty" /> Events <span className="badge">new</span></button>
-          <button  onClick={onNotification}> <FaBell   className="menu-icon-faculty" /> Notifications  </button>
           <button><FaCog className="menu-icon-faculty" /> Settings</button>
           <button onClick={onLogout} style={{ color: "#df0000" }}>
             <FaSignOutAlt className="menu-icon-faculty" /> Logout
@@ -177,6 +191,7 @@ export const NotificationPageFaculty = ({ token, userData, onLogout }) => {
         </div>
       )}
 
+    </div>
     </div>)
   );
 };

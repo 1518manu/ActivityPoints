@@ -6,6 +6,7 @@ import { FaSearch, FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaFilt
 import { Loading } from "../../../Loading/Loading";
 import "./Certificate.css";
 import { use } from "react";
+import { FaUserTie } from "react-icons/fa6";
 
 // Activity data structure
 const activityData = {
@@ -256,7 +257,7 @@ export const Certificate = ({ token, userData, onLogout } ) => {
         {/* Sidebar */}
         <div className="sidebar-menu">
           <button onClick={() => navigate("/StudentDashboard")}>
-            <FaThLarge className="menu-icon" /> Dashboard
+            <FaUserTie className="menu-icon" /> Dashboard
           </button>
           <button><FaCog className="menu-icon" /> Settings</button>
           <button><FaCalendarAlt className="menu-icon" /> Events <span className="badge">new</span></button>
