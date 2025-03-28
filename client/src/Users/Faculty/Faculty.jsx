@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import jsPDF from "jspdf";
 import autoTable from 'jspdf-autotable';
 import { FaThLarge, FaCheckCircle, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaEdit, FaUser, FaUniversity, FaCheck, FaTimes } from "react-icons/fa";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs ,query, where, onSnapshot} from "firebase/firestore";
 import { db } from '../../firebaseFile/firebaseConfig';
 import "./Faculty.css";
 import { Loading } from "../../Loading/Loading";
@@ -22,7 +22,7 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
   const [showYearPopup, setShowYearPopup] = useState(false);
   const [selectedYears, setSelectedYears] = useState([]);
   const [yearsWithData, setYearsWithData] = useState([]);
-  
+  const [notificationCount, setNotificationCount] = useState(0);
   const navigate = useNavigate();
 
   // All possible semesters
@@ -96,6 +96,18 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
 
     fetchAllData();
   }, [token, initialUserData?.email, navigate]);
+  useEffect(() => {
+    if (!userData?.faculty_id) return; // Ensure faculty_id is available
+  
+    const notificationsRef = collection(db, "Notifications");
+    const q = query(notificationsRef, where("user_id", "==", userData.faculty_id)); 
+  
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setNotificationCount(snapshot.size); // Real-time update
+    });
+  
+    return () => unsubscribe();
+  }, [userData?.faculty_id]); 
 
   const handleSemesterReportClick = () => {
     setShowSemesterPopup(true);
@@ -665,7 +677,7 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
           <button onClick={onValidate}><FaCheckCircle className="menu-icon-faculty" /> Validate</button>
           <button onClick={onStudentList}><FaThLarge className="menu-icon-faculty" /> Student List</button>
           <button><FaCalendarAlt className="menu-icon-faculty" /> Events <span className="badge">new</span></button>
-          <button><FaBell className="menu-icon-faculty" /> Notifications <span className="badge">new</span></button>
+          <button> <FaBell   className="menu-icon-faculty" /> Notifications  {notificationCount > 0 && <span className="badge">{notificationCount}</span>}</button>
           <button><FaCog className="menu-icon-faculty" /> Settings</button>
           <button onClick={onLogout} style={{ color: "#df0000" }}>
             <FaSignOutAlt className="menu-icon-faculty" /> Logout
