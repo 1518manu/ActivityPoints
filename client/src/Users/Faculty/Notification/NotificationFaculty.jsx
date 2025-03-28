@@ -46,7 +46,6 @@ export const NotificationPageFaculty = ({ token, userData, onLogout }) => {
     if (userData) fetchNotifications(userData);
   }, [token, userData, navigate]);
 
-  const onCertificate = () => navigate("/certificate");
 
   return (loading ? (
     <Loading />
@@ -54,9 +53,6 @@ export const NotificationPageFaculty = ({ token, userData, onLogout }) => {
     <div className="notification-container1">
       {/* Sidebar Menu */}
       <div className={`sidebar-menu  ${selectedNotification ? "blur-background" : ""}`}>
-        <button onClick={onCertificate}>
-          <FaThLarge className="menu-icon" /> Certificates
-        </button>
         <button>
           <FaCog className="menu-icon" /> Settings
         </button>
