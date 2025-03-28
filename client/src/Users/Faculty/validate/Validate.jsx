@@ -280,6 +280,10 @@ const handleRejectCertificate = async (validationId) => {
     window.open(file, "_blank");
   };
 
+  const onValidate = () => { navigate("/Validate"); }
+  const onStudentList = () => { navigate("/StudentList"); }
+  const onNotification = () => { navigate("/Notification-faculty"); }
+  
   return (
     <div className="container">
       <header className="header">

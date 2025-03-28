@@ -46,6 +46,9 @@ export const NotificationPageFaculty = ({ token, userData, onLogout }) => {
     if (userData) fetchNotifications(userData);
   }, [token, userData, navigate]);
 
+  const onValidate = () => { navigate("/Validate"); }
+  const onStudentList = () => { navigate("/StudentList"); }
+  const onNotification = () => { navigate("/Notification-faculty"); }
 
   return (loading ? (
     <Loading />

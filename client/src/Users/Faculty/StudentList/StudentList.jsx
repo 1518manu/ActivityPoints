@@ -72,6 +72,9 @@ const fetchStudents = async () => {
     setSelectedStudent(studentId);
   };
 
+  const onValidate = () => { navigate("/Validate"); }
+  const onStudentList = () => { navigate("/StudentList"); }
+  const onNotification = () => { navigate("/Notification-faculty"); }
 
   return (
     <div className="container">
