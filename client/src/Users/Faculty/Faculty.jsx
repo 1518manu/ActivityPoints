@@ -3,7 +3,7 @@ import { fetchUserData, fetchUserRole } from "../../Login/dataApi/userDataApi";
 import { useNavigate } from "react-router-dom";
 import jsPDF from "jspdf";
 import autoTable from 'jspdf-autotable';
-import { FaThLarge, FaCheckCircle, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaEdit, FaUser, FaUniversity, FaCheck, FaTimes } from "react-icons/fa";
+import { FaThLarge, FaCheckCircle, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaEdit, FaUser, FaUniversity, FaCheck, FaTimes, FaFilter } from "react-icons/fa";
 import { collection, getDocs ,query, where, onSnapshot} from "firebase/firestore";
 import { db } from '../../firebaseFile/firebaseConfig';
 import "./Faculty.css";
@@ -593,6 +593,7 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
   const onValidate = () => { navigate("/Validate"); }
   const onStudentList = () => { navigate("/StudentList"); }
   const onNotification = () => { navigate("/Notification-faculty"); }
+  const onFilter = () => { navigate("/filter"); }
 
   const handleViewApplication = (application) => {
     setSelectedApplication(application);
@@ -681,6 +682,7 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
           <button onClick={onStudentList}><FaThLarge className="menu-icon-faculty" /> Student List</button>
           <button><FaCalendarAlt className="menu-icon-faculty" /> Events <span className="badge">new</span></button>
           <button  onClick={onNotification}> <FaBell   className="menu-icon-faculty" /> Notifications  {notificationCount > 0 && <span className="badge">{notificationCount}</span>}</button>
+          <button  onClick={onFilter}> <FaFilter   className="menu-icon-faculty" /> Filter  </button>
           <button><FaCog className="menu-icon-faculty" /> Settings</button>
           <button onClick={onLogout} style={{ color: "#df0000" }}>
             <FaSignOutAlt className="menu-icon-faculty" /> Logout
