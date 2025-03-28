@@ -81,7 +81,6 @@ export const NotificationPage = ({ token, userData, onLogout }) => {
   }, [token, userData, navigate]);
 
   const onCertificate = () => navigate("/certificate");
-  const onNotification = () => navigate("/Notification");
 
   return (loading ? (
     <Loading />

@@ -44,7 +44,7 @@ const rolesForElectedRepresentatives = ["Chairman", "Secretary", "Other Council 
 const prizeOptions = ["None", "1st Prize", "2nd Prize", "3rd Prize"];
 const semesters = ["Semester 1", "Semester 2", "Semester 3", "Semester 4", "Semester 5", "Semester 6", "Semester 7", "Semester 8"];
 
-export const Certificate = ({ token, userData: initialUserData, onLogout } ) => {
+export const Certificate = ({ token, userData, onLogout } ) => {
   const [certificates, setCertificates] = useState([]);
   const [filteredCertificates, setFilteredCertificates] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -52,7 +52,6 @@ export const Certificate = ({ token, userData: initialUserData, onLogout } ) => 
   const [sortOrder, setSortOrder] = useState("");
   const [showFilterPanel, setShowFilterPanel] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
-
   const [expandedSections, setExpandedSections] = useState({
     sort: false,
     activityHead: true,
@@ -62,9 +61,6 @@ export const Certificate = ({ token, userData: initialUserData, onLogout } ) => 
     prize: false,
     semester: false,
   });
-  
-  const onNotification = () => navigate("/Notification");
-  
   const [filters, setFilters] = useState({
     activityHead: [],
     activity: [],
@@ -73,14 +69,17 @@ export const Certificate = ({ token, userData: initialUserData, onLogout } ) => 
     prize: [],
     semester: [],
   });
-
+  
   const navigate = useNavigate();
-  const userData = JSON.parse(localStorage.getItem("userData"));
-  let userId = userData.rollNo;
+  
+  const onNotification = () => navigate("/Notification");
+  
 
-  useEffect(() => {
-    const fetchCertificates = async () => {
+
+    const fetchCertificates = async (userData) => {
       try {
+        
+        const userId = userData.rollNo;
         const q = query(collection(db, "certificates"), where("user_id", "==", userId));
         const querySnapshot = await getDocs(q);
 
@@ -98,8 +97,6 @@ export const Certificate = ({ token, userData: initialUserData, onLogout } ) => 
       }
     };
 
-    fetchCertificates();
-  }, []);
 
   // Search Functionality
   const handleSearch = (e) => {
@@ -218,6 +215,12 @@ export const Certificate = ({ token, userData: initialUserData, onLogout } ) => 
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+  
+    useEffect(() => {
+      if (!token) navigate("/");
+      if (userData) fetchCertificates();
+    }, [token, userData, navigate]);
+  
 
   if (isLoading) return <Loading />;
 
