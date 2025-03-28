@@ -312,7 +312,7 @@ const handleRejectCertificate = async (validationId) => {
         </div>
 
         <div className="profile-content">
-
+          <h2>Validate Certificate</h2>
           <div className="student-certificates-container">
             
 
