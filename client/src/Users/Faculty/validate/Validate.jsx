@@ -352,10 +352,10 @@ const handleRejectCertificate = async (validationId) => {
           </div>
 
           <div className="actions">
-                          {/* <button className="approve-btn" onClick={() => handleAcceptCertificate(selectedStudent, cert.id)}>Approve</button> */}
-                          <button className="approve-btn" onClick={() => handleAcceptCertificate(validation)}>Approve</button>
-                          <button className="reject-btn" onClick={() => setRejectPopup(validation.id)}>Reject</button>
-                        </div>
+            {/* <button className="approve-btn" onClick={() => handleAcceptCertificate(selectedStudent, cert.id)}>Approve</button> */}
+            <button className="approve-btn" onClick={() => handleAcceptCertificate(validation)}>Approve</button>
+            <button className="reject-btn-validate" onClick={() => setRejectPopup(validation.id)}>Reject</button>
+          </div>
         </div>
       ))}
     </div>
