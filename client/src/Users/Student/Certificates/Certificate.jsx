@@ -247,7 +247,7 @@ export const Certificate = ({ token, userData, onLogout } ) => {
           <button className="filter-sort-btn" onClick={() => setShowFilterPanel(true)}>
             <FaFilter /> Filter & Sort
           </button>
-          <button className="business-btn" onClick={() => navigate("/")}>Logout</button>
+          <button className="business-btn" onClick={onLogout}>Logout</button>
         </div>
       </header>
 
@@ -263,7 +263,7 @@ export const Certificate = ({ token, userData, onLogout } ) => {
             <FaBell className="menu-icon" /> Notifications  
             {notificationCount > 0 && <span className="badge">{notificationCount}</span>}
           </button>
-          <button onClick={() => navigate("/")} style={{ color: "#df0000" }}>
+          <button onClick={onLogout} style={{ color: "#df0000" }}>
             <FaSignOutAlt className="menu-icon" /> Logout
           </button>
         </div>
