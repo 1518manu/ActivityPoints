@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { FaSearch, FaAward, FaEdit, FaUser, FaUniversity, FaUpload, FaThLarge, FaCog, FaCalendarAlt, FaBell , FaSignOutAlt } from "react-icons/fa"; 
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import { fetchUserData, fetchUserRole } from "../../Login/dataApi/userDataApi"
-//--------
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebaseFile/firebaseConfig";
 import 'react-circular-progressbar/dist/styles.css';
@@ -80,10 +79,6 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
         <div className="header-left">
           <div className="logo-container">
             <img src="/api/placeholder/100/40" alt="Logo" className="logo" />
-          </div>
-          <div className="search-bar">
-            <input type="text" placeholder="Search " />
-            <FaSearch style={{ color: "#ccc", fontSize: "20px", margin: "5px 0px", fontWeight: "100" }} />
           </div>
         </div>
 
