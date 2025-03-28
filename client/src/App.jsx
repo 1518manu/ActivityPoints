@@ -14,6 +14,7 @@ import { Validate } from "./Users/Faculty/validate/Validate";
 import { StudentList } from "./Users/Faculty/StudentList/StudentList";
 import { NotificationPageStudent } from "./Users/Student/Notification/NotificationStudent";
 import { NotificationPageFaculty } from "./Users/Faculty/Notification/NotificationFaculty";
+import {FilterStudent} from "./Users/Faculty/Filter/FilterStudent"
 import { DutyLeaveForm } from "./Users/Student/DutyLeave/DutyLeaveStudent";
 import "./App.css";
 
@@ -150,6 +151,12 @@ function App() {
                 path = "/Notification-faculty"
                 element ={
                   <NotificationPageFaculty token={token} userData={userData} onLogout={handleLogout} />
+                }
+              />
+              <Route
+                path = "/filter"
+                element ={
+                  <FilterStudent token={token} userData={userData} onLogout={handleLogout} />
                 }
               />
             </Routes>
