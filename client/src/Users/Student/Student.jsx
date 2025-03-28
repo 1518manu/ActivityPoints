@@ -101,9 +101,6 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
             <FaCalendarAlt className="menu-icon" /> Event <span className="badge">new</span>
           </button>
 
-          {/* <button>
-            <FaBell   className="menu-icon" /> Notifications  <span className="badge">new</span>
-          </button> */}
           <button onClick={onNotification} >
           <FaBell className="menu-icon" /> Notifications  
           {notificationCount > 0 && <span className="badge">{notificationCount}</span>}

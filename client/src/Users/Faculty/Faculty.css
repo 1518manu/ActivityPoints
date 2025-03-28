@@ -154,11 +154,6 @@
   justify-content: center;
 }
 
-.profile-icon-faculty {
-  width: 80px;
-  height: 80px;
-  color: #333;
-}
 
 .profile-header-info-faculty {
   flex: 1;

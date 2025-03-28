@@ -23,6 +23,7 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
   const [selectedYears, setSelectedYears] = useState([]);
   const [yearsWithData, setYearsWithData] = useState([]);
   const [notificationCount, setNotificationCount] = useState(0);
+
   const navigate = useNavigate();
 
   // All possible semesters
@@ -688,14 +689,14 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
           <div className="profile-banner-faculty">
             <div className="banner-background-faculty"></div>
             <div className="edit-button-faculty">
-              <FaEdit className="edit-icon-faculty" />
+              <FaEdit style={{ color: "#ccc", fontSize: "15px", margin: "5px", fontWeight: "100" }}/>
             </div>
           </div>
 
           <div className="profile-details-faculty">
             <div className="profile-header-faculty">
               <div className="profile-pic-container-faculty">
-                <FaUser className="profile-icon-faculty" />
+               <FaUser style={{ color: "#ccc", fontSize: "40px", margin: "5px", fontWeight: "100" }} />
               </div>
               <div className="profile-header-info-faculty">
                 <h2>{userData?.name || "N/A"}</h2>
