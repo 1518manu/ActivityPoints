@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebaseFile/firebaseConfig";
-import { FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt } from "react-icons/fa";
+import { FaEdit, FaThLarge, FaCheckCircle, FaCog,
+   FaCalendarAlt, FaBell, FaSignOutAlt,
+     FaUser, FaUniversity, FaCheck, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { Loading } from "../../../Loading/Loading";
 import "./NotificationFaculty.css";
@@ -56,19 +58,15 @@ export const NotificationPageFaculty = ({ token, userData, onLogout }) => {
     <div className="notification-container1">
       {/* Sidebar Menu */}
       <div className={`sidebar-menu  ${selectedNotification ? "blur-background" : ""}`}>
-        <button>
-          <FaCog className="menu-icon" /> Settings
-        </button>
-        <button>
-          <FaCalendarAlt className="menu-icon" /> Event <span className="badge">new</span>
-        </button>
-        <button >
-          <FaBell className="menu-icon" /> Notifications
-        </button>
-        <button onClick={onLogout} style={{ color: "#df0000" }}>
-          <FaSignOutAlt className="menu-icon" style={{ color: "#df0000" }} /> Logout
-        </button>
-      </div>
+          <button onClick={onValidate}><FaCheckCircle className="menu-icon-faculty" /> Validate</button>
+          <button onClick={onStudentList}><FaThLarge className="menu-icon-faculty" /> Student List</button>
+          <button><FaCalendarAlt className="menu-icon-faculty" /> Events <span className="badge">new</span></button>
+          <button  onClick={onNotification}> <FaBell   className="menu-icon-faculty" /> Notifications  </button>
+          <button><FaCog className="menu-icon-faculty" /> Settings</button>
+          <button onClick={onLogout} style={{ color: "#df0000" }}>
+            <FaSignOutAlt className="menu-icon-faculty" /> Logout
+          </button>
+        </div>
 
       {/* Notifications List */}
       <div className={`notification-container2 ${selectedNotification ? "blur-background" : ""}`}>

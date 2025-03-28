@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaEye } from "react-icons/fa";
+import { FaEdit, FaThLarge, FaCheckCircle, FaCog,
+   FaCalendarAlt, FaBell, FaSignOutAlt,
+     FaUser, FaUniversity, FaCheck, FaTimes } from "react-icons/fa";
 import { certificatesFetch } from "../certificatesFetch/certificatesFetch"
 import { db } from '../../../firebaseFile/firebaseConfig'; 
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -283,7 +285,7 @@ const handleRejectCertificate = async (validationId) => {
   const onValidate = () => { navigate("/Validate"); }
   const onStudentList = () => { navigate("/StudentList"); }
   const onNotification = () => { navigate("/Notification-faculty"); }
-  
+
   return (
     <div className="container">
       <header className="header">
@@ -298,11 +300,15 @@ const handleRejectCertificate = async (validationId) => {
       </header>
 
       <div className="main-content">
-        <div className="sidebar-menu">
-          <button><img src="settings-icon.svg" className="menu-icon" /> Settings</button>
-          <button><img src="settings-icon.svg" className="menu-icon" /> Validate</button>
-          <button><img src="notifications-icon.svg" className="menu-icon" /> Manage Faculty</button>
-          <button><img src="notifications-icon.svg" className="menu-icon" /> Notifications</button>
+        <div className="sidebar-menu-faculty">
+          <button onClick={onValidate}><FaCheckCircle className="menu-icon-faculty" /> Validate</button>
+          <button onClick={onStudentList}><FaThLarge className="menu-icon-faculty" /> Student List</button>
+          <button><FaCalendarAlt className="menu-icon-faculty" /> Events <span className="badge">new</span></button>
+          <button  onClick={onNotification}> <FaBell   className="menu-icon-faculty" /> Notifications  </button>
+          <button><FaCog className="menu-icon-faculty" /> Settings</button>
+          <button onClick={onLogout} style={{ color: "#df0000" }}>
+            <FaSignOutAlt className="menu-icon-faculty" /> Logout
+          </button>
         </div>
 
         <div className="profile-content">
