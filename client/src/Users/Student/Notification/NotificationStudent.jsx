@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebaseFile/firebaseConfig";
-import { FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt } from "react-icons/fa";
+import { FaThLarge,FaUserTie, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { Loading } from "../../../Loading/Loading";
 import "./NotificationStudent.css";
@@ -82,13 +82,30 @@ export const NotificationPageStudent = ({ token, userData, onLogout }) => {
   }, [token, userData, navigate]);
 
   const onCertificate = () => navigate("/certificate");
+  const onDashboard = () => navigate("/StudentDashboard");
 
   return (loading ? (
     <Loading />
   ) :(
+    <div className="container">
+      {/* Header/Navbar */}
+      <header className="header">
+        <div className="header-left">
+          <div className="logo-container">
+            <img src="/api/placeholder/100/40" alt="Logo" className="logo" />
+          </div>
+        </div>
+
+        <div className="header-right">
+          <button className="business-btn" onClick={onLogout}>Logout</button>
+        </div>
+      </header>
     <div className="notification-container1">
       {/* Sidebar Menu */}
       <div className={`sidebar-menu  ${selectedNotification ? "blur-background" : ""}`}>
+      <button onClick={onDashboard}>
+          <FaUserTie  className="menu-icon" /> Dashboard
+        </button>
         <button onClick={onCertificate}>
           <FaThLarge className="menu-icon" /> Certificates
         </button>
@@ -98,12 +115,11 @@ export const NotificationPageStudent = ({ token, userData, onLogout }) => {
         <button>
           <FaCalendarAlt className="menu-icon" /> Event <span className="badge">new</span>
         </button>
-        <button >
-          <FaBell className="menu-icon" /> Notifications
-        </button>
+       
         <button onClick={onLogout} style={{ color: "#df0000" }}>
           <FaSignOutAlt className="menu-icon" style={{ color: "#df0000" }} /> Logout
         </button>
+
       </div>
 
       {/* Notifications List */}
@@ -215,6 +231,7 @@ export const NotificationPageStudent = ({ token, userData, onLogout }) => {
         </div>
       )}
 
+    </div>
     </div>)
   );
 };
