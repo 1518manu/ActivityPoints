@@ -163,13 +163,24 @@
   padding: 8px 12px;
   margin-right: 10px;
   cursor: pointer;
+  border-radius: 5px;
   display: flex;
   align-items: center;
   gap: 5px;
 }
+.close-btn {
+  background: none;
+  border:none;
+}
+
+.close-btn:hover{
+  color: rgb(194, 57, 57);
+}
 
 .filter-sort-btn:hover {
-  background: #1e67af;
+  background: #ffffff;
+  border: 1px solid #1e67af;
+  color: #1e67af;
 }
 
 

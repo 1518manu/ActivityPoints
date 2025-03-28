@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebaseFile/firebaseConfig";
 import { useNavigate } from "react-router-dom";
-import { FaSearch, FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaFilter, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaSearch, FaPoint, FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaFilter, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Loading } from "../../../Loading/Loading";
 import "./Certificate.css";
 import { use } from "react";
@@ -246,6 +246,9 @@ export const Certificate = ({ token, userData, onLogout } ) => {
         </div>
 
         <div className="header-right">
+          <button className="filter-sort-btn" >
+            <FaPoint/> Get Point
+          </button>
           <button className="filter-sort-btn" onClick={() => setShowFilterPanel(true)}>
             <FaFilter /> Filter & Sort
           </button>
