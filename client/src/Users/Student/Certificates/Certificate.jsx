@@ -44,7 +44,7 @@ const rolesForElectedRepresentatives = ["Chairman", "Secretary", "Other Council 
 const prizeOptions = ["None", "1st Prize", "2nd Prize", "3rd Prize"];
 const semesters = ["Semester 1", "Semester 2", "Semester 3", "Semester 4", "Semester 5", "Semester 6", "Semester 7", "Semester 8"];
 
-export const Certificate = () => {
+export const Certificate = ({ token, userData: initialUserData, onLogout } ) => {
   const [certificates, setCertificates] = useState([]);
   const [filteredCertificates, setFilteredCertificates] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

@@ -99,7 +99,7 @@ function App() {
                 }
               />
               <Route path="/upload-certificate" element={<CertificateUploadPage />} />
-              <Route path="/certificate" element={<Certificate />} />
+              <Route path="/certificate" element={<Certificate  token={token} userData={userData} onLogout={handleLogout} />} />
               <Route 
                 path = "/FacultyDashboard"
                 element={
