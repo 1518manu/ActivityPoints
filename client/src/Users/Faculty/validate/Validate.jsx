@@ -312,12 +312,6 @@ const handleRejectCertificate = async (validationId) => {
         </div>
 
         <div className="profile-content">
-          <div className="profile-banner">
-            <div className="banner-background"></div>
-            <div className="edit-button">
-              <FaEdit style={{ color: "#0000FF", fontSize: "15px", margin: "5px", fontWeight: "100" }} />
-            </div>
-          </div>
 
           <div className="student-certificates-container">
             
