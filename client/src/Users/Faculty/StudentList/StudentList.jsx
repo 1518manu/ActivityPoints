@@ -236,11 +236,17 @@ export const StudentList = ({ token, userData, onLogout }) => {
                       <div className="certificate-details">
                         <p>Organization: {cert.activity || 'N/A'}</p>
                         <p>Date: {cert.eventDate || 'Unknown'}</p>
-                        <p>Points: <span style = {{color:`blue`}}>{cert.points || 0}</span></p>
+                        <p>Points: <span style={{ color: 'blue' }}>{cert.points || 0}</span></p>
                         {cert.fileUrl && (
-                          <a href={cert.fileUrl} target="_blank" rel="noopener noreferrer">
-                            View Certificate
-                          </a>
+                          <div className="certificate-preview">
+                            <iframe 
+                              src={cert.fileUrl} 
+                              title="Certificate Preview"
+                              className="certificate-frame"
+                              frameBorder="0"
+                              loading="lazy"
+                            ></iframe>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -248,6 +254,7 @@ export const StudentList = ({ token, userData, onLogout }) => {
                 </div>
               )}
             </div>
+
           </div>
         </div>
       )}
