@@ -220,7 +220,18 @@ export const FilterStudent = ({ token, userData, onLogout }) => {
     // Remove students who have no matching certificates after filtering
     filtered = filtered.filter(student => student.certificates.length > 0);
   
-    setFilteredStudents(filtered);
+    // Ensure students are unique in the list
+    const uniqueStudents = [];
+    const seenStudents = new Set();
+    
+    filtered.forEach(student => {
+      if (!seenStudents.has(student.rollNo)) {
+        seenStudents.add(student.rollNo);
+        uniqueStudents.push(student);
+      }
+    });
+  
+    setFilteredStudents(uniqueStudents);
     setFiltersApplied(true);
     setShowFilterPanel(false);
   };
@@ -264,7 +275,7 @@ export const FilterStudent = ({ token, userData, onLogout }) => {
   const onValidate = () => navigate("/Validate");
   const onNotification = () => navigate("/Notification-faculty");
 
-  // Group students by activity
+  // Group students by activity and include semesters
   const groupStudentsByActivity = () => {
     if (!filtersApplied || filteredStudents.length === 0) return [];
   
@@ -279,15 +290,26 @@ export const FilterStudent = ({ token, userData, onLogout }) => {
             activityHead: cert.activityHead || 'N/A',
             activity: cert.activity || 'N/A',
             level: cert.achievementLevel || 'N/A',
-            semester: cert.semester || 'N/A',
             students: []
           };
         }
         
-        groups[key].students.push({ 
-          ...student, 
-          certificateDetails: cert  // Add certificate-specific details inside student
-        });
+        // Check if student already exists in this group
+        const existingStudent = groups[key].students.find(s => s.rollNo === student.rollNo);
+        
+        if (existingStudent) {
+          // Add semester to existing student's semesters array
+          if (cert.semester && !existingStudent.semesters.includes(cert.semester)) {
+            existingStudent.semesters.push(cert.semester);
+          }
+        } else {
+          // Add new student with semesters array
+          groups[key].students.push({ 
+            ...student, 
+            semesters: cert.semester ? [cert.semester] : ['N/A'],
+            certificateDetails: cert  // Add certificate-specific details inside student
+          });
+        }
       });
     });
   
@@ -310,13 +332,10 @@ export const FilterStudent = ({ token, userData, onLogout }) => {
           'Level': group.level,
           'Student Name': student.name,
           'Roll No': student.rollNo,
-          'Department': student.department,
           'Phone Number': student.phone,
           'Email': student.email,
-          'Achievement Level': student.achievementLevel,
-          'Role': student.role,
-          'Prize': student.prize,
-          'Semester': student.semester,
+          'Semesters': student.semesters.join(', '),
+          'Prize': student.certificateDetails?.prize || 'N/A',
           'Points': student.points || 0
         });
       });
@@ -626,6 +645,7 @@ export const FilterStudent = ({ token, userData, onLogout }) => {
                               <tr>
                                 <th>Name</th>
                                 <th>Roll No</th>
+                                <th>Semesters</th>
                                 <th>Phone</th>
                                 <th>Email</th>
                               </tr>
@@ -635,6 +655,7 @@ export const FilterStudent = ({ token, userData, onLogout }) => {
                                 <tr key={idx}>
                                   <td>{student.name || 'N/A'}</td>
                                   <td>{student.rollNo || 'N/A'}</td>
+                                  <td>{student.semesters.join(', ') || 'N/A'}</td>
                                   <td>{student.phone || 'N/A'}</td>
                                   <td>{student.email || 'N/A'}</td>
                                 </tr>
