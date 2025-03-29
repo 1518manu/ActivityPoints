@@ -215,7 +215,74 @@ const fetchValidationData = async () => {
   setSelectedValidation(validation);
   setPointsPopup(true);
   };
+  //--------------------------------------------------to add-----------------------------------------------------
+  const handleConfirmApproval = async (validationId) => {
+    try {
+      // Step 1: Fetch the Validation document
+      const validationRef = doc(db, "Validation", validationId);
+      const validationSnap = await getDoc(validationRef);
   
+      if (!validationSnap.exists()) {
+        console.error("Validation document not found");
+        return;
+      }
+  
+      const { cert_id, faculty_id } = validationSnap.data(); // Extract cert_id and faculty_id
+  
+      if (!cert_id) {
+        console.error("Error: cert_id is undefined!");
+        return;
+      }
+  
+      // Step 2: Fetch user_id from Certificates collection using cert_id
+      const certRef = doc(db, "certificates", cert_id);
+      const certSnap = await getDoc(certRef);
+  
+      if (!certSnap.exists()) {
+        console.error("Certificate document not found");
+        return;
+      }
+  
+      const { user_id } = certSnap.data(); // Extract user_id
+  
+      // Step 3: Update the Validation document with approval details
+      await updateDoc(validationRef, {
+        validation_status: "approved",
+        cert_id: cert_id,
+        faculty_id: faculty_id || "Unknown Faculty",
+        points: Number(calculatedPoints),
+        rejectReason: null,
+        validatedBy: userData.name, // Faculty name (optional)
+        validationTime: new Date().toISOString(),
+      });
+  
+      console.log("Validation approved and updated in Firestore");
+  
+      // Step 4: Add an approval notification for the student
+      const notificationsRef = collection(db, "Notifications");
+      await addDoc(notificationsRef, {
+        cert_id: cert_id,
+        for: "student",
+        msg: `Your certificate has been approved! You received ${calculatedPoints} points.`,
+        status: "not viewed",
+        type: "approve",
+        user_id: user_id,
+        timestamp: new Date().toISOString(),
+      });
+  
+      console.log("Approval notification added to Firestore");
+  
+      // Refresh validation data to reflect the update
+      setPointsPopup(false);
+      fetchValidationData(); // Reload data after approval
+  
+    } catch (error) {
+      console.error("Error approving validation status:", error);
+    }
+  };
+  
+  //-------------------------------------------------------------------------------------------------------
+
 const handleRejectCertificate = async (validationId) => {
   try {
     // Update the Firestore Validation document
@@ -382,15 +449,9 @@ const handleRejectCertificate = async (validationId) => {
     </label>
 
     <div className="popup-buttons">
-      <button 
-        onClick={() => {
-          console.log("Final Approved Points:", calculatedPoints);
-          // You can now update Firestore / local state here with final points
-          setPointsPopup(false);
-        }}
-      >
-        Confirm Approval
-      </button>
+    <button onClick={() => handleConfirmApproval(selectedValidation.id)}>
+  Confirm Approval
+</button>
 
       <button onClick={() => setPointsPopup(false)}>Cancel</button>
     </div>
