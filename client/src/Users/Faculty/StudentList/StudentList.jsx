@@ -240,7 +240,7 @@ export const StudentList = ({ token, userData, onLogout }) => {
                         {cert.fileUrl && (
                           <div className="certificate-preview">
                             <iframe 
-                              src={cert.fileUrl} 
+                              src={cert.fileURL} 
                               title="Certificate Preview"
                               className="certificate-frame"
                               frameBorder="0"
