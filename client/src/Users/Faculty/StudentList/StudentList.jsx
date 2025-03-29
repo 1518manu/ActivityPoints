@@ -157,7 +157,7 @@ export const StudentList = ({ token, userData, onLogout }) => {
           <div className="student-modal">
             <div className="modal-header">
               <h3>{selectedStudent.name}'s Details</h3>
-              <button className="close-button" onClick={closeModal}>
+              <button className="close-button1" onClick={closeModal}>
                 <FaTimes />
               </button>
             </div>

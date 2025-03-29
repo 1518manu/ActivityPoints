@@ -229,17 +229,16 @@ body {
   margin: 0;
 }
 
-.close-button {
+.close-button1 {
   background: none;
   border: none;
   color: #757575;
-  font-size: 1px;
+  font-size: 20px;
   cursor: pointer;
-  padding: 1px;
 }
 
-.close-button:hover {
-  color: #333;
+.close-button1:hover {
+  color: #ad2424;
 }
 
 .modal-content {
