@@ -8,13 +8,9 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import './StudentList.css';
 
 const getColor = (point) => {
-  if (point <= 40) {
-    return 'red'; 
-  } else if (point >= 75) {
-    return 'green'; 
-  } else { 
-    return 'blue';
-  }
+  if (point <= 40) return 'red'; 
+  if (point >= 75) return 'green'; 
+  return 'blue';
 };
 
 export const StudentList = ({ token, userData, onLogout }) => {
@@ -26,13 +22,8 @@ export const StudentList = ({ token, userData, onLogout }) => {
 
   const fetchStudents = async () => {
     try {
-      const userDataString1 = localStorage.getItem('userData'); 
-      let facultyId = null;
-
-      if (userDataString1) {
-        const userData1 = JSON.parse(userDataString1);
-        facultyId = userData1.faculty_id;
-      }
+      const userDataString = localStorage.getItem('userData'); 
+      const facultyId = userDataString ? JSON.parse(userDataString).faculty_id : null;
 
       const viewStudents = query(
         collection(db, "Students"),
@@ -40,12 +31,7 @@ export const StudentList = ({ token, userData, onLogout }) => {
       );
 
       const studDoc = await getDocs(viewStudents);
-      const studDataArray = [];
-
-      for (const doc of studDoc.docs) {
-        const studData = { id: doc.id, ...doc.data() };
-        studDataArray.push(studData);
-      }
+      const studDataArray = studDoc.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setStudents(studDataArray);
     } catch (error) {
       console.error("Error fetching students:", error);
@@ -54,15 +40,14 @@ export const StudentList = ({ token, userData, onLogout }) => {
 
   const fetchStudentCertificates = async (rollNo) => {
     try {
-      console.log("Fetching certificates for rollNo:", rollNo);
       setLoadingCertificates(true);
       const q = query(collection(db, "certificates"), where("user_id", "==", rollNo));
       const querySnapshot = await getDocs(q);
       const certs = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
+        fileUrl: doc.data().fileUrl || doc.data().fileURL // Handle both cases
       }));
-      console.log("Certificates fetched:", certs);
       setStudentCertificates(certs);
     } catch (error) {
       console.error("Error fetching certificates:", error);
@@ -73,8 +58,6 @@ export const StudentList = ({ token, userData, onLogout }) => {
 
   const handleStudentClick = async (student) => {
     setSelectedStudent(student);
-    console.log("Student clicked:", student);
-    console.log("Selected Student:", student);
     await fetchStudentCertificates(student.rollNo);
   };
 
@@ -84,16 +67,11 @@ export const StudentList = ({ token, userData, onLogout }) => {
   };
 
   useEffect(() => {
-    if (!token) {
-      navigate("/");
-    }
+    if (!token) navigate("/");
     fetchStudents();
-  }, [token, userData, navigate]);
+  }, [token, navigate]);
 
-  if (!userData) {
-    return <div>Loading user data...</div>;
-  }
-
+  if (!userData) return <div className="loading-full">Loading user data...</div>;
 
   return (
     <div className="container">
@@ -117,7 +95,7 @@ export const StudentList = ({ token, userData, onLogout }) => {
             <FaBell className="menu-icon-faculty" /> Notifications
           </button>
           <button><FaCog className="menu-icon-faculty" /> Settings</button>
-          <button onClick={onLogout} style={{ color: "#df0000" }}>
+          <button onClick={onLogout} className="logout-btn">
             <FaSignOutAlt className="menu-icon-faculty" /> Logout
           </button>
         </div>
@@ -125,139 +103,140 @@ export const StudentList = ({ token, userData, onLogout }) => {
         <div className="profile-content">
           <h2>Student List</h2>
 
-          <div className="student-certificates-container">
-            <div className="student-list-container">
-              <div className="student-list">
-                {students.map((student) => {
-                  const pointColor = getColor(student.point);
-                  return (
-                    <div 
-                      key={student.id}
-                      className="student-card"
-                      onClick={() => handleStudentClick(student)}
-                    >
-                      <div className="student-card-header">
-                        <div className="profile-image-container">
-                          {student.profileImg ? (
-                            <img 
-                              src={student.profileImg} 
-                              alt={`${student.name}'s profile`}
-                              className="profile-image"
-                            />
-                          ) : (
-                            <div className="default-profile-icon">
-                              <FaUser size={24} />
-                            </div>
-                          )}
-                        </div>
-                        <div className="student-info-main">
-                          <h3>{student.name}</h3>
-                          <span className={`student-points ${pointColor}`}>
-                            {student.point} pts
-                          </span>
-                        </div>
+          <div className="student-list">
+            {students.map((student) => (
+              <div 
+                key={student.id}
+                className="student-card"
+                onClick={() => handleStudentClick(student)}
+              >
+                <div className="student-card-header">
+                  <div className="profile-image-container">
+                    {student.profileImg ? (
+                      <img 
+                        src={student.profileImg} 
+                        alt={`${student.name}'s profile`}
+                        className="profile-image"
+                      />
+                    ) : (
+                      <div className="default-profile-icon">
+                        <FaUser size={24} />
                       </div>
-                      <div className="student-card-details">
-                        <div className="detail-row">
-                          <span className="detail-label">Roll No:</span>
-                          <span>{student.rollNo}</span>
-                        </div>
-                        <div className="detail-row">
-                          <span className="detail-label">Department:</span>
-                          <span>{student.dept}</span>
-                        </div>
-                        <div className="detail-row">
-                          <span className="detail-label">Email:</span>
-                          <span className="student-email">{student.email}</span>
-                        </div>
-                        <div className="detail-row">
-                          <span className="detail-label">Phone:</span>
-                          <span>{student.phone}</span>
-                        </div>
-                      </div>
-                      <div className="student-card-footer">
-                        <button className="view-profile-btn">View Profile</button>
-                      </div>
-                    </div>
-                  );
-                })}
+                    )}
+                  </div>
+                  <div className="student-info-main">
+                    <h3>{student.name}</h3>
+                    <span className={`student-points ${getColor(student.point)}`}>
+                      {student.point} pts
+                    </span>
+                  </div>
+                </div>
+                <div className="student-card-details">
+                  <div className="detail-row">
+                    <span className="detail-label">Roll No:</span>
+                    <span>{student.rollNo}</span>
+                  </div>
+                  <div className="detail-row">
+                    <span className="detail-label">Department:</span>
+                    <span>{student.dept}</span>
+                  </div>
+                  <div className="detail-row">
+                    <span className="detail-label">Email:</span>
+                    <span className="student-email">{student.email}</span>
+                  </div>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Student Details Modal */}
-      {selectedStudent && (
-        <div className="modal-overlay">
+      {/* Enhanced Modal Overlay */}
+      <div className={`modal-overlay ${selectedStudent ? 'active' : ''}`}>
+        {selectedStudent && (
           <div className="student-modal">
             <div className="modal-header">
-              <h3>Student Details</h3>
+              <h3>{selectedStudent.name}'s Details</h3>
               <button className="close-button" onClick={closeModal}>
                 <FaTimes />
               </button>
             </div>
 
-            <div className="student-info">
-              <div className="info-row">
-                <span className="info-label">Name:</span>
-                <span>{selectedStudent.name}</span>
-              </div>
-              <div className="info-row">
-                <span className="info-label">Roll No:</span>
-                <span>{selectedStudent.rollNo}</span>
-              </div>
-              <div className="info-row">
-                <span className="info-label">Department:</span>
-                <span>{selectedStudent.dept}</span>
-              </div>
-              <div className="info-row">
-                <span className="info-label">Total Points:</span>
-                <span style = {{color:`${getColor(selectedStudent.point)}`}}>{selectedStudent.point || 0}</span>
-              </div>
-            </div>
-
-            <div className="certificates-section">
-              <h4>Certificates ({studentCertificates.length})</h4>
-              {loadingCertificates ? (
-                <div className="loading">Loading certificates...</div>
-              ) : studentCertificates.length === 0 ? (
-                <p>No certificates found</p>
-              ) : (
-                <div className="certificate-list">
-                  {studentCertificates.map((cert) => (
-                    <div key={cert.id} className="certificate-item">
-                      <div className="certificate-header">
-                        <strong>{cert.certificateName || 'Unnamed Event'}</strong>
-                        <span className={`status ${cert.status?.toLowerCase()}`}>
-                          {cert.status || 'Pending'}
-                        </span>
-                      </div>
-                      <div className="certificate-details">
-                        <p>Organization: {cert.activity || 'N/A'}</p>
-                        <p>Date: {cert.eventDate || 'Unknown'}</p>
-                        <p>Points: <span style={{ color: 'blue' }}>{cert.points || 0}</span></p>
-                        {cert.fileUrl && (
-                          <div className="certificate-preview">
-                            <iframe 
-                              src={cert.fileURL} 
-                              title="Certificate Preview"
-                              className="certificate-frame"
-                              frameBorder="0"
-                              loading="lazy"
-                            ></iframe>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+            <div className="modal-content">
+              <div className="student-info">
+                <div className="info-row">
+                  <span className="info-label">Roll No:</span>
+                  <span>{selectedStudent.rollNo}</span>
                 </div>
-              )}
-            </div>
+                <div className="info-row">
+                  <span className="info-label">Department:</span>
+                  <span>{selectedStudent.dept}</span>
+                </div>
+                <div className="info-row">
+                  <span className="info-label">Email:</span>
+                  <span>{selectedStudent.email}</span>
+                </div>
+                <div className="info-row">
+                  <span className="info-label">Total Points:</span>
+                  <span style={{color: getColor(selectedStudent.point)}}>
+                    {selectedStudent.point || 0}
+                  </span>
+                </div>
+              </div>
 
+              <div className="certificates-section">
+                <h4>Certificates ({studentCertificates.length})</h4>
+                {loadingCertificates ? (
+                  <div className="loading-spinner"></div>
+                ) : studentCertificates.length === 0 ? (
+                  <p className="no-certificates">No certificates found</p>
+                ) : (
+                  <div className="certificate-list">
+                    {studentCertificates.map((cert) => (
+                      <div key={cert.id} className="certificate-item">
+                        <div className="certificate-header">
+                          <strong>{cert.certificateName || 'Unnamed Certificate'}</strong>
+                          <span className={`status ${cert.status?.toLowerCase()}`}>
+                            {cert.status || 'Pending'}
+                          </span>
+                        </div>
+                        <div className="certificate-details">
+                          <p><span className="detail-label">Organization:</span> {cert.activity || 'N/A'}</p>
+                          <p><span className="detail-label">Date:</span> {cert.eventDate || 'Unknown'}</p>
+                          <p><span className="detail-label">Points:</span> <span className="points-value">{cert.points || 0}</span></p>
+                          
+                          {cert.fileUrl && (
+                            <div className="certificate-preview-container">
+                              <iframe 
+                                src={cert.fileUrl}
+                                title={`Certificate: ${cert.certificateName}`}
+                                className="certificate-frame"
+                                frameBorder="0"
+                                loading="lazy"
+                                onError={(e) => {
+                                  e.target.style.display = 'none';
+                                  const fallback = document.getElementById(`fallback-${cert.id}`);
+                                  if (fallback) fallback.style.display = 'block';
+                                }}
+                              ></iframe>
+                              <div id={`fallback-${cert.id}`} className="certificate-fallback">
+                                <p>Certificate preview unavailable</p>
+                                <a href={cert.fileUrl} target="_blank" rel="noopener noreferrer">
+                                  View certificate in new tab
+                                </a>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
