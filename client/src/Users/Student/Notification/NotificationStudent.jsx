@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebaseFile/firebaseConfig";
-import { FaThLarge,FaUserTie, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt } from "react-icons/fa";
+import { FaThLarge,FaUserTie, FaCog, FaCalendarAlt, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { Loading } from "../../../Loading/Loading";
 import "./NotificationStudent.css";

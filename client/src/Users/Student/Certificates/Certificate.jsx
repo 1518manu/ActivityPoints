@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebaseFile/firebaseConfig";
 import { useNavigate } from "react-router-dom";
-import { FaSearch, FaCoins, FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaFilter, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaSearch, FaCoins, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaFilter, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Loading } from "../../../Loading/Loading";
 import "./Certificate.css";
-import { use } from "react";
 import { FaUserTie } from "react-icons/fa6";
+import { PDFDocument } from "pdf-lib";
+
 
 // Activity data structure
 const activityData = {
@@ -224,7 +225,161 @@ export const Certificate = ({ token, userData, onLogout } ) => {
       if (userData) fetchCertificates(userData);
     }, [token, userData, navigate]);
   
+    const [organizedCertificates, setOrganizedCertificates] = useState({});
+    const [maxCertificates, setMaxCertificates] = useState({});
+    
+    const [selectedCertificates, setSelectedCertificates] = useState(new Set());
+const [selectedCertificatesCount, setSelectedCertificatesCount] = useState({});
 
+const handleCertificateSelection = (e, cert) => {
+  const { activityHead, id } = cert;
+  const isChecked = e.target.checked;
+
+  setSelectedCertificates((prevSelected) => {
+    const newSelected = new Set(prevSelected);
+    const updatedCount = { ...selectedCertificatesCount };
+
+    if (isChecked) {
+      // If selected, check if maxCertificates is reached
+      if (
+        (maxCertificates[activityHead]?.maxCertificates || Infinity) >
+        (updatedCount[activityHead] || 0)
+      ) {
+        newSelected.add(id);
+        updatedCount[activityHead] = (updatedCount[activityHead] || 0) + 1;
+      }
+    } else {
+      // If deselected, update count
+      newSelected.delete(id);
+      updatedCount[activityHead] = Math.max((updatedCount[activityHead] || 0) - 1, 0);
+    }
+
+    setSelectedCertificatesCount(updatedCount);
+    return newSelected;
+  });
+};
+
+    
+    // Function to process and organize certificates
+    const organizeCertificates = async () => {
+      try {
+        // Fetch Points data from Firebase
+        const pointsSnapshot = await getDocs(collection(db, "Points"));
+        const pointsData = {};
+    
+        pointsSnapshot.forEach((doc) => {
+          const data = doc.data();
+          pointsData[data.activityHead] = {
+            levelOrder: data.level, // Store the level priority
+            maxCertificates: data.maxCertificates,
+          };
+        });
+    
+        setMaxCertificates(pointsData); // Store maxCertificates for disabling selection
+    
+        // Fetch Validation data from Firebase
+        const validationSnapshot = await getDocs(collection(db, "Validation"));
+        const validationData = {};
+    
+        validationSnapshot.forEach((doc) => {
+          const data = doc.data();
+          validationData[data.cert_id] = data.points || 0; // Store points using cert_id
+        });
+    
+        // Map levels from Points to Certificates and add points from Validation
+        const updatedCertificates = certificates.map((cert) => ({
+          ...cert,
+          level: pointsData[cert.activityHead]?.level || "N/A", // Assign level from Points
+          points: validationData[cert.id] || 0, // Assign points from Validation
+        }));
+    
+        console.log("points data", pointsData);
+        console.log("validation data", validationData);
+        console.log("updated certificates", updatedCertificates);
+    
+        // Categorize certificates by activityHead
+        const grouped = updatedCertificates.reduce((acc, cert) => {
+          const activity = cert.activityHead || "Others";
+          if (!acc[activity]) acc[activity] = [];
+          acc[activity].push(cert);
+          return acc;
+        }, {});
+    
+        // Sort each category based on level priority (V > IV > III > II > I) and points
+        for (const activity in grouped) {
+          grouped[activity].sort((a, b) => {
+            const levels = { "V": 5, "IV": 4, "III": 3, "II": 2, "I": 1 };
+    
+            // Extract level from achievementLevel (e.g., "Level III (State)" -> "III")
+            const extractLevel = (achievementLevel) => {
+              const match = achievementLevel?.match(/Level (\w+)/); // Extracts "III" from "Level III (College)"
+              return match ? match[1] : "N/A"; // Returns extracted level or "N/A" if not found
+            };
+    
+            const levelA = extractLevel(a.achievementLevel);
+            const levelB = extractLevel(b.achievementLevel);
+    
+            // Sort first by level (higher levels first), then by points (higher points first)
+            if ((levels[levelB] || 0) !== (levels[levelA] || 0)) {
+              return (levels[levelB] || 0) - (levels[levelA] || 0);
+            }
+            return b.points - a.points; // Sort by points within the same level
+          });
+        }
+    
+        setOrganizedCertificates(grouped);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+    
+    // Call organizeCertificates when modal opens
+    useEffect(() => {
+      if (showPointModal) {
+        organizeCertificates();
+      }
+    }, [showPointModal, certificates]);
+    
+    const downloadCertificatesAsPDF = async () => {
+      try {
+        if (selectedCertificates.size === 0) {
+          alert("Please select at least one certificate to download.");
+          return;
+        }
+    
+        const mergedPdf = await PDFDocument.create();
+        const isPdf = (url) => url.toLowerCase().endsWith(".pdf");
+
+        for (const certId of selectedCertificates) {
+          const cert = certificates.find((c) => c.id === certId);
+          if (!cert || !cert.fileURL || !isPdf(cert.fileURL)) {
+            console.warn(`Skipping non-PDF file: ${cert?.fileURL}`);
+            continue;
+          }
+        
+          const response = await fetch(cert.fileURL);
+          const arrayBuffer = await response.arrayBuffer();
+          const pdfDoc = await PDFDocument.load(arrayBuffer);
+          const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+        
+          copiedPages.forEach((page) => mergedPdf.addPage(page));
+        }
+        
+    
+        const mergedPdfBytes = await mergedPdf.save();
+    
+        // Create a blob and download
+        const blob = new Blob([mergedPdfBytes], { type: "application/pdf" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "Certificates.pdf";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        console.error("Error merging certificates:", error);
+      }
+    }; 
   if (isLoading) return <Loading />;
 
   return (
@@ -248,7 +403,7 @@ export const Certificate = ({ token, userData, onLogout } ) => {
 
         <div className="header-right">
           <button className="filter-sort-btn" onClick={() => setShowPointModal(true)}>
-            <FaCoins/> Get Point
+            <FaCoins/> Certificate
           </button>
           <button className="filter-sort-btn" onClick={() => setShowFilterPanel(true)}>
             <FaFilter /> Filter & Sort
@@ -503,77 +658,75 @@ export const Certificate = ({ token, userData, onLogout } ) => {
         </div>
       </div>
       {showPointModal && (
-        <>
-          <div className="modal-overlay" onClick={() => setShowPointModal(false)}></div>
-          <div className="point-modal">
-            <div className="modal-header">
-              <h3>Select Certificates to Claim Points</h3>
-              <button className="close-btn" onClick={() => setShowPointModal(false)}>
-                <FaTimes />
-              </button>
-            </div>
-            <div className="modal-content">
-              <div className="certificate-checklist">
-                {certificates.length > 0 ? (
-                  <table className="certificate-table">
-                    <thead>
-                      <tr>
-                        <th>Select</th>
-                        <th>Certificate</th>
-                        <th>Activity</th>
-                        <th>Date</th>
-                        <th>Points</th>
+  <>
+    <div className="modal-overlay" onClick={() => setShowPointModal(false)}></div>
+    <div className="point-modal">
+      <div className="modal-header">
+        <h3>Select Certificates to Download</h3>
+        <button className="close-btn" onClick={() => setShowPointModal(false)}>
+          <FaTimes />
+        </button>
+      </div>
+      <div className="modal-content">
+        {Object.keys(organizedCertificates).length > 0 ? (
+          Object.entries(organizedCertificates).map(([activity, certs]) => (
+            <div key={activity} className="activity-section">
+              <h4>{activity}</h4>
+              <table className="certificate-table">
+                <thead>
+                  <tr>
+                    <th>Select</th>
+                    <th>Certificate</th>
+                    <th>Level</th>
+                    <th>Date</th>
+                    <th>Points</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {certs.map((cert) => {
+                    const isDisabled =
+                      selectedCertificates.size >= (maxCertificates[activity]?.maxCertificates || Infinity);
+
+                    return (
+                      <tr key={cert.id}>
+                        <td>
+  <input
+    type="checkbox"
+    id={`cert-${cert.id}`}
+    checked={selectedCertificates.has(cert.id)}
+    disabled={
+      !selectedCertificates.has(cert.id) && 
+      (selectedCertificatesCount[cert.activityHead] || 0) >= 
+      (maxCertificates[cert.activityHead]?.maxCertificates || Infinity)
+    }
+    onChange={(e) => handleCertificateSelection(e, cert)}
+  />
+</td>
+                        <td>{cert.certificateName}</td>
+                        <td>{cert.achievementLevel || "N/A"}</td>
+                        <td>{cert.eventDate || "N/A"}</td>
+                        <td>{cert.points || "N/A"}</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {certificates.map((cert) => (
-                        <tr key={cert.id}>
-                          <td>
-                            <input 
-                              type="checkbox" 
-                              id={`cert-${cert.id}`}
-                              // You'll need to add state management for selected certificates
-                            />
-                          </td>
-                          <td>
-                            <label htmlFor={`cert-${cert.id}`}>
-                              {cert.certificateName}
-                            </label>
-                          </td>
-                          <td>{cert.activityHead || "N/A"}</td>
-                          <td>{cert.eventDate || "N/A"}</td>
-                          <td>
-                            <input 
-                              type="number" 
-                              min="0"
-                              defaultValue={cert.points || 0}
-                              className="points-input"
-                              // You'll need to add state management for point values
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                ) : (
-                  <p>No certificates available for claiming points.</p>
-                )}
-              </div>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
-            <div className="modal-footer">
-              <button 
-                className="set-point-btn"
-                onClick={() => {
-                  // Add your logic to save the points
-                  setShowPointModal(false);
-                }}
-              >
-                Set Points
-              </button>
-            </div>
-          </div>
-        </>
-      )}
+          ))
+        ) : (
+          <p>No certificates available for claiming points.</p>
+        )}
+      </div>
+      <div className="modal-footer">
+      <button className="set-point-btn" onClick={downloadCertificatesAsPDF}>
+  Download
+</button>
+
+      </div>
+    </div>
+  </>
+)}
+
     </div>
   );
 };

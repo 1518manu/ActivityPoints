@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaSearch, FaAward, FaFileAlt, FaEdit, FaUser, FaUniversity, FaUpload, FaThLarge, FaCog, FaCalendarAlt, FaBell , FaSignOutAlt } from "react-icons/fa"; 
+import { FaFileAlt, FaEdit, FaUser, FaUniversity, FaUpload, FaThLarge, FaCog, FaCalendarAlt, FaBell , FaSignOutAlt } from "react-icons/fa"; 
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import { fetchUserData, fetchUserRole } from "../../Login/dataApi/userDataApi"
 import { collection, query, where, onSnapshot } from "firebase/firestore";
@@ -186,7 +186,7 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
       </div>
 
       <div className="upload-div">
-        <button className="upload-button" onClick={openUploadPage}>Upload <FaUpload style={{ color: "#fff", fontSize: "20px", margin: "5px 0px", fontWeight: "100" }} /></button>
+        <button className="upload-button" onClick={openUploadPage}>Upload Certificate<FaUpload style={{ color: "#fff", fontSize: "20px", margin: "5px 0px", fontWeight: "100" }} /></button>
       </div>
     </div>
   );
