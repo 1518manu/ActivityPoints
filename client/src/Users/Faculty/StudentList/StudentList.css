@@ -133,6 +133,9 @@ body {
   justify-content: space-between;
   flex: 1;
 }
+.student-info div{
+  margin-bottom: 10px;
+}
 
 .student-card-header h3 {
   margin: 0;
