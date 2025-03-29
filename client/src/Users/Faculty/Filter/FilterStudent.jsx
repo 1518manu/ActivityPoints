@@ -90,31 +90,46 @@ export const FilterStudent = ({ token, userData, onLogout }) => {
     try {
       const userDataString1 = localStorage.getItem('userData'); 
       let facultyId = null;
-
+  
       if (userDataString1) {
         const userData1 = JSON.parse(userDataString1);
         facultyId = userData1.faculty_id;
       }
-
+  
+      // Fetch Students assigned to the faculty
       const viewStudents = query(
         collection(db, "Students"),
         where("mentor", "==", facultyId)
       );
-
+  
       const studDoc = await getDocs(viewStudents);
-      const studDataArray = studDoc.docs.map(doc => ({ 
+      let studentsArray = studDoc.docs.map(doc => ({
         id: doc.id, 
         ...doc.data(),
-        activityHead: doc.data().activityHead || "N/A",
-        activity: doc.data().activity || "N/A",
-        achievementLevel: doc.data().achievementLevel || "N/A",
-        role: doc.data().role || "N/A",
-        prize: doc.data().prize || "None",
-        semester: doc.data().semester || "N/A",
-        level: doc.data().level || "N/A" // Added level field
+        certificates: [] // Placeholder for certificates
       }));
-      
-      setStudents(studDataArray);
+      console.log("Students Data:", studentsArray);
+
+      // Fetch Certificates for each student based on rollNo
+      const certPromises = studentsArray.map(async student => {
+        const certQuery = query(
+          collection(db, "certificates"),
+          where("user_id", "==", student.rollNo) // Match user_id with rollNo
+        );
+  
+        const certSnapshot = await getDocs(certQuery);
+        const certificates = certSnapshot.docs.map(cert => ({
+          id: cert.id,
+          ...cert.data()
+        }));
+  
+        return { ...student, certificates }; // Merge certificates into student data
+      });
+  
+      // Resolve all certificate fetches
+      const studentsWithCertificates = await Promise.all(certPromises);
+  
+      setStudents(studentsWithCertificates);
       setFilteredStudents([]);
     } catch (error) {
       console.error("Error fetching students:", error);
@@ -122,6 +137,7 @@ export const FilterStudent = ({ token, userData, onLogout }) => {
       setLoading(false);
     }
   };
+  
 
   // Search Functionality
   const handleSearch = (e) => {
@@ -184,74 +200,31 @@ export const FilterStudent = ({ token, userData, onLogout }) => {
   // Apply all selected filters
   const applyFilters = () => {
     let filtered = [...students]; // Start with all students
-
-    // Apply filters only if they have values selected
-    if (filters.activityHead.length > 0) {
-      filtered = filtered.filter(student => 
-        filters.activityHead.includes(student.activityHead)
-      );
-    }
-
-    if (filters.activity.length > 0) {
-      filtered = filtered.filter(student => 
-        filters.activity.includes(student.activity)
-      );
-    }
-
-    if (filters.achievementLevel.length > 0) {
-      filtered = filtered.filter(student => 
-        filters.achievementLevel.includes(student.achievementLevel)
-      );
-    }
-
-    if (filters.role.length > 0) {
-      filtered = filtered.filter(student => 
-        filters.role.includes(student.role)
-      );
-    }
-
-    if (filters.prize.length > 0) {
-      filtered = filtered.filter(student => 
-        filters.prize.includes(student.prize)
-      );
-    }
-
-    if (filters.semester.length > 0) {
-      filtered = filtered.filter(student => 
-        filters.semester.includes(student.semester)
-      );
-    }
-
-    // Apply search filter if search query exists
-    if (searchQuery) {
-      filtered = filtered.filter(student => 
-        (student.name?.toLowerCase().includes(searchQuery)) ||
-        (student.rollNo?.toLowerCase().includes(searchQuery)) ||
-        (student.department?.toLowerCase().includes(searchQuery))
-      );
-    }
-
-    // Apply sorting if sort order is selected
-    if (sortOrder) {
-      filtered = [...filtered].sort((a, b) => {
-        if (sortOrder === "name-asc") {
-          return a.name?.localeCompare(b.name);
-        } else if (sortOrder === "name-desc") {
-          return b.name?.localeCompare(a.name);
-        } else if (sortOrder === "points-asc") {
-          return (a.points || 0) - (b.points || 0);
-        } else if (sortOrder === "points-desc") {
-          return (b.points || 0) - (a.points || 0);
-        }
-        return 0;
+  
+    filtered = filtered.map(student => {
+      // Filter the certificates that match selected filters
+      const filteredCertificates = student.certificates.filter(cert => {
+        return (
+          (filters.activityHead.length === 0 || filters.activityHead.includes(cert.activityHead)) &&
+          (filters.activity.length === 0 || filters.activity.includes(cert.activity)) &&
+          (filters.achievementLevel.length === 0 || filters.achievementLevel.includes(cert.achievementLevel)) &&
+          (filters.role.length === 0 || filters.role.includes(cert.role)) &&
+          (filters.prize.length === 0 || filters.prize.includes(cert.prize)) &&
+          (filters.semester.length === 0 || filters.semester.includes(cert.semester))
+        );
       });
-    }
-
+  
+      return { ...student, certificates: filteredCertificates };
+    });
+  
+    // Remove students who have no matching certificates after filtering
+    filtered = filtered.filter(student => student.certificates.length > 0);
+  
     setFilteredStudents(filtered);
     setFiltersApplied(true);
     setShowFilterPanel(false);
   };
-
+  
   // Clear all filters
   const clearFilters = () => {
     setFilters({
@@ -294,24 +267,33 @@ export const FilterStudent = ({ token, userData, onLogout }) => {
   // Group students by activity
   const groupStudentsByActivity = () => {
     if (!filtersApplied || filteredStudents.length === 0) return [];
-    
+  
     const groups = {};
-    
+  
     filteredStudents.forEach(student => {
-      const key = `${student.activityHead || 'No Activity Head'}|${student.activity || 'No Activity'}|${student.level || 'No Level'}`;
-      if (!groups[key]) {
-        groups[key] = {
-          activityHead: student.activityHead || 'N/A',
-          activity: student.activity || 'N/A',
-          level: student.level || 'N/A',
-          students: []
-        };
-      }
-      groups[key].students.push(student);
+      student.certificates.forEach(cert => {
+        const key = `${cert.activityHead || 'No Activity Head'}|${cert.activity || 'No Activity'}|${cert.achievementLevel || 'No Level'}`;
+  
+        if (!groups[key]) {
+          groups[key] = {
+            activityHead: cert.activityHead || 'N/A',
+            activity: cert.activity || 'N/A',
+            level: cert.achievementLevel || 'N/A',
+            semester: cert.semester || 'N/A',
+            students: []
+          };
+        }
+        
+        groups[key].students.push({ 
+          ...student, 
+          certificateDetails: cert  // Add certificate-specific details inside student
+        });
+      });
     });
-    
+  
     return Object.values(groups);
   };
+  
 
   // Download as Excel
   const downloadExcel = () => {
@@ -644,10 +626,8 @@ export const FilterStudent = ({ token, userData, onLogout }) => {
                               <tr>
                                 <th>Name</th>
                                 <th>Roll No</th>
-                                <th>Department</th>
                                 <th>Phone</th>
                                 <th>Email</th>
-                                <th>Points</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -655,10 +635,8 @@ export const FilterStudent = ({ token, userData, onLogout }) => {
                                 <tr key={idx}>
                                   <td>{student.name || 'N/A'}</td>
                                   <td>{student.rollNo || 'N/A'}</td>
-                                  <td>{student.department || 'N/A'}</td>
                                   <td>{student.phone || 'N/A'}</td>
                                   <td>{student.email || 'N/A'}</td>
-                                  <td>{student.points || '0'}</td>
                                 </tr>
                               ))}
                             </tbody>
