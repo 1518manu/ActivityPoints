@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaPaperPlane, FaUndo, FaUpload, FaTimes } from 'react-icons/fa';
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where ,addDoc } from "firebase/firestore";
 import { db } from "../../../firebaseFile/firebaseConfig";
 import { Loading } from "../../../Loading/Loading";
 import './DutyLeaveStudent.css';
@@ -62,42 +62,117 @@ export const DutyLeaveForm = ({ userData }) => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    
-    if (name === 'newCertificate') {
-      setFormData(prev => ({
+  
+    if (name === "newCertificate") {
+      setFormData((prev) => ({
         ...prev,
-        newCertificate: files[0]
+        newCertificate: files[0],
+      }));
+    } else if (name === "selectedCertificate") {
+      // Find the selected certificate's fileURL
+      const selectedCert = certificates.find(cert => cert.id === value);
+      setFormData((prev) => ({
+        ...prev,
+        selectedCertificate: value,
+        certificateFileURL: selectedCert ? selectedCert.fileURL : "", // Store fileURL
       }));
     } else {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        [name]: value
+        [name]: value,
       }));
     }
   };
-
-  const handleSubmit = (e) => {
+  
+  const uploadToImageKit = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("fileName", file.name);
+    formData.append("folder", "/dutyleave");
+    formData.append("publicKey", "public_dGrtJlwx1cYmPGWcjN5Ybdp0bYw="); 
+  
+    try {
+      const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
+        method: "POST",
+        headers: {
+          Authorization: `Basic ${btoa("private_6doDUpitrkkv73i9cZvUYrviuDg=:")}`, // Fixed API Key format
+        },
+        body: formData,
+      });
+  
+      const data = await response.json();
+      return data.url; // Return the uploaded file URL
+    } catch (error) {
+      console.error("Error uploading to ImageKit:", error);
+      return null;
+    }
+  };
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validate form data before submission
     if (!formData.leavePeriod || !formData.leaveReason) {
-      alert('Please fill all required fields');
+      alert("Please fill all required fields");
       return;
     }
+    
+    setIsLoading(true);
+    
+    try {
+      let uploadedFileURL = formData.certificateFileURL; // Use selected file URL if exists
+      let certId = formData.selectedCertificate || null; // Use existing cert_id if available
+  
+      // If a new certificate is uploaded, upload to ImageKit
+      if (formData.newCertificate) {
+        const imageKitURL = await uploadToImageKit(formData.newCertificate);
+        if (imageKitURL) {
+          uploadedFileURL = imageKitURL;
+          certId = imageKitURL; // Set certId as the uploaded file URL
+        }
+      }
+  
+      // Prepare Firestore document
+      const submissionData = {
+        studentName: formData.studentName,
+        className: formData.className,
+        rollNo: formData.rollNo,
+        leavePeriod: formData.leavePeriod,
+        leaveReason: formData.leaveReason,
+        examinationDuringLeave: formData.examinationDuringLeave,
+        dutyLeaveCount: formData.dutyLeaveCount,
+        studentSignature: formData.studentSignature,
+        advisorRemarks: formData.advisorRemarks,
+        faculty_id: userData.mentor,
+        hodApproval: formData.hodApproval,
+        certificateURL: uploadedFileURL, // Store uploaded or selected certificate URL
+        timestamp: new Date(),
+      };
+  
+      // Add duty leave data to Firestore
+      const docRef = await addDoc(collection(db, "Dutyleave"), submissionData);
+  
+      // Add notification for faculty
+      await addDoc(collection(db, "Notifications"), {
+        cert_id: certId, // Use existing cert_id or uploaded file URL
+        for: "faculty",
+        msg: `${userData.name} requested for duty leave`, 
+        status: "not viewed",
+        type: "upload",
+        user_id: userData.mentor, // Assigning the faculty ID as recipient
+        timestamp: new Date().toISOString(),
+      });
 
-    // Prepare form data with certificate info
-    const submissionData = {
-      ...formData,
-      certificateId: formData.selectedCertificate,
-      certificateFile: formData.newCertificate
-    };
-    
-    console.log('Form submitted:', submissionData);
-    alert('Duty Leave application submitted successfully!');
-    
-    // Here you would typically send the data to your backend
-    // submitDutyLeaveApplication(submissionData);
-  };
+      alert("Duty Leave application submitted successfully!");
+      handleReset();
+    } catch (error) {
+      console.error("Error submitting duty leave:", error);
+      alert("Error submitting duty leave. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+};
+
+  
 
   const handleReset = () => {
     setFormData({
