@@ -146,6 +146,7 @@ export const DutyLeaveForm = ({ userData }) => {
         hodApproval: formData.hodApproval,
         certificateURL: uploadedFileURL, // Store uploaded or selected certificate URL
         timestamp: new Date(),
+        status: "pending",
       };
   
       // Add duty leave data to Firestore

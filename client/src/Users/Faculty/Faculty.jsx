@@ -23,6 +23,7 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
   const [selectedYears, setSelectedYears] = useState([]);
   const [yearsWithData, setYearsWithData] = useState([]);
   const [notificationCount, setNotificationCount] = useState(0);
+  const [dutyLeaveApplications, setDutyLeaveApplications] = useState([]);
 
   const navigate = useNavigate();
 
@@ -111,6 +112,24 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
     return () => unsubscribe();
   }, [userData?.faculty_id]); 
 
+    //----------------------dutyleaveapplications------------------
+    useEffect(() => {
+      const fetchDutyLeaves = async () => {
+        try {
+          const querySnapshot = await getDocs(collection(db, "Dutyleave"));
+          const applications = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setDutyLeaveApplications(applications);
+        } catch (error) {
+          console.error("Error fetching duty leave applications:", error);
+        }
+      };
+  
+      fetchDutyLeaves();
+    }, []);
+    //--------------------------------------------------------------
   const handleSemesterReportClick = () => {
     setShowSemesterPopup(true);
   };
@@ -627,42 +646,16 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
     return <Loading />;
   }
 
-  const dutyLeaveApplications = [
-    {
-      id: 1,
-      studentName: "Alice Johnson",
-      rollNo: "S101",
-      class: "R6A",
-      date: "2023-10-25",
-      facultyName: "Dr. Smith",
-      reason: "Medical Emergency",
-      certificate: "medical_certificate.pdf",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      studentName: "Bob Smith",
-      rollNo: "S102",
-      class: "R6B",
-      date: "2023-10-26",
-      facultyName: "",
-      reason: "Family Function",
-      certificate: "family_function.pdf",
-      status: "Pending",
-    },
-    {
-      id: 3,
-      studentName: "Charlie Brown",
-      rollNo: "S103",
-      class: "R6B",
-      date: "2023-10-27",
-      facultyName: "Dr. Brown",
-      reason: "Sports Competition",
-      certificate: "sports_certificate.pdf",
-      status: "Pending",
-    },
-  ];
+  
 
+  // const handleViewApplication = (application) => {
+  //   setSelectedApplication(application);
+  // };
+
+  // const handleClosePopup = () => {
+  //   setSelectedApplication(null);
+  //   setRejectionReason("");
+  // };
   return (
     <div className="container-faculty">
       <header className="header-faculty">
@@ -756,55 +749,61 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
             </div>
               
             <div className="section-container-faculty">
-              <h3>Duty-Leave Applications</h3>
-              {dutyLeaveApplications.map((app) => (
-                <div key={app.id} className="application-card-faculty">
-                  <p><strong>Name:</strong> {app.studentName}</p>
-                  <p><strong>Roll No:</strong> {app.rollNo}</p>
-                  <button 
-                    className="view-button-faculty" 
-                    onClick={() => handleViewApplication(app)}
-                  >
-                    View Application
-                  </button>
-                </div>
-              ))}
+      <h3>Duty-Leave Applications</h3>
+      {dutyLeaveApplications.length > 0 ? (
+        dutyLeaveApplications.map((app) => (
+          <div key={app.id} className="application-card-faculty">
+            <p><strong>Name:</strong> {app.studentName}</p>
+            <p><strong>Roll No:</strong> {app.rollNo}</p>
+            <button className="view-button-faculty" onClick={() => handleViewApplication(app)}>
+              View Application
+            </button>
+          </div>
+        ))
+      ) : (
+        <p>No duty leave applications found.</p>
+      )}
+
+      {/* Popup for detailed view */}
+      {selectedApplication && (
+        <div className="popup-overlay-faculty">
+          <div className="popup-content-faculty">
+            <h3>Application Details</h3>
+            <p><strong>Name:</strong> {selectedApplication.studentName}</p>
+            <p><strong>Roll No:</strong> {selectedApplication.rollNo}</p>
+            <p><strong>Class:</strong> {selectedApplication.className}</p>
+            <p><strong>Leave Period:</strong> {selectedApplication.leavePeriod}</p>
+            <p><strong>Reason:</strong> {selectedApplication.leaveReason}</p>
+            <p><strong>Certificate:</strong> 
+              <a href={selectedApplication.certificateURL} target="_blank" rel="noopener noreferrer">
+                View Certificate
+              </a>
+            </p>
+
+            <div className="rejection-reason-faculty">
+              <label>Rejection Reason (if applicable):</label>
+              <textarea
+                value={rejectionReason}
+                onChange={(e) => setRejectionReason(e.target.value)}
+                placeholder="Enter reason for rejection"
+              />
             </div>
 
-            {selectedApplication && (
-              <div className="popup-overlay-faculty">
-                <div className="popup-content-faculty">
-                  <h3>Application Details</h3>
-                  <p><strong>Name:</strong> {selectedApplication.studentName}</p>
-                  <p><strong>Roll No:</strong> {selectedApplication.rollNo}</p>
-                  <p><strong>Class:</strong> {selectedApplication.class}</p>
-                  <p><strong>Date:</strong> {selectedApplication.date}</p>
-                  <p><strong>Reason:</strong> {selectedApplication.reason}</p>
-                  <p><strong>Certificate:</strong> {selectedApplication.certificate}</p>
-                  
-                  <div className="rejection-reason-faculty">
-                    <label>Rejection Reason (if applicable):</label>
-                    <textarea
-                      value={rejectionReason}
-                      onChange={(e) => setRejectionReason(e.target.value)}
-                      placeholder="Enter reason for rejection"
-                    />
-                  </div>
-
-                  <div className="popup-actions-faculty">
-                    <button className="approve-btn-faculty" onClick={handleApprove}>
-                      <FaCheck /> Approve
-                    </button>
-                    <button className="reject-btn-faculty" onClick={handleReject}>
-                      <FaTimes /> Reject
-                    </button>
-                    <button className="close-btn-faculty" onClick={handleClosePopup}>
-                      Close
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
+            <div className="popup-actions-faculty">
+              <button className="approve-btn-faculty" onClick={() => handleApprove(selectedApplication.id)}>
+                <FaCheck /> Approve
+              </button>
+              <button className="reject-btn-faculty" onClick={() => handleReject(selectedApplication.id)}>
+                <FaTimes /> Reject
+              </button>
+              <button className="close-btn-faculty" onClick={handleClosePopup}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
 
             {showSemesterPopup && (
               <div className="popup-overlay-faculty">
