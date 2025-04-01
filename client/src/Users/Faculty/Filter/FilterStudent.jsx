@@ -1,19 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { 
-  FaCheckCircle, 
-  FaThLarge, 
-  FaCalendarAlt, 
-  FaBell, 
-  FaCog, 
-  FaSignOutAlt, 
-  FaFilter, 
-  FaFileDownload, 
-  FaSearch, 
-  FaTimes, 
-  FaChevronDown, 
-  FaChevronUp 
-} from "react-icons/fa";
+import { FaCheckCircle, FaThLarge,   FaCalendarAlt,  FaBell, 
+  FaCog,   FaSignOutAlt,   FaFilter,   FaFileDownload,   FaSearch,   FaTimes, 
+  FaChevronDown,   FaChevronUp, FaUserTie} from "react-icons/fa";
 import { db } from '../../../firebaseFile/firebaseConfig'; 
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import * as XLSX from 'xlsx';
@@ -386,8 +375,9 @@ export const FilterStudent = ({ token, userData, onLogout }) => {
       <div className="main-content">
         {/* Sidebar */}
         <div className="sidebar-menu-faculty">
+        <button onClick={() => navigate("/FacultyDashboard")}><FaUserTie className="menu-icon-faculty" /> Dashboard</button>
           <button onClick={onValidate}><FaCheckCircle className="menu-icon-faculty" /> Validate</button>
-          <button><FaThLarge className="menu-icon-faculty" /> Student List</button>
+          <button onClick={() => navigate("/StudentList")} ><FaThLarge className="menu-icon-faculty" /> Student List</button>
           <button><FaCalendarAlt className="menu-icon-faculty" /> Events <span className="badge">new</span></button>
           <button onClick={onNotification}><FaBell className="menu-icon-faculty" /> Notifications</button>
           <button><FaCog className="menu-icon-faculty" /> Settings</button>

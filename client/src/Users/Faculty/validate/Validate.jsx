@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaEye, FaThLarge, FaCheckCircle, FaCog,
+import { FaEdit, FaEye, FaThLarge, FaUserTie, FaCog,
    FaCalendarAlt, FaBell, FaSignOutAlt,
-     FaUser, FaUniversity, FaCheck, FaTimes } from "react-icons/fa";
+     FaUser, FaUniversity, FaCheck, FaTimes, 
+     FaFilter} from "react-icons/fa";
 import { certificatesFetch } from "../certificatesFetch/certificatesFetch"
 import { db } from '../../../firebaseFile/firebaseConfig'; 
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -349,10 +350,10 @@ const handleRejectCertificate = async (validationId) => {
     window.open(file, "_blank");
   };
 
-  const onValidate = () => { navigate("/Validate"); }
   const onStudentList = () => { navigate("/StudentList"); }
   const onNotification = () => { navigate("/Notification-faculty"); }
-
+  const onFilter = () => { navigate("/filter"); }
+  const onDashboard = () => { navigate("/FacultyDashboard"); }
   return (
     <div className="container">
       <header className="header">
@@ -362,16 +363,18 @@ const handleRejectCertificate = async (validationId) => {
           </div>
         </div>
 
-        <div className="header-right">
+        <div className="header-right-faculty">
+          <button className="business-btn" onClick={onLogout}>Logout</button>
         </div>
       </header>
 
       <div className="main-content">
         <div className="sidebar-menu-faculty">
-          <button onClick={onValidate}><FaCheckCircle className="menu-icon-faculty" /> Validate</button>
+          <button onClick={onDashboard}><FaUserTie className="menu-icon-faculty" /> Dashboard</button>
           <button onClick={onStudentList}><FaThLarge className="menu-icon-faculty" /> Student List</button>
           <button><FaCalendarAlt className="menu-icon-faculty" /> Events <span className="badge">new</span></button>
           <button  onClick={onNotification}> <FaBell   className="menu-icon-faculty" /> Notifications  </button>
+          <button  onClick={onFilter}> <FaFilter   className="menu-icon-faculty" /> Filter & Sort  </button>
           <button><FaCog className="menu-icon-faculty" /> Settings</button>
           <button onClick={onLogout} style={{ color: "#df0000" }}>
             <FaSignOutAlt className="menu-icon-faculty" /> Logout
@@ -379,7 +382,7 @@ const handleRejectCertificate = async (validationId) => {
         </div>
 
         <div className="profile-content">
-          <h2>Validate Certificate</h2>
+          <h2>Dashboard Certificate</h2>
           <div className="student-certificates-container">
             
 

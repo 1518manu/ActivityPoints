@@ -1,70 +1,67 @@
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .notification-container1 {
   display: flex;
   height: 100vh;
-  background-color: #f8f8f8;
-  display: flex;
+  background-color: #ffffff;
 }
 
 .sidebar-menu {
-  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  padding: 0;
-  width: 20vw;
+  width: 240px;
+  background-color: #ffffff;
+  padding: 20px 0;
+  border-right: 1px solid #eaeaea;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-menu button {
+  width: 100%;
+  padding: 12px 25px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  width: 100%;
-  padding: 12px 20px;
-  background: none;
-  border: none;
-  text-align: left;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  color: #333;
+  color: #5f6368;
+  transition: all 0.2s;
+  font-size: 0.95rem;
 }
 
 .sidebar-menu button:hover {
-  background-color: #ede8e8;
+  background-color: #f5f5f5;
 }
 
 .menu-icon {
-  width: 13px;
-  height: 13px;
-  margin-right: 2vw;
-  color: rgb(139, 137, 137);
+  margin-right: 12px;
+  font-size: 1.1rem;
+  color: #5f6368;
+  width: auto;
+  height: auto;
 }
 
 .badge {
   margin-left: auto;
   background-color: #ff5722;
   color: white;
-  font-size: 10px;
-  padding: 2px 6px;
+  font-size: 0.7rem;
+  padding: 3px 7px;
   border-radius: 10px;
 }
 
-/* Container */
-
+.logout-btn {
+  color: #e53935 !important;
+}
 
 .notification-container2 {
-  width: 100%;
-  margin: 0;
+  flex: 1;
   padding: 20px;
-  box-shadow: 3px 4px 12px rgba(0, 0, 0, 0.2);
-  transition: filter 0.3s ease-in-out;
+  background-color: #ffffff;
 }
 
 /* Blur effect when modal is open */
@@ -76,8 +73,10 @@
 /* Title */
 .notification-title {
   text-align: center;
-  font-size: 24px;
-  margin-bottom: 20px;
+  font-size: 1.5rem;
+  margin-bottom: 25px;
+  color: #333;
+  font-weight: 500;
 }
 
 /* List */
@@ -94,17 +93,21 @@
 /* Button styling */
 .notification-button {
   width: 100%;
-  padding: 15px;
+  padding: 15px 20px;
   text-align: left;
   border: none;
   border-radius: 8px;
-  background: #e3e3e3;
+  background: #f5f5f5;
   cursor: pointer;
   transition: 0.3s;
+  color: #333;
+  font-size: 0.95rem;
+  border: 1px solid #e0e0e0;
 }
 
 .notification-button:hover {
-  background: #d1d1d1;
+  background: #e8e8e8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 /* Modal popup */
@@ -113,14 +116,15 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width:70%;
+  width: 70%;
+  max-width: 800px;
   min-height: 200px;
   height: auto;
   background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
-  border:2px solid rgb(201, 198, 198);
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e0e0e0;
   z-index: 1000;
   animation: fadeIn 0.3s ease-in-out;
 }
@@ -128,36 +132,46 @@
 /* Modal content */
 .notification-modal-content {
   text-align: left;
+  color: #333;
 }
+
 .certificate-details h3 {
-  color: #076fe5;
+  color: #1e88e5;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
 }
-.certificate-table tbody tr td{
-  padding: 2px;
+
+.certificate-table tbody tr td {
+  padding: 8px 5px;
+  font-size: 0.9rem;
 }
+
 .date {
   position: absolute;
-  bottom: 4%;
-  right:20px;
+  bottom: 20px;
+  right: 20px;
+  color: #757575;
+  font-size: 0.85rem;
 }
+
 .close-button {
-  background:transparent;
-  color: rgb(82, 81, 81);
+  background: transparent;
+  color: #757575;
   border: none;
   cursor: pointer;
   position: absolute;
-  border-radius: 0px 6px 0px 0px;
-  padding: 0px 5px;
-  top: 0px;
-  right: 0px;
-  font-size: 30px;
+  padding: 5px 10px;
+  top: 5px;
+  right: 5px;
+  font-size: 1.5rem;
+  transition: all 0.2s;
 }
 
 .close-button:hover {
-  color: rgb(255, 255, 255);
-  background-color: rgb(198, 0, 0);
+  color: #ffffff;
+  background-color: #e53935;
+  border-radius: 4px;
 }
-
 
 /* Fade-in animation */
 @keyframes fadeIn {
@@ -171,14 +185,30 @@
   }
 }
 
-/* Dark overlay */
-.notification-modal::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.5);
-  z-index: -1;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .notification-container1 {
+    flex-direction: column;
+  }
+  
+  .sidebar-menu {
+    width: 100%;
+    padding: 10px 0;
+    display: flex;
+    overflow-x: auto;
+    border-right: none;
+    border-bottom: 1px solid #eaeaea;
+  }
+  
+  .sidebar-menu button {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+  
+  .notification-modal {
+    width: 90%;
+    padding: 15px;
+  }
 }
+

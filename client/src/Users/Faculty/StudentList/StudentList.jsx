@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaThLarge, FaCheckCircle, FaCog, 
+import {  FaCheckCircle, FaCog, 
          FaCalendarAlt, FaBell, FaSignOutAlt, 
-         FaUser, FaUniversity, FaTimes} from 'react-icons/fa';
+         FaUser, FaUserTie, FaTimes,
+         FaFilter} from 'react-icons/fa';
 import { db } from '../../../firebaseFile/firebaseConfig'; 
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import './StudentList.css';
@@ -81,18 +82,23 @@ export const StudentList = ({ token, userData, onLogout }) => {
             <img src="/api/placeholder/100/40" alt="Logo" className="logo" />
           </div>
         </div>
-        <div className="header-right"></div>
+        <div className="header-right-faculty">
+          <button className="business-btn" onClick={onLogout}>Logout</button>
+        </div>
       </header>
 
       <div className="main-content">
         <div className="sidebar-menu-faculty">
+        <button onClick={() => navigate("/FacultyDashboard")}><FaUserTie className="menu-icon-faculty" /> Dashboard</button>
           <button onClick={() => navigate("/Validate")}>
             <FaCheckCircle className="menu-icon-faculty" /> Validate
           </button>
-          <button><FaThLarge className="menu-icon-faculty" /> Student List</button>
           <button><FaCalendarAlt className="menu-icon-faculty" /> Events <span className="badge">new</span></button>
           <button onClick={() => navigate("/Notification-faculty")}>
             <FaBell className="menu-icon-faculty" /> Notifications
+          </button>
+          <button onClick={() => navigate("/filter")}>
+            <FaFilter className="menu-icon-faculty" /> Filter & Sort
           </button>
           <button><FaCog className="menu-icon-faculty" /> Settings</button>
           <button onClick={onLogout} className="logout-btn">

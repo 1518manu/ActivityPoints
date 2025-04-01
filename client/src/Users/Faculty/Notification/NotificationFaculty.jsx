@@ -4,7 +4,8 @@ import { db } from "../../../firebaseFile/firebaseConfig";
 import { FaEdit, FaThLarge, FaCheckCircle, FaCog,
    FaCalendarAlt, FaBell, FaSignOutAlt,
      FaUser, FaUniversity, FaCheck, FaTimes, 
-     FaUserTie} from "react-icons/fa";
+     FaUserTie,
+     FaFilter} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { Loading } from "../../../Loading/Loading";
 import "./NotificationFaculty.css";
@@ -76,6 +77,7 @@ export const NotificationPageFaculty = ({ token, userData, onLogout }) => {
           <button onClick={onValidate}><FaCheckCircle className="menu-icon-faculty" /> Validate</button>
           <button onClick={onStudentList}><FaThLarge className="menu-icon-faculty" /> Student List</button>
           <button><FaCalendarAlt className="menu-icon-faculty" /> Events <span className="badge">new</span></button>
+          <button onClick={() => navigate("/filter")} ><FaFilter className="menu-icon-faculty" /> Filter & Sort</button>
           <button><FaCog className="menu-icon-faculty" /> Settings</button>
           <button onClick={onLogout} style={{ color: "#df0000" }}>
             <FaSignOutAlt className="menu-icon-faculty" /> Logout
