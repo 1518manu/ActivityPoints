@@ -2,11 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaEye, FaThLarge, FaUserTie, FaCog,
+import {  FaEye, FaThLarge, FaUserTie, FaCog,
    FaCalendarAlt, FaBell, FaSignOutAlt,
-     FaUser, FaUniversity, FaCheck, FaTimes, 
      FaFilter} from "react-icons/fa";
-import { certificatesFetch } from "../certificatesFetch/certificatesFetch"
 import { db } from '../../../firebaseFile/firebaseConfig'; 
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { doc, updateDoc, addDoc ,getDoc } from 'firebase/firestore';

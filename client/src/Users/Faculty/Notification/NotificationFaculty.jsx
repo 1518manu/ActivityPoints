@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
+import  { useEffect, useState } from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebaseFile/firebaseConfig";
-import { FaEdit, FaThLarge, FaCheckCircle, FaCog,
-   FaCalendarAlt, FaBell, FaSignOutAlt,
-     FaUser, FaUniversity, FaCheck, FaTimes, 
+import {  FaThLarge, FaCheckCircle, FaCog,
+   FaCalendarAlt,  FaSignOutAlt,
      FaUserTie,
      FaFilter} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
