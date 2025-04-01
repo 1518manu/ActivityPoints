@@ -83,6 +83,7 @@ export const NotificationPageStudent = ({ token, userData, onLogout }) => {
 
   const onCertificate = () => navigate("/certificate");
   const onDashboard = () => navigate("/StudentDashboard");
+  const onDutyLeave = () => navigate("/duty-leave");
 
   return (loading ? (
     <Loading />
@@ -115,7 +116,9 @@ export const NotificationPageStudent = ({ token, userData, onLogout }) => {
         <button>
           <FaCalendarAlt className="menu-icon" /> Event <span className="badge">new</span>
         </button>
-       
+        <button onClick={onDutyLeave}>
+          <FaThLarge className="menu-icon" /> Duty Leave 
+        </button>
         <button onClick={onLogout} style={{ color: "#df0000" }}>
           <FaSignOutAlt className="menu-icon" style={{ color: "#df0000" }} /> Logout
         </button>
@@ -137,8 +140,7 @@ export const NotificationPageStudent = ({ token, userData, onLogout }) => {
                   onClick={() => {
                     setSelectedNotification(notification);
                     setSelectedCertificate(notification.certificate || null);
-                  }}
-                >
+                  }}>
                   <h3 className="notification-heading">{notification.title || "Notification"}</h3>
                   <p className="notification-message">{notification.msg}</p>
                   <p className="notification-date">

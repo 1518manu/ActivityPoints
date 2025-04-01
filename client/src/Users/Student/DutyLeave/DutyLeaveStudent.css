@@ -1,246 +1,273 @@
-/* DutyLeaveStudent.css */
-
 /* Base Styles */
 .duty-leave-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  .college-header {
-    text-align: center;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid #e1e5ee;
-  }
-  
-  .college-header h1 {
-    font-size: 1.8rem;
-    color: #2c3e50;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-  }
-  
-  .college-header h2 {
-    font-size: 1.4rem;
-    color: #4a6baf;
-    font-weight: 500;
-  }
-  
-  /* Form Styles */
-  .duty-leave-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .form-group label {
-    font-weight: 500;
-    color: #4a5568;
-    font-size: 0.95rem;
-  }
-  
-  .form-group input,
-  .form-group select,
-  .form-group textarea {
-    padding: 0.75rem 1rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.2s ease;
-    background-color: #f8fafc;
-  }
-  
-  .form-group input:focus,
-  .form-group select:focus,
-  .form-group textarea:focus {
-    outline: none;
-    border-color: #4a6baf;
-    box-shadow: 0 0 0 3px rgba(74, 107, 175, 0.1);
-  }
-  
-  .form-group textarea {
-    min-height: 100px;
-    resize: vertical;
-  }
-  
-  .form-row {
-    display: flex;
-    gap: 1.5rem;
-  }
-  
-  .form-row .form-group {
-    flex: 1;
-  }
-  
-  /* Certificate Selection Styles */
-  .certificate-select {
-    width: 100%;
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1em;
-  }
-  
-  .upload-toggle-btn {
-    background: none;
-    border: none;
-    color: #4a6baf;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
-    padding: 0.5rem 0;
-    transition: color 0.2s;
-  }
-  
-  .upload-toggle-btn:hover {
-    color: #3a568f;
-    text-decoration: underline;
-  }
-  
-  .file-upload-container {
-    margin-bottom: 0.5rem;
-  }
-  
-  .file-upload-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    background-color: #f8fafc;
-    border-radius: 8px;
-    cursor: pointer;
-    border: 1px dashed #cbd5e0;
-    transition: all 0.2s;
-  }
-  
-  .file-upload-label:hover {
-    background-color: #f1f5f9;
-    border-color: #a0aec0;
-  }
-  
-  .file-upload-label input[type="file"] {
-    display: none;
-  }
-  
-  .file-preview {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 0.75rem;
-    padding: 0.75rem 1rem;
-    background-color: #f1f5f9;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-  }
-  
-  .remove-file-btn {
-    background: none;
-    border: none;
-    color: #e53e3e;
-    cursor: pointer;
-    padding: 0.25rem;
-    border-radius: 4px;
-    transition: background-color 0.2s;
-  }
-  
-  .remove-file-btn:hover {
-    background-color: rgba(229, 62, 62, 0.1);
-  }
-  
-  /* Form Actions */
-  .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #e2e8f0;
-  }
-  
-  .submit-btn,
-  .reset-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 8px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  
-  .submit-btn {
-    background-color: #4a6baf;
-    color: white;
-  }
-  
-  .submit-btn:hover {
-    background-color: #3a568f;
-    transform: translateY(-1px);
-  }
-  
-  .reset-btn {
-    background-color: #edf2f7;
-    color: #4a5568;
-  }
-  
-  .reset-btn:hover {
-    background-color: #e2e8f0;
-  }
-  
-  /* Loading State */
-  .loading-message {
-    color: #4a5568;
-    font-style: italic;
-    padding: 0.5rem 0;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .duty-leave-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-height: 90vh; /* Set maximum height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  scroll-behavior: smooth; /* Smooth scrolling */
+}
+
+/* Custom scrollbar styling */
+.duty-leave-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.duty-leave-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.duty-leave-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.duty-leave-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.college-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e1e5ee;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+
+.college-header h1 {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.college-header h2 {
+  font-size: 1.4rem;
+  color: #4a6baf;
+  font-weight: 500;
+}
+
+/* Form Styles */
+.duty-leave-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #4a5568;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background-color: #f8fafc;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #4a6baf;
+  box-shadow: 0 0 0 3px rgba(74, 107, 175, 0.1);
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-row {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+/* Certificate Selection Styles */
+.certificate-select {
+  width: 100%;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+}
+
+.upload-toggle-btn {
+  background: none;
+  border: none;
+  color: #4a6baf;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem 0;
+  transition: color 0.2s;
+}
+
+.upload-toggle-btn:hover {
+  color: #3a568f;
+  text-decoration: underline;
+}
+
+.file-upload-container {
+  margin-bottom: 0.5rem;
+}
+
+.file-upload-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px dashed #cbd5e0;
+  transition: all 0.2s;
+}
+
+.file-upload-label:hover {
+  background-color: #f1f5f9;
+  border-color: #a0aec0;
+}
+
+.file-upload-label input[type="file"] {
+  display: none;
+}
+
+.file-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background-color: #f1f5f9;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.remove-file-btn {
+  background: none;
+  border: none;
+  color: #e53e3e;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.remove-file-btn:hover {
+  background-color: rgba(229, 62, 62, 0.1);
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  bottom: 0;
+  background: white;
+  z-index: 10;
+}
+
+.submit-btn,
+.reset-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.submit-btn {
+  background-color: #4a6baf;
+  color: white;
+}
+
+.submit-btn:hover {
+  background-color: #3a568f;
+  transform: translateY(-1px);
+}
+
+.reset-btn {
+  background-color: #edf2f7;
+  color: #4a5568;
+}
+
+.reset-btn:hover {
+  background-color: #e2e8f0;
+}
+
+/* Loading State */
+.loading-message {
+  color: #4a5568;
+  font-style: italic;
+  padding: 0.5rem 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .duty-leave-container {
       padding: 1.5rem;
       margin: 1rem;
-    }
-  
-    .form-row {
+      max-height: 85vh;
+  }
+
+  .form-row {
       flex-direction: column;
       gap: 1.5rem;
-    }
-  
-    .college-header h1 {
-      font-size: 1.5rem;
-    }
-  
-    .college-header h2 {
-      font-size: 1.2rem;
-    }
   }
-  
-  @media (max-width: 480px) {
-    .form-actions {
+
+  .college-header h1 {
+      font-size: 1.5rem;
+  }
+
+  .college-header h2 {
+      font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-actions {
       flex-direction: column;
-    }
-  
-    .submit-btn,
-    .reset-btn {
+  }
+
+  .submit-btn,
+  .reset-btn {
       width: 100%;
       justify-content: center;
-    }
   }
+}

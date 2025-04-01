@@ -1,31 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { FaPaperPlane, FaUndo, FaUpload, FaTimes } from 'react-icons/fa';
-import { collection, getDocs, query, where ,addDoc } from "firebase/firestore";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  FaPaperPlane,
+  FaUndo,
+  FaUpload,
+  FaTimes,
+  FaThLarge,
+  FaCog,
+  FaFileAlt,
+  FaUserTie,
+  FaBell,
+  FaSignOutAlt,
+} from "react-icons/fa";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  addDoc,
+} from "firebase/firestore";
 import { db } from "../../../firebaseFile/firebaseConfig";
 import { Loading } from "../../../Loading/Loading";
-import './DutyLeaveStudent.css';
+import "./DutyLeaveStudent.css";
 
-export const DutyLeaveForm = ({ userData }) => {
+export const DutyLeaveForm = ({
+  userData,
+  onLogout,
+  notificationCount,
+}) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    studentName: userData?.name || '',
-    className: userData?.class || '',
-    rollNo: userData?.rollNo || '',
-    leavePeriod: '',
-    leaveReason: '',
-    examinationDuringLeave: '',
-    dutyLeaveCount: '',
-    studentSignature: '',
-    advisorRemarks: '',
-    hodApproval: '',
-    selectedCertificate: '',
-    newCertificate: null
+    studentName: userData?.name || "",
+    className: userData?.className || "",
+    rollNo: userData?.rollNo || "",
+    leavePeriod: "",
+    leaveReason: "",
+    examinationDuringLeave: "",
+    dutyLeaveCount: "",
+    studentSignature: "",
+    advisorRemarks: "",
+    hodApproval: "",
+    selectedCertificate: "",
+    certificateFileURL: "",
+    newCertificate: null,
   });
+
   const [loading, setLoading] = useState(true);
   const [certificates, setCertificates] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showUploadOption, setShowUploadOption] = useState(false);
 
-  // Function to fetch user certificates from Firestore
+  // Navigation functions
+  const onCertificate = () => navigate("/certificate");
+  const onNotification = () => navigate("/notification");
+  const onDashboard = () => navigate("/StudentDashboard");
+
+  const handleLogout = () => {
+    if (onLogout) {
+      onLogout();
+    }
+    navigate("/");
+  };
+
   const fetchUserCertificates = async (rollNo) => {
     try {
       const q = query(collection(db, "certificates"), where("user_id", "==", rollNo));
@@ -36,7 +72,7 @@ export const DutyLeaveForm = ({ userData }) => {
       }));
     } catch (error) {
       console.error("Error fetching certificates:", error);
-      throw error;
+      return [];
     } finally {
       setLoading(false);
     }
@@ -62,19 +98,18 @@ export const DutyLeaveForm = ({ userData }) => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-  
+
     if (name === "newCertificate") {
       setFormData((prev) => ({
         ...prev,
         newCertificate: files[0],
       }));
     } else if (name === "selectedCertificate") {
-      // Find the selected certificate's fileURL
-      const selectedCert = certificates.find(cert => cert.id === value);
+      const selectedCert = certificates.find((cert) => cert.id === value);
       setFormData((prev) => ({
         ...prev,
         selectedCertificate: value,
-        certificateFileURL: selectedCert ? selectedCert.fileURL : "", // Store fileURL
+        certificateFileURL: selectedCert ? selectedCert.fileURL : "",
       }));
     } else {
       setFormData((prev) => ({
@@ -83,55 +118,52 @@ export const DutyLeaveForm = ({ userData }) => {
       }));
     }
   };
-  
+
   const uploadToImageKit = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("fileName", file.name);
     formData.append("folder", "/dutyleave");
-    formData.append("publicKey", "public_dGrtJlwx1cYmPGWcjN5Ybdp0bYw="); 
-  
+
     try {
       const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
         method: "POST",
         headers: {
-          Authorization: `Basic ${btoa("private_6doDUpitrkkv73i9cZvUYrviuDg=:")}`, // Fixed API Key format
+          Authorization: `Basic ${btoa(process.env.REACT_APP_IMAGEKIT_PRIVATE_KEY)}`,
         },
         body: formData,
       });
-  
+
       const data = await response.json();
-      return data.url; // Return the uploaded file URL
+      return data.url;
     } catch (error) {
       console.error("Error uploading to ImageKit:", error);
       return null;
     }
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.leavePeriod || !formData.leaveReason) {
       alert("Please fill all required fields");
       return;
     }
-    
+
     setIsLoading(true);
-    
+
     try {
-      let uploadedFileURL = formData.certificateFileURL; // Use selected file URL if exists
-      let certId = formData.selectedCertificate || null; // Use existing cert_id if available
-  
-      // If a new certificate is uploaded, upload to ImageKit
+      let uploadedFileURL = formData.certificateFileURL;
+      let certId = formData.selectedCertificate || null;
+
       if (formData.newCertificate) {
         const imageKitURL = await uploadToImageKit(formData.newCertificate);
         if (imageKitURL) {
           uploadedFileURL = imageKitURL;
-          certId = imageKitURL; // Set certId as the uploaded file URL
+          certId = imageKitURL;
         }
       }
-  
-      // Prepare Firestore document
+
       const submissionData = {
         studentName: formData.studentName,
         className: formData.className,
@@ -144,22 +176,20 @@ export const DutyLeaveForm = ({ userData }) => {
         advisorRemarks: formData.advisorRemarks,
         faculty_id: userData.mentor,
         hodApproval: formData.hodApproval,
-        certificateURL: uploadedFileURL, // Store uploaded or selected certificate URL
+        certificateURL: uploadedFileURL,
         timestamp: new Date(),
         status: "pending",
       };
-  
-      // Add duty leave data to Firestore
-      const docRef = await addDoc(collection(db, "Dutyleave"), submissionData);
-  
-      // Add notification for faculty
+
+      await addDoc(collection(db, "Dutyleave"), submissionData);
+
       await addDoc(collection(db, "Notifications"), {
-        cert_id: certId, // Use existing cert_id or uploaded file URL
+        cert_id: certId,
         for: "faculty",
-        msg: `${userData.name} requested for duty leave`, 
+        msg: `${userData.name} requested for duty leave`,
         status: "not viewed",
         type: "upload",
-        user_id: userData.mentor, // Assigning the faculty ID as recipient
+        user_id: userData.mentor,
         timestamp: new Date().toISOString(),
       });
 
@@ -171,24 +201,23 @@ export const DutyLeaveForm = ({ userData }) => {
     } finally {
       setIsLoading(false);
     }
-};
-
-  
+  };
 
   const handleReset = () => {
     setFormData({
-      studentName: userData?.name || '',
-      className: userData?.class || '',
-      rollNo: userData?.rollNo || '',
-      leavePeriod: '',
-      leaveReason: '',
-      examinationDuringLeave: '',
-      dutyLeaveCount: '',
-      studentSignature: '',
-      advisorRemarks: '',
-      hodApproval: '',
-      selectedCertificate: '',
-      newCertificate: null
+      studentName: userData?.name || "",
+      className: userData?.className || "",
+      rollNo: userData?.rollNo || "",
+      leavePeriod: "",
+      leaveReason: "",
+      examinationDuringLeave: "",
+      dutyLeaveCount: "",
+      studentSignature: "",
+      advisorRemarks: "",
+      hodApproval: "",
+      selectedCertificate: "",
+      certificateFileURL: "",
+      newCertificate: null,
     });
     setShowUploadOption(false);
   };
@@ -198,10 +227,52 @@ export const DutyLeaveForm = ({ userData }) => {
   };
 
   if (loading) {
-    return <Loading />; 
+    return <Loading />;
   }
+
   return (
-    <div className="duty-leave-container">
+    <div className="container">
+      <header className="header">
+        <div className="header-left">
+          <div className="logo-container">
+            <img src="/api/placeholder/100/40" alt="Logo" className="logo" />
+          </div>
+        </div>
+
+        <div className="header-right">
+          <button className="business-btn" onClick={handleLogout}>Logout</button>
+        </div>
+      </header>
+
+      <div className="main-content">
+        <div className="sidebar-menu">
+          <button onClick={onCertificate}>
+            <FaThLarge className="menu-icon" /> Certificates
+          </button>
+
+          <button>
+            <FaCog className="menu-icon" /> Settings
+          </button>
+
+          <button>
+            <FaFileAlt className="menu-icon" /> Event <span className="badge">new</span>
+          </button>
+          
+          <button onClick={onDashboard}>
+            <FaUserTie className="menu-icon" /> Dashboard
+          </button>
+
+          <button onClick={onNotification}>
+            <FaBell className="menu-icon" /> Notifications
+            {notificationCount > 0 && <span className="badge">{notificationCount}</span>}
+          </button>
+
+          <button onClick={handleLogout} style={{ color: "#df0000" }}>
+            <FaSignOutAlt style={{ color: "#df0000" }} className="menu-icon" /> Logout
+          </button>
+        </div>
+
+        <div className="duty-leave-container">
       <div className="college-header">
         <h1>T K M COLLEGE OF ENGINEERING, KOLLAM -5</h1>
         <h2>Application for Duty Leave (Students)</h2>
@@ -391,6 +462,9 @@ export const DutyLeaveForm = ({ userData }) => {
           </button>
         </div>
       </form>
+    </div>
+
+      </div>
     </div>
   );
 };

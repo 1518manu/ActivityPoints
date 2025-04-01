@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebaseFile/firebaseConfig";
 import { useNavigate } from "react-router-dom";
-import { FaSearch, FaCoins, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaFilter, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaThLarge,FaSearch, FaCoins, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaFilter, FaTimes, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Loading } from "../../../Loading/Loading";
 import "./Certificate.css";
 import { FaUserTie } from "react-icons/fa6";
@@ -77,6 +77,8 @@ export const Certificate = ({ token, userData, onLogout } ) => {
   const navigate = useNavigate();
   
   const onNotification = () => navigate("/Notification");
+  const onDutyLeave = () => navigate("/duty-leave");
+  
   
 
 
@@ -258,8 +260,7 @@ const handleCertificateSelection = (e, cert) => {
     return newSelected;
   });
 };
-
-    
+   
     // Function to process and organize certificates
     const organizeCertificates = async () => {
       try {
@@ -423,6 +424,9 @@ const handleCertificateSelection = (e, cert) => {
           <button onClick={onNotification}>
             <FaBell className="menu-icon" /> Notifications  
             {notificationCount > 0 && <span className="badge">{notificationCount}</span>}
+          </button>
+          <button onClick={onDutyLeave}>
+            <FaThLarge className="menu-icon" /> Duty Leave
           </button>
           <button onClick={onLogout} style={{ color: "#df0000" }}>
             <FaSignOutAlt className="menu-icon" /> Logout
