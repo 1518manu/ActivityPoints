@@ -55,13 +55,6 @@ export const DutyLeaveForm = ({
   const onNotification = () => navigate("/notification");
   const onDashboard = () => navigate("/StudentDashboard");
 
-  const handleLogout = () => {
-    if (onLogout) {
-      onLogout();
-    }
-    navigate("/");
-  };
-
   const fetchUserCertificates = async (rollNo) => {
     try {
       const q = query(collection(db, "certificates"), where("user_id", "==", rollNo));
@@ -240,7 +233,7 @@ export const DutyLeaveForm = ({
         </div>
 
         <div className="header-right">
-          <button className="business-btn" onClick={handleLogout}>Logout</button>
+          <button className="business-btn" onClick={onLogout}>Logout</button>
         </div>
       </header>
 
@@ -267,7 +260,7 @@ export const DutyLeaveForm = ({
             {notificationCount > 0 && <span className="badge">{notificationCount}</span>}
           </button>
 
-          <button onClick={handleLogout} style={{ color: "#df0000" }}>
+          <button onClick={onLogout} style={{ color: "#df0000" }}>
             <FaSignOutAlt style={{ color: "#df0000" }} className="menu-icon" /> Logout
           </button>
         </div>
