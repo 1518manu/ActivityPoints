@@ -256,7 +256,31 @@ const fetchValidationData = async () => {
       });
   
       console.log("Validation approved and updated in Firestore");
-  
+      //updating the points in the student collection
+      const studentsCollection = collection(db, "Students");
+      const q = query(studentsCollection, where("rollNo", "==", user_id));
+      const studentQuerySnap = await getDocs(q);
+
+      if (studentQuerySnap.empty) {
+          console.error("Student with roll number not found");
+          return;
+      }
+
+      const studentDoc = studentQuerySnap.docs[0]; // Assuming rollNo is unique
+      const studentRef = doc(db, "Students", studentDoc.id); // Get reference to student document
+
+      // Fetch the current student data
+      const studentSnap = await getDoc(studentRef);
+      const currentPoints = studentSnap.data().point || 0; // Default to 0 if undefined
+
+      const newTotalPoints = currentPoints + Number(calculatedPoints);
+
+      // Update the student's total points in Firestore
+      await updateDoc(studentRef, {
+          point: newTotalPoints
+      });
+
+      console.log("Student points updated in Firestore");
       // Step 4: Add an approval notification for the student
       const notificationsRef = collection(db, "Notifications");
       await addDoc(notificationsRef, {
