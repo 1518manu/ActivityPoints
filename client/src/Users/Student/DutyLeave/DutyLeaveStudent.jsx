@@ -23,12 +23,9 @@ import { db } from "../../../firebaseFile/firebaseConfig";
 import { Loading } from "../../../Loading/Loading";
 import "./DutyLeaveStudent.css";
 
-export const DutyLeaveForm = ({
-  userData,
-  onLogout,
-  notificationCount,
-}) => {
+export const DutyLeaveForm = ({token, userData, onLogout}) => {
   const navigate = useNavigate();
+  
   const [formData, setFormData] = useState({
     studentName: userData?.name || "",
     className: userData?.className || "",
@@ -219,6 +216,10 @@ export const DutyLeaveForm = ({
     setFormData(prev => ({ ...prev, newCertificate: null }));
   };
 
+  useEffect(() => {
+    if (!token) navigate("/");
+  }, [token, userData, navigate]);
+
   if (loading) {
     return <Loading />;
   }
@@ -257,7 +258,7 @@ export const DutyLeaveForm = ({
 
           <button onClick={onNotification}>
             <FaBell className="menu-icon" /> Notifications
-            {notificationCount > 0 && <span className="badge">{notificationCount}</span>}
+            {/* {notificationCount > 0 && <span className="badge">{notificationCount}</span>} */}
           </button>
 
           <button onClick={onLogout} style={{ color: "#df0000" }}>

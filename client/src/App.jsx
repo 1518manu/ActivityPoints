@@ -121,7 +121,7 @@ function App() {
               <Route
                 path = "/duty-leave"
                 element ={
-                  <DutyLeaveForm userData={userData}/>
+                  <DutyLeaveForm token={token} userData={userData} onLogout={handleLogout} />
                 }
               />
               /duty-leave

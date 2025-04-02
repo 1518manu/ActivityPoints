@@ -70,7 +70,7 @@ export const NotificationPageStudent = ({ token, userData, onLogout }) => {
       setNotifications(notificationDataArray);
     } catch (error) {
       console.error("Error fetching notifications:", error);
-      onLogout();
+      
     } finally {
       setLoading(false);
     }
