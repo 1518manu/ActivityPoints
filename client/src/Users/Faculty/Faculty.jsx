@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import jsPDF from "jspdf";
 import autoTable from 'jspdf-autotable';
 import { FaThLarge, FaCheckCircle, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaEdit, FaUser, FaUniversity, FaCheck, FaTimes, FaFilter } from "react-icons/fa";
-import { collection, getDocs ,query, where, onSnapshot} from "firebase/firestore";
+import { collection, getDocs ,query, where, onSnapshot, updateDoc, doc} from "firebase/firestore";
 import { db } from '../../firebaseFile/firebaseConfig';
 import "./Faculty.css";
 import { Loading } from "../../Loading/Loading";
@@ -113,22 +113,72 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
   }, [userData?.faculty_id]); 
 
     //----------------------dutyleaveapplications------------------
+    const fetchDutyLeaves = async () => {
+      try {
+        const q = query(collection(db, "Dutyleave"), where("status", "==", "pending"));
+        const querySnapshot = await getDocs(q);
+        const applications = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setDutyLeaveApplications(applications);
+      } catch (error) {
+        console.error("Error fetching pending duty leave applications:", error);
+      }
+    };
     useEffect(() => {
-      const fetchDutyLeaves = async () => {
-        try {
-          const querySnapshot = await getDocs(collection(db, "Dutyleave"));
-          const applications = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setDutyLeaveApplications(applications);
-        } catch (error) {
-          console.error("Error fetching duty leave applications:", error);
-        }
-      };
-  
+      
+      
+
       fetchDutyLeaves();
     }, []);
+    const handleApprove = async () => {
+      if (!selectedApplication) return;
+    
+      try {
+        const applicationRef = doc(db, "Dutyleave", selectedApplication.id);
+        await updateDoc(applicationRef, {
+          status: "Approved",
+        });
+    
+        const facultyName = selectedApplication.facultyName || "HOD";
+        alert(`Approved application for ${selectedApplication.studentName}. Forwarded to ${facultyName}.`);
+    
+        // Refresh applications after approval
+        fetchDutyLeaves(); 
+    
+        handleClosePopup();
+      } catch (error) {
+        console.error("Error approving duty leave:", error);
+      }
+    };
+
+    // Reject function: Updates the pending field to "Rejected" and adds a rejection reason
+const handleReject = async () => {
+  if (!selectedApplication) return;
+
+  if (!rejectionReason) {
+    alert("Please provide a reason for rejection.");
+    return;
+  }
+
+  try {
+    const applicationRef = doc(db, "Dutyleave", selectedApplication.id);
+    await updateDoc(applicationRef, {
+      status: "Rejected",
+      rejectionReason: rejectionReason,
+    });
+
+    alert(`Rejected application for ${selectedApplication.studentName}. Reason: ${rejectionReason}`);
+
+    // Refresh applications after rejection
+     fetchDutyLeaves(); 
+
+    handleClosePopup();
+  } catch (error) {
+    console.error("Error rejecting duty leave:", error);
+  }
+};
     //--------------------------------------------------------------
   const handleSemesterReportClick = () => {
     setShowSemesterPopup(true);
@@ -623,20 +673,16 @@ export const Faculty = ({ token, userData: initialUserData, onLogout }) => {
     setRejectionReason("");
   };
 
-  const handleApprove = () => {
-    const facultyName = selectedApplication.facultyName || "HOD";
-    alert(`Approved application for ${selectedApplication.studentName}. Forwarded to ${facultyName}.`);
-    handleClosePopup();
-  };
+  
 
-  const handleReject = () => {
-    if (!rejectionReason) {
-      alert("Please provide a reason for rejection.");
-      return;
-    }
-    alert(`Rejected application for ${selectedApplication.studentName}. Reason: ${rejectionReason}`);
-    handleClosePopup();
-  };
+  // const handleReject = () => {
+  //   if (!rejectionReason) {
+  //     alert("Please provide a reason for rejection.");
+  //     return;
+  //   }
+  //   alert(`Rejected application for ${selectedApplication.studentName}. Reason: ${rejectionReason}`);
+  //   handleClosePopup();
+  // };
 
   if (!userData) {
     return <Loading />;
