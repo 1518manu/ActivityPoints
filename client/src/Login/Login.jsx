@@ -54,7 +54,7 @@ export function LoginPage({ onLoginSuccess }) {
             setTimeout(() => {
               switch (role) {
                 case "admin":
-                  navigate("/AdminDashboard");
+                  navigate("/Admin");
                   break;
                 case "Faculty":
                   navigate("/FacultyDashboard");
@@ -66,10 +66,6 @@ export function LoginPage({ onLoginSuccess }) {
                   navigate("/StudentDashboard");
                   console.log("Student nav");
                   break;
-                case "Admin":
-                    navigate("/Admin");
-                    console.log("Admin nav");
-                    break;
                 default:
                   showNotification("User role not found!", "error");
                   console.log("User role not found!");
@@ -126,7 +122,7 @@ const handleGoogleSignIn = async (e) => {
           switch (role) {
             case "admin":
               console.log("Admin role found!");
-              navigate("/AdminDashboard");
+              navigate("/Admin");
               break;
             case "faculty":
               console.log("Faculty role found!");
@@ -140,10 +136,6 @@ const handleGoogleSignIn = async (e) => {
               console.log("Student role found!");
               navigate("/StudentDashboard");
               break;
-            case "Admin":
-                console.log("Admin nav");
-                navigate("/Admin");
-                break;
             default:
               showNotification("User role not found!", "error");
               console.log("User role not found!");
@@ -206,7 +198,7 @@ const handleSubmit = async (e) => {
           switch (role) {
             case "admin":
               console.log("Admin role found!");
-              navigate("/AdminDashboard");
+              navigate("/Admin");
               break;
             case "Faculty":
               console.log("Faculty role found!");
@@ -220,10 +212,6 @@ const handleSubmit = async (e) => {
               console.log("Student role found!");
               navigate("/StudentDashboard");
               break; 
-            case "Admin":
-              console.log("Admin nav");
-              navigate("/Admin");
-              break;
             default:
               showNotification("User role not found!", "error");
               console.log("User role not found!");
