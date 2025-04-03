@@ -99,10 +99,10 @@ export const Admin = ({ token, userData: initialUserData, onLogout }) => {
     fetchAllData();
   }, [token, initialUserData?.email, navigate]);
   useEffect(() => {
-    if (!userData?.faculty_id) return; // Ensure faculty_id is available
+    if (!userData?.Admin_id) return; // Ensure Admin_id is available
   
     const notificationsRef = collection(db, "Notifications");
-    const q = query(notificationsRef, where("user_id", "==", userData.faculty_id)); 
+    const q = query(notificationsRef, where("user_id", "==", userData.Admin_id)); 
   
     const unsubscribe = onSnapshot(q, (snapshot) => {
       console.log(snapshot.docs);
@@ -110,7 +110,7 @@ export const Admin = ({ token, userData: initialUserData, onLogout }) => {
     });
   
     return () => unsubscribe();
-  }, [userData?.faculty_id]); 
+  }, [userData?.Admin_id]); 
 
     //----------------------dutyleaveapplications------------------
     const fetchDutyLeaves = async () => {
@@ -141,8 +141,8 @@ export const Admin = ({ token, userData: initialUserData, onLogout }) => {
           status: "Approved",
         });
     
-        const facultyName = selectedApplication.facultyName || "HOD";
-        alert(`Approved application for ${selectedApplication.studentName}. Forwarded to ${facultyName}.`);
+        const AdminName = selectedApplication.AdminName || "HOD";
+        alert(`Approved application for ${selectedApplication.studentName}. Forwarded to ${AdminName}.`);
     
         // Refresh applications after approval
         fetchDutyLeaves(); 
@@ -661,7 +661,7 @@ const handleReject = async () => {
 
   const onValidate = () => { navigate("/Validate"); }
   const onStudentList = () => { navigate("/StudentList"); }
-  const onNotification = () => { navigate("/Notification-faculty"); }
+  const onNotification = () => { navigate("/Notification-Admin"); }
   const onFilter = () => { navigate("/filter"); }
 
   const handleViewApplication = (application) => {
@@ -703,89 +703,89 @@ const handleReject = async () => {
   //   setRejectionReason("");
   // };
   return (
-    <div className="container-faculty">
-      <header className="header-faculty">
-        <div className="header-left-faculty">
-          <div className="logo-container-faculty">
+    <div className="container-Admin">
+      <header className="header-Admin">
+        <div className="header-left-Admin">
+          <div className="logo-container-Admin">
             <img src="/api/placeholder/100/40" alt="Logo" className="logo" />
           </div>
         </div>
-        <div className="header-right-faculty">
+        <div className="header-right-Admin">
           <button className="business-btn" onClick={onLogout}>Logout</button>
         </div>
       </header>
 
-      <div className="main-content-faculty">
-        <div className="sidebar-menu-faculty">
-          <button onClick={onValidate}><FaCheckCircle className="menu-icon-faculty" /> Validate</button>
-          <button onClick={onStudentList}><FaThLarge className="menu-icon-faculty" /> Student List</button>
-          <button><FaCalendarAlt className="menu-icon-faculty" /> Events <span className="badge">new</span></button>
-          <button  onClick={onNotification}> <FaBell   className="menu-icon-faculty" /> Notifications  {notificationCount > 0 && <span className="badge">{notificationCount}</span>}</button>
-          <button  onClick={onFilter}> <FaFilter   className="menu-icon-faculty" /> Filter  </button>
-          <button><FaCog className="menu-icon-faculty" /> Settings</button>
+      <div className="main-content-Admin">
+        <div className="sidebar-menu-Admin">
+          <button onClick={onValidate}><FaCheckCircle className="menu-icon-Admin" /> Validate</button>
+          <button onClick={onStudentList}><FaThLarge className="menu-icon-Admin" /> Student List</button>
+          <button><FaCalendarAlt className="menu-icon-Admin" /> Events <span className="badge">new</span></button>
+          <button  onClick={onNotification}> <FaBell   className="menu-icon-Admin" /> Notifications  {notificationCount > 0 && <span className="badge">{notificationCount}</span>}</button>
+          <button  onClick={onFilter}> <FaFilter   className="menu-icon-Admin" /> Filter  </button>
+          <button><FaCog className="menu-icon-Admin" /> Settings</button>
           <button onClick={onLogout} style={{ color: "#df0000" }}>
-            <FaSignOutAlt className="menu-icon-faculty" /> Logout
+            <FaSignOutAlt className="menu-icon-Admin" /> Logout
           </button>
         </div>
 
-        <div className="profile-content-faculty">
-          <div className="profile-banner-faculty">
-            <div className="banner-background-faculty"></div>
-            <div className="edit-button-faculty">
+        <div className="profile-content-Admin">
+          <div className="profile-banner-Admin">
+            <div className="banner-background-Admin"></div>
+            <div className="edit-button-Admin">
               <FaEdit style={{ color: "#ccc", fontSize: "15px", margin: "5px", fontWeight: "100" }}/>
             </div>
           </div>
 
-          <div className="profile-details-faculty">
-            <div className="profile-header-faculty">
-              <div className="profile-pic-container-faculty">
+          <div className="profile-details-Admin">
+            <div className="profile-header-Admin">
+              <div className="profile-pic-container-Admin">
                <FaUser style={{ color: "#ccc", fontSize: "40px", margin: "5px", fontWeight: "100" }} />
               </div>
-              <div className="profile-header-info-faculty">
+              <div className="profile-header-info-Admin">
                 <h2>{userData?.name || "N/A"}</h2>
-                <div className="profile-username-faculty">{userData?.faculty_id || "unknown"}</div>
-                <div className="profile-username-faculty">
-                  {userData?.faculty_type + " | " || "unknown"} {userData?.email || "N/A"}
+                <div className="profile-username-Admin">{userData?.Admin_id || "unknown"}</div>
+                <div className="profile-username-Admin">
+                  {userData?.Admin_type + " | " || "unknown"} {userData?.email || "N/A"}
                 </div>
-                <div className="profile-education-faculty">
-                  <FaUniversity className="university-icon-faculty" />
+                <div className="profile-education-Admin">
+                  <FaUniversity className="university-icon-Admin" />
                   <span>{userData?.college || "N/A"}</span>
                 </div>
               </div>
             </div>
             
-            <div className="section-container-faculty">
-              <div className="section-header-faculty">
+            <div className="section-container-Admin">
+              <div className="section-header-Admin">
                 <h3>WORKS</h3>
               </div>
-              <div className="boxes-container-faculty">
-                <div className="box-faculty box1">
+              <div className="boxes-container-Admin">
+                <div className="box-Admin box1">
                   <p>Total Students: {students.length}</p>
                 </div>
-                <div className="box-faculty box2">
+                <div className="box-Admin box2">
                   <p>Pending Validation: {certificates.filter(c => c.status === "pending").length}</p>
                 </div>
-                <div className="box-faculty box3">
+                <div className="box-Admin box3">
                   <p>Approved Certificates: {certificates.filter(c => c.status === "approved").length}</p>
                 </div>
               </div>
             </div>
 
-            <div className="section-container-faculty">
-              <div className="section-header-faculty">
+            <div className="section-container-Admin">
+              <div className="section-header-Admin">
                 <h3>Generate Report</h3>
                 <p>Analysis based on student performance semester-wise or year-wise</p>
               </div>
-              <div className="buttons-container-faculty">
+              <div className="buttons-container-Admin">
                 <button 
-                  className="report-button-faculty" 
+                  className="report-button-Admin" 
                   onClick={handleSemesterReportClick}
                   disabled={loading}
                 >
                   {loading ? "Loading..." : "Semester-wise Report"}
                 </button>
                 <button 
-                  className="report-button-faculty" 
+                  className="report-button-Admin" 
                   onClick={handleYearReportClick}
                   disabled={loading}
                 >
@@ -794,14 +794,14 @@ const handleReject = async () => {
               </div>
             </div>
               
-            <div className="section-container-faculty">
+            <div className="section-container-Admin">
       <h3>Duty-Leave Applications</h3>
       {dutyLeaveApplications.length > 0 ? (
         dutyLeaveApplications.map((app) => (
-          <div key={app.id} className="application-card-faculty">
+          <div key={app.id} className="application-card-Admin">
             <p><strong>Name:</strong> {app.studentName}</p>
             <p><strong>Roll No:</strong> {app.rollNo}</p>
-            <button className="view-button-faculty" onClick={() => handleViewApplication(app)}>
+            <button className="view-button-Admin" onClick={() => handleViewApplication(app)}>
               View Application
             </button>
           </div>
@@ -812,8 +812,8 @@ const handleReject = async () => {
 
       {/* Popup for detailed view */}
       {selectedApplication && (
-        <div className="popup-overlay-faculty">
-          <div className="popup-content-faculty">
+        <div className="popup-overlay-Admin">
+          <div className="popup-content-Admin">
             <h3>Application Details</h3>
             <p><strong>Name:</strong> {selectedApplication.studentName}</p>
             <p><strong>Roll No:</strong> {selectedApplication.rollNo}</p>
@@ -826,7 +826,7 @@ const handleReject = async () => {
               </a>
             </p>
 
-            <div className="rejection-reason-faculty">
+            <div className="rejection-reason-Admin">
               <label>Rejection Reason (if applicable):</label>
               <textarea
                 value={rejectionReason}
@@ -835,14 +835,14 @@ const handleReject = async () => {
               />
             </div>
 
-            <div className="popup-actions-faculty">
-              <button className="approve-btn-faculty" onClick={() => handleApprove(selectedApplication.id)}>
+            <div className="popup-actions-Admin">
+              <button className="approve-btn-Admin" onClick={() => handleApprove(selectedApplication.id)}>
                 <FaCheck /> Approve
               </button>
-              <button className="reject-btn-faculty" onClick={() => handleReject(selectedApplication.id)}>
+              <button className="reject-btn-Admin" onClick={() => handleReject(selectedApplication.id)}>
                 <FaTimes /> Reject
               </button>
-              <button className="close-btn-faculty" onClick={handleClosePopup}>
+              <button className="close-btn-Admin" onClick={handleClosePopup}>
                 Close
               </button>
             </div>
@@ -852,8 +852,8 @@ const handleReject = async () => {
     </div>
 
             {showSemesterPopup && (
-              <div className="popup-overlay-faculty">
-                <div className="popup-content-faculty" style={{ maxWidth: "500px" }}>
+              <div className="popup-overlay-Admin">
+                <div className="popup-content-Admin" style={{ maxWidth: "500px" }}>
                   <h3>Select Semesters to Generate Reports</h3>
                   <p>Check the semesters you want to generate reports for:</p>
                   
@@ -878,9 +878,9 @@ const handleReject = async () => {
                     })}
                   </div>
 
-                  <div className="popup-actions-faculty" style={{ justifyContent: 'space-between' }}>
+                  <div className="popup-actions-Admin" style={{ justifyContent: 'space-between' }}>
                     <button 
-                      className="close-btn-faculty" 
+                      className="close-btn-Admin" 
                       onClick={() => {
                         setShowSemesterPopup(false);
                         setSelectedSemesters([]);
@@ -889,7 +889,7 @@ const handleReject = async () => {
                       Cancel
                     </button>
                     <button 
-                      className="generate-btn-faculty"
+                      className="generate-btn-Admin"
                       onClick={handleGenerateSelectedReports}
                       disabled={selectedSemesters.length === 0}
                     >
@@ -901,8 +901,8 @@ const handleReject = async () => {
             )}
 
             {showYearPopup && (
-              <div className="popup-overlay-faculty">
-                <div className="popup-content-faculty" style={{ maxWidth: "500px" }}>
+              <div className="popup-overlay-Admin">
+                <div className="popup-content-Admin" style={{ maxWidth: "500px" }}>
                   <h3>Select Academic Years to Generate Reports</h3>
                   <p>Check the years you want to generate reports for:</p>
                   
@@ -927,9 +927,9 @@ const handleReject = async () => {
                     })}
                   </div>
 
-                  <div className="popup-actions-faculty" style={{ justifyContent: 'space-between' }}>
+                  <div className="popup-actions-Admin" style={{ justifyContent: 'space-between' }}>
                     <button 
-                      className="close-btn-faculty" 
+                      className="close-btn-Admin" 
                       onClick={() => {
                         setShowYearPopup(false);
                         setSelectedYears([]);
@@ -938,7 +938,7 @@ const handleReject = async () => {
                       Cancel
                     </button>
                     <button 
-                      className="generate-btn-faculty"
+                      className="generate-btn-Admin"
                       onClick={handleGenerateSelectedYearReports}
                       disabled={selectedYears.length === 0}
                     >
