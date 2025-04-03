@@ -66,6 +66,10 @@ export function LoginPage({ onLoginSuccess }) {
                   navigate("/StudentDashboard");
                   console.log("Student nav");
                   break;
+                case "Admin":
+                    navigate("/Admin");
+                    console.log("Admin nav");
+                    break;
                 default:
                   showNotification("User role not found!", "error");
                   console.log("User role not found!");
@@ -135,7 +139,11 @@ const handleGoogleSignIn = async (e) => {
             case "Students":
               console.log("Student role found!");
               navigate("/StudentDashboard");
-              break; 
+              break;
+            case "Admin":
+                console.log("Admin nav");
+                navigate("/Admin");
+                break;
             default:
               showNotification("User role not found!", "error");
               console.log("User role not found!");
@@ -212,6 +220,10 @@ const handleSubmit = async (e) => {
               console.log("Student role found!");
               navigate("/StudentDashboard");
               break; 
+            case "Admin":
+              console.log("Admin nav");
+              navigate("/Admin");
+              break;
             default:
               showNotification("User role not found!", "error");
               console.log("User role not found!");
