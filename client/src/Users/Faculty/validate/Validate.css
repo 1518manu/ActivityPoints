@@ -108,22 +108,7 @@
     background-color: #ede8e8;
   }
   
-  /* Profile Content */
-  .profile-content-validate {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-  }
-  
-  /* Profile Banner */
-  .profile-banner-validate {
-    position: relative;
-    height: 180px;
-    background-color: #2ba1a5;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 60px;
-  }
+ 
   
   .edit-button-validate {
     position: absolute;
@@ -138,321 +123,388 @@
     justify-content: center;
     cursor: pointer;
   }
-  
-  /* Profile Details */
-  .profile-details-validate {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-  }
-  
-  .profile-header-validate {
-    display: flex;
-    padding: 20px;
-    border-bottom: 1px solid #e0e0e0;
-    position: relative;
-  }
-  
-  .profile-pic-container-validate {
-    border-radius: 50%;
-    position: relative;
-    border: 2px solid #1e67af;
-    margin-right: 20px;
-    width: 100px;
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .profile-header-info-validate h2 {
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 5px;
-  }
-  
-  .profile-username-validate {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 5px;
-  }
-  
-  .profile-contact-validate {
-    display: flex;
-    gap: 15px;
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 5px;
-  }
-  
-  .profile-education-validate {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    color: #666;
-  }
-  
-  /* Section Container */
-  .section-container-validate {
-    padding: 20px;
-    border-bottom: 1px solid #e0e0e0;
-  }
-  
-  .section-header-validate h3 {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 15px;
-  }
-  
-  /* Student List */
-  .student-list-validate {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .student-card-validate {
-    background-color: #f9f9f9;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .student-card-validate:hover {
-    background-color: #ede8e8;
-  }
-  
-  /* Certificate List */
-  .certificate-list-validate {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .certificate-card-validate {
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .actions-validate {
-    margin-top: 10px;
-  }
-  
-  .approve-btn, .reject-btn-validate {
-    margin-right: 10px;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  
-  .approve-btn-validate {
-    background-color: #4caf50;
-    color: white;
-  }
-  
-  .reject-btn-validate {
-    background-color: #f44336;
-    color: white;
-  }
-  
-  .approve-btn-validate:hover {
-    background-color: #45a049;
-  }
-  
-  .reject-btn-validate:hover {
-    background-color: #d32f2f;
-  }
-  
-  /* Reject Popup */
-  .reject-popup-validate {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    z-index: 999;
-  }
-  
-  .reject-popup-validate h3 {
-    margin-bottom: 10px;
-  }
-  
-  .reject-popup-validate textarea {
-    width: 100%;
-    height: 100px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 10px;
-    font-size: 14px;
-  }
-  
-  .popup-buttons-validate {
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .popup-buttons-validate button {
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .popup-buttons-validate button:hover {
-    opacity: 0.8;
-  }
-  
-  .popup-buttons-validate .cancel-btn-validate {
-    background-color: #e0e0e0;
-    color: #333;
-  }
-  
-  .popup-buttons-validate .confirm-btn-validate {
-    background-color: #f44336;
-    color: white;
-  }
-  
-  /* Overall layout */
-  .container-validate {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-  
-  .main-content-validate {
-    display: flex;
-    flex: 1;
-    padding: 20px;
-  }
-  
-  .sidebar-menu-validate {
-    width: 200px;
-    padding: 10px;
-    border-right: 1px solid #e0e0e0;
-  }
-  
-  .profile-content-validate {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .student-certificates-container-validate {
-    display: flex;
-    gap: 30px;
-  }
-  
-  /* Student List */
-  .student-list-container-validate {
-    flex: 1;
-  }
-  
-  .student-list-validate {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .student-card-validate {
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .student-card-validate:hover, .student-card.selected-validate {
-    background-color: #b7acac;
-  }
-  
-  /* Certificates List */
-  .certificate-list-container-validate {
-    flex: 2;
-  }
-  
-  .certificate-list-validate {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .certificate-card-validate {
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .actions-validate button {
-    margin-right: 10px;
-  }
-  
-  .approve-btn, .reject-btn-validate {
-    padding: 8px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .approve-btn-validate {
-    background-color: green;
-    color: white;
-  }
-  
-  .reject-btn-validate {
-    background-color: red;
-    color: white;
-  }
-  
-  .reject-popup-validate {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-  }
-  
-  .reject-popup-validate textarea {
-    width: 100%;
-    height: 100px;
-    margin-bottom: 10px;
-  }
-  
-  .popup-buttons-validate button{
-    margin-right: 10px;
-  }
-  
-  /* File View */
-  .certificate-file-container-validate {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 500px;
-    background-color: #f1f1f1;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    margin-top: 10px;
-  }
-  
-  .certificate-file-container-validate  iframe{
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-  
-  .certificate-file-container-validate  img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  }
-  
+
+  /* Validation Container */
+.validation-container {
+  display: flex;
+  height: calc(100vh - 180px);
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+/* Students List (1/3) */
+.students-list-container {
+  width: 33.33%;
+  border-right: 1px solid #eaeaea;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.section-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.section-header h3 {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  margin: 0 0 0.3rem 0;
+}
+
+.subtitle {
+  color: #7f8c8d;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.students-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.student-card {
+  border-radius: 6px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: white;
+  border: 1px solid #eaeaea;
+}
+
+.student-card:hover {
+  background-color: #f8f9fa;
+}
+
+.student-card.active {
+  background-color: #e3f2fd;
+  border-color: #90caf9;
+}
+
+.student-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.student-avatar {
+  position: relative;
+}
+
+.student-icon {
+  font-size: 1.8rem;
+  color: #3498db;
+}
+
+.student-avatar .badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #e74c3c;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+}
+
+.student-details {
+  flex: 1;
+}
+
+.student-details h4 {
+  margin: 0 0 4px 0;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.student-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #7f8c8d;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.student-meta span {
+  display: flex;
+  align-items: center;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #95a5a6;
+  text-align: center;
+}
+
+.empty-state p {
+  margin: 0.5rem 0 0 0;
+}
+
+/* Certificates Container (2/3) */
+.certificates-container {
+  width: 66.66%;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.certificate-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.certificate-card {
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+}
+
+.certificate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.certificate-header h4 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+
+
+.certificate-details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.detail-row {
+  display: flex;
+  gap: 8px;
+}
+
+.detail-label {
+  font-weight: 500;
+  color: #34495e;
+}
+
+.certificate-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.view-btn {
+  background: none;
+  border: none;
+  color: #3498db;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.85rem;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.view-btn:hover {
+  background-color: #ebf5fb;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.approve-btn {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.2s;
+}
+
+.approve-btn:hover {
+  background-color: #27ae60;
+}
+
+.reject-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.2s;
+}
+
+.reject-btn:hover {
+  background-color: #c0392b;
+}
+
+/* Popup Styles */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.points-popup, .reject-popup {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  width: 450px;
+  max-width: 90%;
+  padding: 1.5rem;
+}
+
+.points-popup h3, .reject-popup h3 {
+  margin-top: 0;
+  color: #2c3e50;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.popup-content {
+  margin-bottom: 1.5rem;
+}
+
+.points-input-container {
+  margin-top: 1rem;
+}
+
+.points-input-container label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #34495e;
+  font-weight: 500;
+}
+
+.points-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.reject-popup textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.confirm-btn {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.confirm-btn:hover {
+  background-color: #27ae60;
+}
+
+.cancel-btn {
+  background-color: #95a5a6;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.cancel-btn:hover {
+  background-color: #7f8c8d;
+}
+
+.empty-state .empty-icon {
+  font-size: 2.5rem;
+  color: #bdc3c7;
+  margin-bottom: 1rem;
+}
+
+.empty-state h4 {
+  color: #7f8c8d;
+  margin: 0 0 0.5rem 0;
+}
+
+
+
+.scrollable-list {
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 5px; /* Add some space for scrollbar */
+}
+
+/* Custom scrollbar styling */
+.scrollable-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.scrollable-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.scrollable-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
