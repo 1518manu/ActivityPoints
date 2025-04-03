@@ -14,7 +14,7 @@ import { Validate } from "./Users/Faculty/validate/Validate";
 import { StudentList } from "./Users/Faculty/StudentList/StudentList";
 import { NotificationPageStudent } from "./Users/Student/Notification/NotificationStudent";
 import { NotificationPageFaculty } from "./Users/Faculty/Notification/NotificationFaculty";
-import {FilterStudent} from "./Users/Faculty/Filter/FilterStudent"
+import { FilterStudent } from "./Users/Faculty/Filter/FilterStudent"
 import { DutyLeaveForm } from "./Users/Student/DutyLeave/DutyLeaveStudent";
 import { Admin } from "./Users/Admin/Admin"
 import "./App.css";
