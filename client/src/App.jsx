@@ -21,6 +21,8 @@ import { FilterStudent } from "./Users/Faculty/Filter/FilterStudent";
 
 import { Admin } from "./Users/Admin/Admin"
 import { StudentListAdmin } from "./Users/Admin/StudentListAdmin/StudentListAdmin";
+import { AddStudent } from "./Users/Admin/AddStudent/AddStudent";
+
 import "./App.css";
 
 

@@ -1,29 +1,142 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {  FaCheckCircle, FaCog, 
-         FaCalendarAlt, FaBell, FaSignOutAlt, 
-         FaUser, FaUserTie, FaTimes,
-         FaFilter} from 'react-icons/fa';
-import { db } from '../../../firebaseFile/firebaseConfig'; 
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { FaUserTie, FaCog, FaSignOutAlt, FaCheckCircle, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { db } from '../../../firebaseFile/firebaseConfig';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import './AddStudent.css';
-
-const getColor = (point) => {
-  if (point <= 40) return 'red'; 
-  if (point >= 75) return 'green'; 
-  return 'blue';
-};
 
 export const AddStudent = ({ token, userData, onLogout }) => {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    phone: '',
+    adm_no: '',
+    rollNo: '',
+    class: '',
+    dept: '',
+    college: 'TKM College of Engineering, Kerala',
+    about: '',
+    point: 0,
+    mentor: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
+  const toggleShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
-  useEffect(() => {
-    if (!token) navigate("/");
-    fetchStudents();
-  }, [token, navigate]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      // Validate form data
+      if (!formData.email.endsWith('@tkmce.ac.in')) {
+        throw new Error('Only TKMCE email addresses are allowed');
+      }
+
+      if (formData.password !== formData.confirmPassword) {
+        throw new Error('Passwords do not match');
+      }
+
+      if (formData.password.length < 6) {
+        throw new Error('Password must be at least 6 characters');
+      }
+
+      // Step 1: Create authentication user
+      const auth = getAuth();
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      const uid = userCredential.user.uid;
+
+      // Step 2: Add to Users collection
+      const userDoc = {
+        UID: uid,
+        name: formData.name.toUpperCase(),
+        email: formData.email,
+        phone: formData.phone,
+        college: formData.college,
+        role: "Students",
+        rollNo: formData.rollNo,
+        point: Number(formData.point),
+        createdAt: serverTimestamp()
+      };
+
+      await addDoc(collection(db, "Users"), userDoc);
+
+      // Step 3: Add to Students collection
+      const studentDoc = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        adm_no: Number(formData.adm_no),
+        rollNo: formData.rollNo,
+        class: formData.class,
+        dept: formData.dept,
+        college: formData.college,
+        about: formData.about,
+        point: Number(formData.point),
+        mentor: formData.mentor,
+        createdAt: serverTimestamp()
+      };
+
+      await addDoc(collection(db, "Students"), studentDoc);
+
+      setSuccess('Student added successfully!');
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        phone: '',
+        adm_no: '',
+        rollNo: '',
+        class: '',
+        dept: '',
+        college: 'TKM College of Engineering, Kerala',
+        about: '',
+        point: 0,
+        mentor: ''
+      });
+
+    } catch (err) {
+      console.error("Error adding student:", err);
+      setError(err.message || 'Failed to add student');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!token) {
+    navigate("/");
+    return null;
+  }
 
   return (
     <div className="container">
@@ -40,18 +153,206 @@ export const AddStudent = ({ token, userData, onLogout }) => {
 
       <div className="main-content">
         <div className="sidebar-menu-faculty">
-        <button onClick={() => navigate("/Admin")}><FaUserTie className="menu-icon-faculty" /> Dashboard</button>
-          <button><FaCog className="menu-icon-faculty" /> Settings</button>
+          <button onClick={() => navigate("/Admin")}>
+            <FaUserTie className="menu-icon-faculty" /> Dashboard
+          </button>
+          <button>
+            <FaCog className="menu-icon-faculty" /> Settings
+          </button>
           <button onClick={onLogout} className="logout-btn">
             <FaSignOutAlt className="menu-icon-faculty" /> Logout
           </button>
         </div>
 
         <div className="profile-content">
+          <div className="student-form-container">
+            <h2>Add New Student</h2>
+            
+            {error && <div className="error-message">{error}</div>}
+            {success && (
+              <div className="success-message">
+                <FaCheckCircle /> {success}
+              </div>
+            )}
 
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-      </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Email</label>
+                  <input
+                    type="email"
+                    placeholder="@tkmce.ac.in"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
 
+              <div className="form-row">
+                <div className="form-group password-field">
+                  <label>Password</label>
+                  <div className="password-input-container">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                      minLength="6"
+                    />
+                    <button 
+                      type="button" 
+                      className="toggle-password"
+                      onClick={toggleShowPassword}
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="form-group password-field">
+                  <label>Confirm Password</label>
+                  <div className="password-input-container">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      required
+                      minLength="6"
+                    />
+                    <button 
+                      type="button" 
+                      className="toggle-password"
+                      onClick={toggleShowConfirmPassword}
+                    >
+                      {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Phone Number</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Admission Number</label>
+                  <input
+                    type="number"
+                    name="adm_no"
+                    value={formData.adm_no}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Roll Number</label>
+                  <input
+                    type="text"
+                    name="rollNo"
+                    value={formData.rollNo}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Class</label>
+                  <input
+                    type="text"
+                    name="class"
+                    value={formData.class}
+                    onChange={handleChange}
+                    placeholder="eg: R6B"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Department</label>
+                  <select
+                    name="dept"
+                    value={formData.dept}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Select Department</option>
+                    <option value="CS">Computer Science</option>
+                    <option value="EC">Electronics</option>
+                    <option value="ME">Mechanical</option>
+                    <option value="EE">Electrical</option>
+                    <option value="CE">Civil</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Mentor ID</label>
+                  <input
+                    type="text"
+                    name="mentor"
+                    value={formData.mentor}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Initial Points</label>
+                <input
+                  type="number"
+                  name="point"
+                  value={formData.point}
+                  onChange={handleChange}
+                  min="0"
+                  max="100"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>About</label>
+                <textarea
+                  name="about"
+                  value={formData.about}
+                  onChange={handleChange}
+                  rows="4"
+                />
+              </div>
+
+              <button type="submit" disabled={loading} className="submit-btn">
+                {loading ? 'Adding...' : 'Add Student'}
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
