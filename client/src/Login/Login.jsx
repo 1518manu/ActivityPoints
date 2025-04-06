@@ -122,7 +122,7 @@ const handleGoogleSignIn = async (e) => {
         // Redirect to the appropriate dashboard based on the role
         setTimeout(() => {
           switch (role) {
-            case "admin":
+            case "Admin":
               console.log("Admin role found!");
               navigate("/Admin");
               break;
@@ -198,7 +198,7 @@ const handleSubmit = async (e) => {
         
         setTimeout(() => {
           switch (role) {
-            case "admin":
+            case "Admin":
               console.log("Admin role found!");
               navigate("/Admin");
               break;

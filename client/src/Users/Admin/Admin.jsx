@@ -97,7 +97,7 @@ export const Admin = ({ token, userData: initialUserData, onLogout }) => {
               </div>
               <div className="profile-header-info-Admin">
                 <h2>{userData?.name || "N/A"}</h2>
-                <div className="profile-username-Admin">{userData?.user_id || "unknown"}</div>
+                <div className="profile-username-Admin">{userData?.faculty_id || "unknown"}</div>
                 <div className="profile-username-Admin">
                   {userData?.Admin_type + " | " || "unknown"} {userData?.email || "N/A"}
                 </div>
