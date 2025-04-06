@@ -13,7 +13,7 @@ export const Admin = ({ token, userData: initialUserData, onLogout }) => {
 
   const navigate = useNavigate();
 
-  const onStudentList = () => { navigate("/StudentList"); }
+  const onStudentList = () => { navigate("/StudentListAdmin"); }
 
   useEffect(() => {
     if (!token) {

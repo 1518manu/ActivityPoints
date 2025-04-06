@@ -25,7 +25,7 @@ export const StudentListAdmin = ({ token, userData, onLogout }) => {
     try {
       const userDataString = localStorage.getItem('userData'); 
       const dept = userDataString ? JSON.parse(userDataString).dept : null;
-
+      console.log("Department:", dept);
       const viewStudents = query(
         collection(db, "Students"),
         where("dept", "==", dept)
@@ -34,6 +34,7 @@ export const StudentListAdmin = ({ token, userData, onLogout }) => {
       const studDoc = await getDocs(viewStudents);
       const studDataArray = studDoc.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setStudents(studDataArray);
+      console.log("Students:", studDataArray);
     } catch (error) {
       console.error("Error fetching students:", error);
     }
@@ -89,17 +90,7 @@ export const StudentListAdmin = ({ token, userData, onLogout }) => {
 
       <div className="main-content">
         <div className="sidebar-menu-faculty">
-        <button onClick={() => navigate("/FacultyDashboard")}><FaUserTie className="menu-icon-faculty" /> Dashboard</button>
-          <button onClick={() => navigate("/Validate")}>
-            <FaCheckCircle className="menu-icon-faculty" /> Validate
-          </button>
-          <button><FaCalendarAlt className="menu-icon-faculty" /> Events <span className="badge">new</span></button>
-          <button onClick={() => navigate("/Notification-faculty")}>
-            <FaBell className="menu-icon-faculty" /> Notifications
-          </button>
-          <button onClick={() => navigate("/filter")}>
-            <FaFilter className="menu-icon-faculty" /> Filter & Sort
-          </button>
+        <button onClick={() => navigate("/Admin")}><FaUserTie className="menu-icon-faculty" /> Dashboard</button>
           <button><FaCog className="menu-icon-faculty" /> Settings</button>
           <button onClick={onLogout} className="logout-btn">
             <FaSignOutAlt className="menu-icon-faculty" /> Logout
