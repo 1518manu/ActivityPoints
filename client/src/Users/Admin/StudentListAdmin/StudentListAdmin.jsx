@@ -6,7 +6,7 @@ import {  FaCheckCircle, FaCog,
          FaFilter} from 'react-icons/fa';
 import { db } from '../../../firebaseFile/firebaseConfig'; 
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import './StudentList.css';
+import './StudentListAdmin.css';
 
 const getColor = (point) => {
   if (point <= 40) return 'red'; 
