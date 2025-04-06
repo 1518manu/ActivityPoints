@@ -177,6 +177,14 @@ function App() {
                   <StudentListAdmin token={token} userData={userData} onLogout={handleLogout} />
                 }
               />
+              
+              <Route
+                path = "/AddStudent"
+                element ={
+                  <AddStudent token={token} userData={userData} onLogout={handleLogout} />
+                }
+              />
+
             </Routes>
           </Router>
     </>

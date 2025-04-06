@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchUserData, fetchUserRole } from "../../Login/dataApi/userDataApi";
 import { useNavigate } from "react-router-dom";
-import { FaThLarge, FaCheckCircle, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaEdit, FaUser, FaUniversity, FaCheck, FaTimes, FaFilter } from "react-icons/fa";
+import { FaThLarge, FaCheckCircle, FaCog, FaPlus, FaCalendarAlt, FaBell, FaSignOutAlt, FaEdit, FaUser, FaUniversity, FaCheck, FaTimes, FaFilter } from "react-icons/fa";
 import { collection, getDocs ,query, where, onSnapshot, updateDoc, doc} from "firebase/firestore";
 import { db } from '../../firebaseFile/firebaseConfig';
 import { Loading } from "../../Loading/Loading";
@@ -14,6 +14,7 @@ export const Admin = ({ token, userData: initialUserData, onLogout }) => {
   const navigate = useNavigate();
 
   const onStudentList = () => { navigate("/StudentListAdmin"); }
+  const onAddStudent = () => { navigate("/AddStudent"); }
 
   useEffect(() => {
     if (!token) {
@@ -71,6 +72,7 @@ export const Admin = ({ token, userData: initialUserData, onLogout }) => {
           <button><FaCalendarAlt className="menu-icon-Admin" /> Events <span className="badge">new</span></button> */ }
           <button > <FaBell   className="menu-icon-Admin" /> Notifications  {/* notificationCount > 0 && <span className="badge">{notificationCount}</span> */} </button>
           <button> <FaFilter   className="menu-icon-Admin" /> Filter  </button>
+          <button onClick={onAddStudent}> <FaPlus    className="menu-icon-Admin" /> ADD Student  </button>
           <button><FaCog className="menu-icon-Admin" /> Settings</button>
           <button onClick={onStudentList}><FaThLarge className="menu-icon-Admin" /> Student List</button>
           <button onClick={onLogout} style={{ color: "#df0000" }}>
