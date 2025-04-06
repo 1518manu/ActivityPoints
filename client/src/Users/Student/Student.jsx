@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { FaFileAlt, FaEdit, FaUser, FaUniversity, FaUpload, FaThLarge, FaCog, FaCalendarAlt, FaBell , FaSignOutAlt } from "react-icons/fa"; 
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import { fetchUserData, fetchUserRole } from "../../Login/dataApi/userDataApi"
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { collection, query, where, onSnapshot ,getDocs} from "firebase/firestore";
 import { db } from "../../firebaseFile/firebaseConfig";
 import 'react-circular-progressbar/dist/styles.css';
 import './Student.css';
+import { use } from "react";
 
 const getColor = (point) => {
   if (point <= 40) {
@@ -23,10 +24,25 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
   const [progress, setProgress] = useState(0); 
   const [userData, setUserData] = useState(initialUserData);
   const [notificationCount, setNotificationCount] = useState(0);
+  const [dutyLeaveApplications, setDutyLeaveApplications] = useState([]);
   const navigate = useNavigate();
 
   console.log("Student Data:", userData);
   console.log("Token:", token);
+
+
+  const getStatusClass = (status) => {
+    switch (status?.toLowerCase()) {
+      case "approved":
+        return "text-green-600 bg-green-100 px-2 py-1 rounded-md";
+      case "pending":
+        return "text-blue-600 bg-blue-100 px-2 py-1 rounded-md";
+      case "rejected":
+        return "text-red-600 bg-red-100 px-2 py-1 rounded-md";
+      default:
+        return "text-gray-600 bg-gray-100 px-2 py-1 rounded-md"; // Default style
+    }
+  };
 
   useEffect(() => {
     if (!token) {
@@ -51,7 +67,33 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
     };
 
     fetchData();
+     // Fetch duty-leave applications
+    
   }, [token, initialUserData?.email, navigate]);
+
+  const fetchApplications = async () => {
+    if (!userData?.rollNo) return; // Ensure userData.rollNo is available
+
+    try {
+      const dutyLeaveRef = collection(db, "Dutyleave");
+      const q = query(dutyLeaveRef, where("rollNo", "==", userData.rollNo));
+      const querySnapshot = await getDocs(q);
+
+      const applications = querySnapshot.docs.map((doc, index) => ({
+        id: doc.id,
+        slNo: index + 1,
+        ...doc.data(),
+      }));
+
+      setDutyLeaveApplications(applications);
+    } catch (error) {
+      console.error("Error fetching duty-leave applications:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchApplications(); // Fetch applications when rollNo is available
+  }, [userData?.rollNo]); // Re-run when rollNo changes
   useEffect(() => {
     if (!userData?.rollNo) return;
 
@@ -61,10 +103,10 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
     const unsubscribe = onSnapshot(q, (snapshot) => {
       setNotificationCount(snapshot.size); // Update notification count
     });
-
+    
     return () => unsubscribe();
   }, [userData?.rollNo]);
-
+  
   const openUploadPage = () => navigate("/upload-certificate");
   const onCertificate = () => navigate("/certificate");
   const onNotification = () => navigate("/Notification");
@@ -163,24 +205,51 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
             </div>
 
             <div className="section-container">
-              <div className="section-header">
-                <h3>About</h3>
-              </div>
-              <p className="section-prompt">
-               {userData?.about || "Craft an engaging story in your bio and make meaningful connections with peers and recruiters alike!" } </p>
-              <button className="add-button">Add About</button>
-            </div>
+  <div className="section-header">
+    <h3>About</h3>
+  </div>
+  <p className="section-prompt">
+    {userData?.about || "Craft an engaging story in your bio and make meaningful connections with peers and recruiters alike!"}
+  </p>
+  <button className="add-button">Add About</button>
+</div>
 
-            <div className="section-container">
-              <div className="section-header">
-                <h3>Resume</h3>
-              </div>
-              <div className="resume-section">
-                <h4>Add your Resume & get your profile filled in a click!</h4>
-                <p>Adding your Resume helps you to tell who you are and what makes you different—to employers and recruiters</p>
-                <button className="upload-resume-btn">Upload Resume</button>
-              </div>
+{/* Duty-Leave Applications Section */}
+<div className="section-container">
+      <div className="section-header">
+        <h3>Duty-Leave Applications</h3>
+      </div>
+      {dutyLeaveApplications.length > 0 ? (
+        <div className="duty-leave-list">
+          {dutyLeaveApplications.map((app) => (
+            <div key={app.id} className="application-card-faculty p-4 border border-gray-300 rounded-lg shadow-md">
+              <p><strong>Sl. No:</strong> {app.slNo}</p>
+              <p><strong>Reason:</strong> {app.leaveReason}</p>
+              <p>
+                <strong>Status:</strong> 
+                <span className={`ml-2 font-semibold ${getStatusClass(app.status)}`}>
+                  {app.status}
+                </span>
+              </p>
             </div>
+          ))}
+        </div>
+      ) : (
+        <p>No duty-leave applications available.</p>
+      )}
+    </div>
+
+<div className="section-container">
+  <div className="section-header">
+    <h3>Resume</h3>
+  </div>
+  <div className="resume-section">
+    <h4>Add your Resume & get your profile filled in a click!</h4>
+    <p>Adding your Resume helps you to tell who you are and what makes you different—to employers and recruiters.</p>
+    <button className="upload-resume-btn">Upload Resume</button>
+  </div>
+</div>
+
           </div>
         </div>
       </div>
