@@ -109,24 +109,26 @@
 
 /* Modal popup */
 .notification-modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
+  position: absolute;
+  margin-top: 20px;
   transform: translate(-50%, -50%);
-  width:70%;
-  height: auto;
+  width: 70%;
+  max-height: 90vh;
   background: white;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
-  border:2px solid rgb(201, 198, 198);
+  border: 2px solid rgb(201, 198, 198);
   z-index: 1000;
   animation: fadeIn 0.3s ease-in-out;
 }
 
+
 /* Modal content */
 .notification-modal-content {
   text-align: left;
+  max-height: 80vh;
+  overflow-y: auto; 
 }
 .certificate-details h3 {
   color: #076fe5;
@@ -147,7 +149,7 @@
   position: absolute;
   border-radius: 0px 6px 0px 0px;
   padding: 0px 5px;
-  top: 0px;
+  margin-top: 0px;
   right: 0px;
   font-size: 30px;
 }
