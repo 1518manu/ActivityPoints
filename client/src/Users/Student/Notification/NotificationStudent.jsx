@@ -165,11 +165,10 @@ export const NotificationPageStudent = ({ token, userData, onLogout }) => {
             </button>
             <h2>{selectedNotification.title}</h2>
             <p><strong>Message:</strong> {selectedNotification.msg}</p>
-            <p className="date"><strong>Date:</strong> {selectedNotification.timestamp ? new Date(selectedNotification.timestamp).toLocaleString() : "N/A"}</p>
-
+            
             {/* Certificate Details */}
             {selectedCertificate && (
-              <div className="certificate-details">
+              <div className="certificate-details-s">
                 <h3>Certificate Details</h3>
                 
                 <iframe
@@ -230,6 +229,7 @@ export const NotificationPageStudent = ({ token, userData, onLogout }) => {
               </div>
             )}
           </div>
+          <p className="date"><strong>Date:</strong> {selectedNotification.timestamp ? new Date(selectedNotification.timestamp).toLocaleString() : "N/A"}</p>
         </div>
       )}
 

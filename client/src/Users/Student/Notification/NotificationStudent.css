@@ -1,11 +1,4 @@
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
 .notification-container1 {
   display: flex;
   height: 100vh;
@@ -130,14 +123,18 @@
   max-height: 80vh;
   overflow-y: auto; 
 }
-.certificate-details h3 {
+.certificate-details-s h3 {
   color: #076fe5;
+  margin-block: 30px;
+}
+.certificate-table {
+  margin-top: 40px;
 }
 .certificate-table tbody tr td{
   padding: 2px;
 }
 .date {
-  position: absolute;
+  position: relative;
   bottom: 4%;
   right:20px;
 }
