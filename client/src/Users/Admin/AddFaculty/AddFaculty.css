@@ -1,0 +1,321 @@
+/* ===== Main Layout Styles ===== */
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* ===== Header Styles ===== */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid #e0e0e0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .logo {
+    height: 2.5rem;
+    width: auto;
+  }
+  
+  
+  /* ===== Main Content Area ===== */
+  .main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+  
+  /* ===== Sidebar Navigation ===== */
+  .sidebar-menu-faculty {
+    width: 16rem;
+    background-color: #ffffff;
+    padding: 1.5rem 0;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .sidebar-menu-faculty button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background: none;
+    color: #5f6368;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+  }
+  
+  .sidebar-menu-faculty button:hover {
+    background-color: #f1f3f4;
+    color: #202124;
+  }
+  
+  .sidebar-menu-faculty button.active {
+    background-color: #e8f0fe;
+    color: #1a73e8;
+    border-left-color: #1a73e8;
+  }
+  
+  .menu-icon-faculty {
+    margin-right: 1rem;
+    font-size: 1.1rem;
+  }
+  
+  .logout-btn {
+    color: #d93025 !important;
+    margin-top: auto;
+  }
+  
+  .logout-btn:hover {
+    background-color: #fce8e6 !important;
+  }
+  
+  /* ===== Faculty Form Styles ===== */
+  .profile-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+  }
+  
+  .faculty-form-container {
+    max-width: 50rem;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
+  
+  .faculty-form-container h2 {
+    color: #202124;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #5f6368;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #dadce0;
+    border-radius: 0.25rem;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #1a73e8;
+    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+  }
+  
+  .form-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .form-row .form-group {
+    flex: 1;
+  }
+  
+  /* Password Field Styles */
+  .password-field {
+    position: relative;
+  }
+  
+  .password-input-container {
+    position: relative;
+  }
+  
+  .password-input-container input {
+    padding-right: 2.5rem;
+    width: 100%;
+  }
+  
+  .toggle-password {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #5f6368;
+    cursor: pointer;
+    padding: 0.25rem;
+    font-size: 1rem;
+  }
+  
+  .toggle-password:hover {
+    color: #202124;
+  }
+  
+  .submit-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .submit-btn:hover {
+    background-color: #1765cc;
+  }
+  
+  .submit-btn:disabled {
+    background-color: #9aa0a6;
+    cursor: not-allowed;
+  }
+  
+  .spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  /* ===== Status Messages ===== */
+  .error-message {
+    color: #d93025;
+    background-color: #fce8e6;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .success-message {
+    color: #188038;
+    background-color: #e6f4ea;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  /* ===== Responsive Adjustments ===== */
+  @media (max-width: 768px) {
+    .header {
+      padding: 1rem;
+    }
+  
+    .main-content {
+      flex-direction: column;
+    }
+  
+    .sidebar-menu-faculty {
+      width: 100%;
+      flex-direction: row;
+      padding: 0;
+      overflow-x: auto;
+      border-right: none;
+      border-bottom: 1px solid #e0e0e0;
+    }
+  
+    .sidebar-menu-faculty button {
+      padding: 1rem;
+      border-left: none;
+      border-bottom: 3px solid transparent;
+      justify-content: center;
+      white-space: nowrap;
+    }
+  
+    .sidebar-menu-faculty button.active {
+      border-left: none;
+      border-bottom-color: #1a73e8;
+    }
+  
+    .menu-icon-faculty {
+      margin-right: 0;
+      margin-bottom: 0.25rem;
+    }
+  
+    .sidebar-menu-faculty button span {
+      display: none;
+    }
+  
+    .profile-content {
+      padding: 1rem;
+    }
+  
+    .form-row {
+      flex-direction: column;
+      gap: 0;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .faculty-form-container {
+      padding: 1.5rem;
+    }
+    
+    .business-btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+  }

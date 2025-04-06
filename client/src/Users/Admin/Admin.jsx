@@ -15,6 +15,7 @@ export const Admin = ({ token, userData: initialUserData, onLogout }) => {
 
   const onStudentList = () => { navigate("/StudentListAdmin"); }
   const onAddStudent = () => { navigate("/AddStudent"); }
+  const onAddFaculty = () => { navigate("/AddFaculty"); }
 
   useEffect(() => {
     if (!token) {
@@ -72,6 +73,7 @@ export const Admin = ({ token, userData: initialUserData, onLogout }) => {
           <button><FaCalendarAlt className="menu-icon-Admin" /> Events <span className="badge">new</span></button> */ }
           <button > <FaBell   className="menu-icon-Admin" /> Notifications  {/* notificationCount > 0 && <span className="badge">{notificationCount}</span> */} </button>
           <button> <FaFilter   className="menu-icon-Admin" /> Filter  </button>
+          <button onClick={onAddFaculty}> <FaPlus    className="menu-icon-Admin" /> ADD Faculty  </button>
           <button onClick={onAddStudent}> <FaPlus    className="menu-icon-Admin" /> ADD Student  </button>
           <button><FaCog className="menu-icon-Admin" /> Settings</button>
           <button onClick={onStudentList}><FaThLarge className="menu-icon-Admin" /> Student List</button>
