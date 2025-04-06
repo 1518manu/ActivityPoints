@@ -83,6 +83,7 @@ export const AddStudent = ({ token, userData, onLogout }) => {
         college: formData.college,
         role: "Students",
         rollNo: formData.rollNo,
+        password:formData.password,
         point: Number(formData.point),
         createdAt: serverTimestamp()
       };
