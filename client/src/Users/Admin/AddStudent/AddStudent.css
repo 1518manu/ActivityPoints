@@ -115,11 +115,11 @@
     border-bottom: 1px solid #e0e0e0;
   }
   
-  .form-group {
+  .form-group-S {
     margin-bottom: 1.25rem;
   }
   
-  .form-group label {
+  .form-group-S label {
     display: block;
     margin-bottom: 0.5rem;
     color: #5f6368;
@@ -127,9 +127,9 @@
     font-weight: 500;
   }
   
-  .form-group input,
-  .form-group select,
-  .form-group textarea {
+  .form-group-S input,
+  .form-group-S select,
+  .form-group-S textarea {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #dadce0;
@@ -138,15 +138,15 @@
     transition: border-color 0.2s;
   }
   
-  .form-group input:focus,
-  .form-group select:focus,
-  .form-group textarea:focus {
+  .form-group-S input:focus,
+  .form-group-S select:focus,
+  .form-group-S textarea:focus {
     outline: none;
     border-color: #1a73e8;
     box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
   }
   
-  .form-group textarea {
+  .form-group-S textarea {
     min-height: 6rem;
     resize: vertical;
   }
@@ -157,7 +157,7 @@
     margin-bottom: 1.25rem;
   }
   
-  .form-row .form-group {
+  .form-row .form-group-S {
     flex: 1;
   }
   

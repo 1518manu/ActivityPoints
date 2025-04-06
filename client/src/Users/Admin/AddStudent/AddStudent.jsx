@@ -177,7 +177,7 @@ export const AddStudent = ({ token, userData, onLogout }) => {
             )}
 
             <form onSubmit={handleSubmit}>
-              <div className="form-group">
+              <div className="form-group-S">
                 <label>Full Name</label>
                 <input
                   type="text"
@@ -189,7 +189,7 @@ export const AddStudent = ({ token, userData, onLogout }) => {
               </div>
 
               <div className="form-row">
-                <div className="form-group">
+                <div className="form-group-S">
                   <label>Email</label>
                   <input
                     type="email"
@@ -203,7 +203,7 @@ export const AddStudent = ({ token, userData, onLogout }) => {
               </div>
 
               <div className="form-row">
-                <div className="form-group password-field">
+                <div className="form-group-S password-field">
                   <label>Password</label>
                   <div className="password-input-container">
                     <input
@@ -224,7 +224,7 @@ export const AddStudent = ({ token, userData, onLogout }) => {
                   </div>
                 </div>
 
-                <div className="form-group password-field">
+                <div className="form-group-S password-field">
                   <label>Confirm Password</label>
                   <div className="password-input-container">
                     <input
@@ -247,7 +247,7 @@ export const AddStudent = ({ token, userData, onLogout }) => {
               </div>
 
               <div className="form-row">
-                <div className="form-group">
+                <div className="form-group-S">
                   <label>Phone Number</label>
                   <input
                     type="tel"
@@ -258,7 +258,7 @@ export const AddStudent = ({ token, userData, onLogout }) => {
                   />
                 </div>
 
-                <div className="form-group">
+                <div className="form-group-S">
                   <label>Admission Number</label>
                   <input
                     type="number"
@@ -271,7 +271,7 @@ export const AddStudent = ({ token, userData, onLogout }) => {
               </div>
 
               <div className="form-row">
-                <div className="form-group">
+                <div className="form-group-S">
                   <label>Roll Number</label>
                   <input
                     type="text"
@@ -282,7 +282,7 @@ export const AddStudent = ({ token, userData, onLogout }) => {
                   />
                 </div>
 
-                <div className="form-group">
+                <div className="form-group-S">
                   <label>Class</label>
                   <input
                     type="text"
@@ -296,7 +296,7 @@ export const AddStudent = ({ token, userData, onLogout }) => {
               </div>
 
               <div className="form-row">
-                <div className="form-group">
+                <div className="form-group-S">
                   <label>Department</label>
                   <select
                     name="dept"
@@ -313,7 +313,7 @@ export const AddStudent = ({ token, userData, onLogout }) => {
                   </select>
                 </div>
 
-                <div className="form-group">
+                <div className="form-group-S">
                   <label>Mentor ID</label>
                   <input
                     type="text"
@@ -325,7 +325,7 @@ export const AddStudent = ({ token, userData, onLogout }) => {
                 </div>
               </div>
 
-              <div className="form-group">
+              <div className="form-group-S">
                 <label>Initial Points</label>
                 <input
                   type="number"
@@ -338,7 +338,7 @@ export const AddStudent = ({ token, userData, onLogout }) => {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="form-group-S">
                 <label>About</label>
                 <textarea
                   name="about"

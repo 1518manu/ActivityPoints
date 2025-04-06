@@ -180,7 +180,7 @@ export const AddFaculty = ({ token, userData, onLogout }) => {
 
             <form onSubmit={handleSubmit}>
               <div className="form-row">
-                <div className="form-group">
+                <div className="form-group-F">
                   <label>Full Name</label>
                   <input
                     type="text"
@@ -191,7 +191,7 @@ export const AddFaculty = ({ token, userData, onLogout }) => {
                   />
                 </div>
 
-                <div className="form-group">
+                <div className="form-group-F">
                   <label>Email</label>
                   <input
                     type="email"
@@ -205,7 +205,7 @@ export const AddFaculty = ({ token, userData, onLogout }) => {
               </div>
 
               <div className="form-row">
-                <div className="form-group password-field">
+                <div className="form-group-F password-field">
                   <label>Password</label>
                   <div className="password-input-container">
                     <input
@@ -227,7 +227,7 @@ export const AddFaculty = ({ token, userData, onLogout }) => {
                   </div>
                 </div>
 
-                <div className="form-group password-field">
+                <div className="form-group-F password-field">
                   <label>Confirm Password</label>
                   <div className="password-input-container">
                     <input
@@ -251,7 +251,7 @@ export const AddFaculty = ({ token, userData, onLogout }) => {
               </div>
 
               <div className="form-row">
-                <div className="form-group">
+                <div className="form-group-F">
                   <label>Phone Number</label>
                   <input
                     type="tel"
@@ -264,7 +264,7 @@ export const AddFaculty = ({ token, userData, onLogout }) => {
                   />
                 </div>
 
-                <div className="form-group">
+                <div className="form-group-F">
                   <label>Faculty ID</label>
                   <input
                     type="text"
@@ -278,7 +278,7 @@ export const AddFaculty = ({ token, userData, onLogout }) => {
               </div>
 
               <div className="form-row">
-                <div className="form-group">
+                <div className="form-group-F">
                   <label>Department</label>
                   <select
                     name="department"
@@ -294,7 +294,7 @@ export const AddFaculty = ({ token, userData, onLogout }) => {
                   </select>
                 </div>
 
-                <div className="form-group">
+                <div className="form-group-F">
                   <label>Designation</label>
                   <select
                     name="designation"
@@ -311,7 +311,7 @@ export const AddFaculty = ({ token, userData, onLogout }) => {
               </div>
 
               <div className="form-row">
-                <div className="form-group">
+                <div className="form-group-F">
                   <label>Faculty Type</label>
                   <select
                     name="faculty_type"
@@ -325,7 +325,7 @@ export const AddFaculty = ({ token, userData, onLogout }) => {
                   </select>
                 </div>
 
-                <div className="form-group">
+                <div className="form-group-F">
                   <label>Assigned Class</label>
                   <input
                     type="text"
