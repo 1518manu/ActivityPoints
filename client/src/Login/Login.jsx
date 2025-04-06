@@ -224,7 +224,7 @@ const handleSubmit = async (e) => {
       }
     } else {
       showNotification(response.message || "Login Failed!", "error");
-      console.log(response.message || "Login Failed!");
+      console.warn(response.message || "Login Failed!");
     }
   } catch (error) {
     showNotification("An error occurred. Please try again.", "error");
