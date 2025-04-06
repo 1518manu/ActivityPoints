@@ -38,9 +38,11 @@ export function LoginPage({ onLoginSuccess }) {
   
        
         if (role) {
+          console.log("User role:", role, user.email);
             const userData = await fetchUserData(user.email, role); // Fetch Student data if role is Student
         
   
+            console.log("userData:", userData);
             const userId = userData?.rollNo || user.uid; // Default to Firebase UID if no rollNo
             localStorage.setItem("token", await user.getIdToken());
             localStorage.setItem("role", role);
@@ -53,7 +55,7 @@ export function LoginPage({ onLoginSuccess }) {
   
             setTimeout(() => {
               switch (role) {
-                case "admin":
+                case "Admin":
                   navigate("/Admin");
                   break;
                 case "Faculty":

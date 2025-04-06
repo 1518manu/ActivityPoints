@@ -4,19 +4,23 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { LoginPage } from "./Login/Login";
 import { SignupPage } from "./test/Signup/SignUp";
-import { Student } from "./Users/Student/Student";
-import { CertificateUploadPage } from "./Users/Upload/Upload";
-import { Certificate } from "./Users/Student/Certificates/Certificate";
 import { NotificationContainer } from "./Notification/NotificationContainer";
 import { Loading } from "./Loading/Loading";
+
+import { Student } from "./Users/Student/Student";
+import { DutyLeaveForm } from "./Users/Student/DutyLeave/DutyLeaveStudent";
+import { CertificateUploadPage } from "./Users/Student/Upload/Upload";
+import { Certificate } from "./Users/Student/Certificates/Certificate";
+import { NotificationPageStudent } from "./Users/Student/Notification/NotificationStudent";
+
 import { Faculty } from "./Users/Faculty/Faculty";
 import { Validate } from "./Users/Faculty/validate/Validate";
 import { StudentList } from "./Users/Faculty/StudentList/StudentList";
-import { NotificationPageStudent } from "./Users/Student/Notification/NotificationStudent";
 import { NotificationPageFaculty } from "./Users/Faculty/Notification/NotificationFaculty";
 import { FilterStudent } from "./Users/Faculty/Filter/FilterStudent";
-import { DutyLeaveForm } from "./Users/Student/DutyLeave/DutyLeaveStudent";
+
 import { Admin } from "./Users/Admin/Admin"
+import { StudentListAdmin } from "./Users/Admin/StudentListAdmin/StudentListAdmin";
 import "./App.css";
 
 

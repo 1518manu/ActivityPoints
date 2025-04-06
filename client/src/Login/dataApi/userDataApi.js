@@ -26,6 +26,7 @@ export const fetchUserData = async (email, role) => {
 
 export const fetchUserRole = async (email) => {
   try {
+    console.log("Fetching user role for email:", email);
     const usersRef = collection(db, "Users");
     const q = query(usersRef, where("email", "==", email));
     const querySnapshot = await getDocs(q);

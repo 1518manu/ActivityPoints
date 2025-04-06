@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUpload, FaFile, FaTimes } from "react-icons/fa";
-import { NotificationContainer } from "../../Notification/NotificationContainer";
+import { NotificationContainer } from "../../../Notification/NotificationContainer";
 import { getAuth } from "firebase/auth";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { app } from "../../firebaseFile/firebaseConfig"; // Firebase config file
+import { app } from "../../../firebaseFile/firebaseConfig"; // Firebase config file
 import "./Upload.css";
 import { setLogLevel } from "firebase/app";
 
