@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaFileAlt, FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaUser, FaUserTie } from "react-icons/fa";
+import { FaFileAlt, FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaUserTie } from "react-icons/fa";
 import './Event.css';
 import { X, ExternalLink, CalendarPlus } from 'lucide-react';
-
-// Date-fns for calendar functionality
 import {
   addDays,
   format,
@@ -16,7 +14,9 @@ import {
   startOfWeek,
   endOfWeek,
   addMonths,
-  isSameDay
+  isSameDay,
+  isBefore,
+  startOfDay
 } from "date-fns";
 
 // Calendar view constants
@@ -86,36 +86,7 @@ const DUMMY_EVENTS = {
     }
   ]
 };
-const DayCell = ({ day, monthStart, events, onDateClick }) => {
-  const formattedDate = format(day, "yyyy-MM-dd");
-  const dayEvents = events[formattedDate] || [];
-  const isDisabled = !isSameMonth(day, monthStart);
-  const isCurrentDay = isToday(day);
-  const hasEvents = dayEvents.length > 0;
 
-  return (
-    <div
-      className={`day-cell ${isDisabled ? "disabled" : ""} ${
-        isCurrentDay ? "today" : ""
-      } ${hasEvents ? "has-events" : ""}`}
-      onClick={() => !isDisabled && hasEvents && onDateClick(day)}
-    >
-      <span className="day-number">{format(day, "d")}</span>
-      {hasEvents ? (
-        <div className="event-preview">
-          {dayEvents.slice(0, 2).map(event => (
-            <EventDot key={event.id} event={event} />
-          ))}
-          {dayEvents.length > 2 && (
-            <div className="more-events">+{dayEvents.length - 2}</div>
-          )}
-        </div>
-      ) : (
-        !isDisabled && <div className="no-events">N/A</div>
-      )}
-    </div>
-  );
-};
 export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => {
   const navigate = useNavigate();
   
@@ -211,11 +182,11 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
     }
     
     // Update the event registration status
-    const updatedEvents = { ...events };
     const dateKey = format(selectedDate, "yyyy-MM-dd");
-    const eventIndex = updatedEvents[dateKey]?.findIndex(e => e.id === registrationData.eventId);
+    const eventIndex = events[dateKey]?.findIndex(e => e.id === registrationData.eventId);
     
     if (eventIndex !== undefined && eventIndex !== -1) {
+      const updatedEvents = { ...events };
       updatedEvents[dateKey][eventIndex].isRegistered = true;
       updatedEvents[dateKey][eventIndex].registered += 1;
       
@@ -253,16 +224,17 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
     const dayEvents = events[formattedDate] || [];
     const isDisabled = !isSameMonth(day, monthStart);
     const isCurrentDay = isToday(day);
+    const hasEvents = dayEvents.length > 0;
 
     return (
       <div
         className={`day-cell ${isDisabled ? "disabled" : ""} ${
           isCurrentDay ? "today" : ""
-        } ${dayEvents.length > 0 ? "has-events" : ""}`}
+        } ${hasEvents ? "has-events" : ""}`}
         onClick={() => !isDisabled && onDateClick(day)}
       >
         <span className="day-number">{format(day, "d")}</span>
-        {dayEvents.length > 0 && (
+        {hasEvents && (
           <div className="event-preview">
             {dayEvents.slice(0, 2).map(event => (
               <EventDot key={event.id} event={event} />
@@ -311,21 +283,30 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
   const WeekView = ({ currentMonth, events, onEventClick }) => {
     const weekStart = startOfWeek(currentMonth);
     const weekEnd = endOfWeek(currentMonth);
-
+    const today = startOfDay(new Date());
+  
     const days = eachDayOfInterval({ start: weekStart, end: weekEnd });
-
+  
     return (
       <div className="week-view">
         {days.map(day => {
           const formattedDate = format(day, "yyyy-MM-dd");
           const dayEvents = events[formattedDate] || [];
-
+          const isPastDate = isBefore(startOfDay(day), today);
+          const isCurrentDay = isToday(day);
+  
           return (
-            <div key={day} className={`week-day ${isToday(day) ? 'today' : ''}`}>
+            <div
+              key={day}
+              className={`week-day 
+                ${isCurrentDay ? 'today' : ''} 
+                ${isPastDate ? 'past-date' : ''}`}
+            >
               <div className="week-day-header">
                 <span className="week-day-name">{format(day, "EEE")}</span>
                 <span className="week-day-number">{format(day, "d")}</span>
               </div>
+  
               <div className="week-day-events">
                 {dayEvents.map(event => (
                   <div
