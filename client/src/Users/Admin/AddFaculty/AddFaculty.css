@@ -82,6 +82,21 @@
     font-size: 1.1rem;
   }
   
+  .mt-7{
+    margin: auto;
+  }
+  .json-btn7{
+    padding:5px;
+    color: white;
+    border-radius: 7px;
+    border: 1px solid white;
+    background:#1765cc ;
+  }
+  .json-btn7:hover{
+    color: #1765cc;
+    border: 1px solid #1765cc;
+    background-color: white;
+  }
   .logout-btn {
     color: #d93025;
   }

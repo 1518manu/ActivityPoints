@@ -80,7 +80,21 @@
     margin-right: 1rem;
     font-size: 1.1rem;
   }
-  
+  .mt-6{
+    margin: auto;
+  }
+  .json-btn{
+    padding:5px;
+    color: white;
+    border-radius: 7px;
+    border: 1px solid white;
+    background:#1765cc ;
+  }
+  .json-btn:hover{
+    color: #1765cc;
+    border: 1px solid #1765cc;
+    background-color: white;
+  }
   .logout-btn {
     color: #d93025;
   }

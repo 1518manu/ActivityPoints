@@ -229,6 +229,23 @@ const handleUploadButtonClick = () => {
           </div>
         </div>
         <div className="header-right-faculty">
+            <div className="mt-7">
+              <button
+                type="button"
+                className="json-btn7"
+                onClick={handleUploadButtonClick}
+              >
+                Upload JSON
+              </button>
+              
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept=".json"
+                onChange={handleJSONUpload}
+                style={{ display: 'none' }}
+              />
+            </div>
           <button className="business-btn" onClick={onLogout}>Logout</button>
         </div>
       </header>
@@ -428,23 +445,6 @@ const handleUploadButtonClick = () => {
 
 
             </form>
-            <div className="upload-json-section mt-4">
-  <button
-    type="button"
-    className="submit-btn bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-    onClick={handleUploadButtonClick}
-  >
-    Upload JSON
-  </button>
-  
-  <input
-    type="file"
-    ref={fileInputRef}
-    accept=".json"
-    onChange={handleJSONUpload}
-    style={{ display: 'none' }}
-  />
-</div>
           </div>
         </div>
       </div>

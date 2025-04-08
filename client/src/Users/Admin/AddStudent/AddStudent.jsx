@@ -230,7 +230,24 @@ const handleUploadJSONClick = () => {
             <img src="/api/placeholder/100/40" alt="Logo" className="logo" />
           </div>
         </div>
-        <div className="header-right-faculty">
+        <div className="header-right-faculty">            
+          <div className="mt-6">
+              <button
+                type="button"
+                className="json-btn"
+                onClick={handleUploadJSONClick}
+              >
+                Upload Students JSON
+              </button>
+
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept=".json"
+                onChange={handleStudentJSONUpload}
+                style={{ display: 'none' }}
+              />
+            </div>
           <button className="business-btn" onClick={onLogout}>Logout</button>
         </div>
       </header>
@@ -433,24 +450,6 @@ const handleUploadJSONClick = () => {
                 {loading ? 'Adding...' : 'Add Student'}
               </button>
             </form>
-            <div className="mt-6">
-              <button
-                type="button"
-                className="submit-btn"
-                onClick={handleUploadJSONClick}
-              >
-                Upload Students JSON
-              </button>
-
-              <input
-                type="file"
-                ref={fileInputRef}
-                accept=".json"
-                onChange={handleStudentJSONUpload}
-                style={{ display: 'none' }}
-              />
-            </div>
-
           </div>
         </div>
       </div>
