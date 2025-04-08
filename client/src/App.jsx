@@ -79,6 +79,8 @@ function App() {
       localStorage.removeItem("userData");
     } catch (error) {
       console.error("Error logging out:", error);
+    } finally {
+      console.log("User logged out");
     }
   };
 // just for develeopment fase to see the user data , u can remove it any time
@@ -134,7 +136,7 @@ function App() {
                   <DutyLeaveForm token={token} userData={userData} onLogout={handleLogout} />
                 }
               />
-              /duty-leave
+              
               <Route
                 path = "/StudentEvents"
                 element ={
