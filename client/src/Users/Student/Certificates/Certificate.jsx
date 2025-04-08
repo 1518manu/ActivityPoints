@@ -80,29 +80,47 @@ export const Certificate = ({ token, userData, onLogout } ) => {
   const onDutyLeave = () => navigate("/duty-leave");
   
   
-
-
     const fetchCertificates = async (userData) => {
       try {
-        console.log(userData);
         const userId = userData.rollNo;
         const q = query(collection(db, "certificates"), where("user_id", "==", userId));
         const querySnapshot = await getDocs(q);
-
-        const fetchedCertificates = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        setCertificates(fetchedCertificates);
-        setFilteredCertificates(fetchedCertificates);
+    
+        const certificateDocs = querySnapshot.docs;
+    
+        // Fetch all validations once
+        const validationSnapshot = await getDocs(collection(db, "Validation"));
+        const validationData = {};
+        validationSnapshot.forEach((doc) => {
+          const data = doc.data();
+          console.log("Validation Entry:", data); // 👈 Add this to verify cert_id exists
+          validationData[data.cert_id] = data.validation_status;
+        });
+    
+        // Now create fetchedCertificates correctly
+        const certificatesWithStatus = certificateDocs.map((doc) => {
+          const certData = doc.data();
+          const certId = doc.id;
+          const status = validationData[certId] ; // Default to "Pending"
+          console.log("certId", certId);
+          console.log("status", status);
+          return {
+            id: certId,
+            ...certData,
+            status,
+          };
+        });
+    
+        // Set states
+        setCertificates(certificatesWithStatus);
+        setFilteredCertificates(certificatesWithStatus);
       } catch (error) {
         console.error("Error fetching certificates:", error);
       } finally {
         setIsLoading(false);
       }
     };
-
+    
 
   // Search Functionality
   const handleSearch = (e) => {
@@ -649,7 +667,7 @@ const handleCertificateSelection = (e, cert) => {
                   <h3>{cert.certificateName}</h3>
                   <p><strong>Issued By:</strong> {cert.activityHead || "N/A"}</p>
                   <p><strong>Date:</strong> {cert.eventDate || "N/A"}</p>
-                  <p><strong>Description:</strong> {cert.description || "N/A"}</p>
+                  <p><strong>Status:</strong> {cert.status || "Not validated"}</p>
                   <a href={cert.fileURL} target="_blank" rel="noopener noreferrer" className="certificate-link">
                     View Certificate
                   </a>
