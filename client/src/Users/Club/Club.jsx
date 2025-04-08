@@ -1,22 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaFileAlt, FaEdit, FaUser, FaUniversity, FaUpload, FaThLarge, FaCog, FaCalendarAlt, FaBell , FaSignOutAlt } from "react-icons/fa"; 
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import { fetchUserData, fetchUserRole } from "../../Login/dataApi/userDataApi"
-import { collection, query, where, onSnapshot ,getDocs} from "firebase/firestore";
-import { db } from "../../firebaseFile/firebaseConfig";
+import {  FaEdit, FaUser, FaUniversity, FaUpload , FaSignOutAlt } from "react-icons/fa"; 
 import 'react-circular-progressbar/dist/styles.css';
 import './Club.css';
 
-const getColor = (point) => {
-  if (point <= 40) {
-     return 'red'; 
-  } else if (point >= 75) {
-     return 'green'; 
-  } else { 
-    return 'blue';
-  } 
-};
+
 
 
 export const Club = ({ token, userData: initialUserData, onLogout }) => {
@@ -81,7 +69,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
               <div className="profile-header-info">
                 <div className="profile-name_points">
                   <h2>{userData?.name || "N/A"}</h2> 
-                  <div className = "points"   style={{ color: getColor(userData?.point || 0)  }}>{userData?.point || 0} </div>
+                  <div className = "points"   >{userData?.point || 0} </div>
                   <div className="points_text">points</div>
                 </div>
                 <div className = "profile-username">{userData?.rollNo || "unknown"}</div>

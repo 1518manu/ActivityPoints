@@ -207,7 +207,7 @@ function App() {
               />
               
               <Route
-                path = "/Club"
+                path = "/ClubDashboard"
                 element ={
                   <Club token={token} userData={userData} onLogout={handleLogout} />
                 }
