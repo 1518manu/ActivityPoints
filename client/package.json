@@ -12,6 +12,7 @@
   "dependencies": {
     "chart.js": "^4.4.8",
     "client": "file:",
+    "date-fns": "^4.1.0",
     "exceljs": "^4.4.0",
     "firebase": "^11.4.0",
     "jspdf": "^3.0.1",
