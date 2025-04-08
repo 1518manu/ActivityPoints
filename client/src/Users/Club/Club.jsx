@@ -386,7 +386,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
                 {userData?.email || "email@example.com"} | {userData?.phone || "000-000-0000"}
               </p>
               <div className="club-profile__college">
-                <FaUniversity className="club-profile__college-icon" /> {userData?.college || "University"}
+                <FaUniversity className="club-profile__college-icon" /> {userData?.college || "NA"}
               </div>
             </div>
           </div>

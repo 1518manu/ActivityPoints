@@ -141,8 +141,6 @@
 .club-profile__college {
   display: flex;
   align-items: center;
-  color: #3498db;
-  font-weight: 600;
 }
 
 .club-profile__college-icon {
