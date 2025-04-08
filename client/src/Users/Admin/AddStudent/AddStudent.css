@@ -88,11 +88,11 @@
     color: white;
     border-radius: 7px;
     border: 1px solid white;
-    background:#1765cc ;
+    background:#1a73e8 ;
   }
   .json-btn:hover{
-    color: #1765cc;
-    border: 1px solid #1765cc;
+    color: #1a73e8;
+    border: 1px solid #1a73e8;
     background-color: white;
   }
   .logout-btn {
@@ -189,7 +189,7 @@
   }
   
   .submit-btn:hover {
-    background-color: #1765cc;
+    background-color: #1a73e8;
   }
   
   .submit-btn:disabled {
