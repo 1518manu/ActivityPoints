@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState ,useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUserTie, FaCog, FaSignOutAlt, FaBell, FaFilter, FaCheckCircle, FaPlus, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { db } from '../../../firebaseFile/firebaseConfig';
@@ -27,6 +27,12 @@ export const AddStudent = ({ token, userData, onLogout }) => {
   const [success, setSuccess] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const fileInputRef = useRef();
+
+const handleUploadJSONClick = () => {
+  fileInputRef.current.click();
+};
 
   
   const navigate = useNavigate();
@@ -136,6 +142,79 @@ export const AddStudent = ({ token, userData, onLogout }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleStudentJSONUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+  
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const json = JSON.parse(e.target.result);
+        const students = Array.isArray(json) ? json : [json]; // handle single or multiple entries
+  
+        for (const student of students) {
+          try {
+            if (!student.email.endsWith('@tkmce.ac.in')) {
+              throw new Error(`Invalid email: ${student.email}`);
+            }
+  
+            const auth = getAuth();
+            const userCredential = await createUserWithEmailAndPassword(
+              auth,
+              student.email,
+              student.password
+            );
+            const uid = userCredential.user.uid;
+  
+            // Users collection
+            const userDoc = {
+              UID: uid,
+              name: student.name.toUpperCase(),
+              email: student.email,
+              phone: student.phone,
+              college: student.college,
+              role: "Students",
+              rollNo: student.rollNo,
+              password: student.password,
+              point: Number(student.point),
+              createdAt: serverTimestamp()
+            };
+  
+            await addDoc(collection(db, "Users"), userDoc);
+  
+            // Students collection
+            const studentDoc = {
+              name: student.name,
+              email: student.email,
+              phone: student.phone,
+              adm_no: Number(student.adm_no),
+              rollNo: student.rollNo,
+              class: student.class,
+              dept: student.dept,
+              college: student.college,
+              about: student.about,
+              point: Number(student.point),
+              mentor: student.mentor,
+              createdAt: serverTimestamp()
+            };
+  
+            await addDoc(collection(db, "Students"), studentDoc);
+  
+          } catch (err) {
+            console.error("Error in JSON upload:", err.message);
+          }
+        }
+  
+        alert('Students from JSON uploaded successfully!');
+      } catch (err) {
+        console.error("JSON parsing failed:", err.message);
+        alert('Invalid JSON format.');
+      }
+    };
+  
+    reader.readAsText(file);
   };
 
   if (!token) {
@@ -354,6 +433,24 @@ export const AddStudent = ({ token, userData, onLogout }) => {
                 {loading ? 'Adding...' : 'Add Student'}
               </button>
             </form>
+            <div className="mt-6">
+              <button
+                type="button"
+                className="submit-btn"
+                onClick={handleUploadJSONClick}
+              >
+                Upload Students JSON
+              </button>
+
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept=".json"
+                onChange={handleStudentJSONUpload}
+                style={{ display: 'none' }}
+              />
+            </div>
+
           </div>
         </div>
       </div>
