@@ -30,7 +30,6 @@ export const AddStudent = ({ token, userData, onLogout }) => {
 
   
   const navigate = useNavigate();
-  const onAddStudent = () => { navigate("/AddStudent"); }
   const onAddFaculty = () => { navigate("/AddFaculty"); }
   const onDashboard = () => { navigate("/Admin"); }
 
@@ -164,7 +163,7 @@ export const AddStudent = ({ token, userData, onLogout }) => {
            <button><FaBell className="menu-icon-Admin" /> Notifications</button>
            <button><FaFilter className="menu-icon-Admin" /> Filter</button>
            <button><FaCog className="menu-icon-faculty" /> Settings  </button>
-           <button onClick={onAddStudent}><FaPlus className="menu-icon-Admin" /> ADD Student </button>
+           <button onClick={onAddFaculty}><FaPlus className="menu-icon-Admin" /> ADD Faculty </button>
            <button onClick={onLogout} className="logout-btn"> <FaSignOutAlt className="menu-icon-faculty" /> Logout </button>
         </div>
 
