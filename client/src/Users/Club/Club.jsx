@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaUser, FaUniversity, FaSignOutAlt, FaEye, FaPlus } from "react-icons/fa";
+import { FaEdit, FaUser, FaUniversity, FaSignOutAlt, FaPlus } from "react-icons/fa";
 import { CalendarPlus, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import './Club.css';
 import {
@@ -130,7 +130,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
 
   // Calendar sub-components
   const EventDot = () => (
-    <div className="event-dot" />
+    <div className="club-calendar__event-dot" />
   );
 
   const DayCell = ({ day, monthStart }) => {
@@ -142,14 +142,14 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
 
     return (
       <div
-        className={`day-cell ${isDisabled ? "disabled" : ""} ${
-          isCurrentDay ? "today" : ""
-        } ${hasEvents ? "has-events" : ""}`}
+        className={`club-calendar__day-cell ${isDisabled ? "club-calendar__day-cell--disabled" : ""} ${
+          isCurrentDay ? "club-calendar__day-cell--today" : ""
+        } ${hasEvents ? "club-calendar__day-cell--has-events" : ""}`}
         onClick={() => !isDisabled && handleDateClick(day)}
       >
-        <span className="day-number">{format(day, "d")}</span>
+        <span className="club-calendar__day-number">{format(day, "d")}</span>
         {hasEvents && (
-          <div className="event-dots">
+          <div className="club-calendar__event-dots">
             {dayEvents.slice(0, 3).map((_, i) => (
               <EventDot key={i} />
             ))}
@@ -173,9 +173,9 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
     }
 
     return (
-      <div className="days-grid">
+      <div className="club-calendar__days-grid">
         {weeks.map((week, weekIdx) => (
-          <div className="week-row" key={weekIdx}>
+          <div className="club-calendar__week-row" key={weekIdx}>
             {week.map(day => (
               <DayCell
                 key={day}
@@ -196,30 +196,30 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
     const days = eachDayOfInterval({ start: weekStart, end: weekEnd });
 
     return (
-      <div className="week-view">
+      <div className="club-calendar__week-view">
         {days.map(day => {
           const formattedDate = format(day, "yyyy-MM-dd");
           const dayEvents = events[formattedDate] || [];
           const isCurrentDay = isToday(day);
 
           return (
-            <div key={day} className={`week-day ${isCurrentDay ? 'today' : ''}`}>
-              <div className="week-day-header">
-                <span className="week-day-name">{format(day, "EEE")}</span>
-                <span className="week-day-number">{format(day, "d")}</span>
+            <div key={day} className={`club-calendar__week-day ${isCurrentDay ? 'club-calendar__week-day--today' : ''}`}>
+              <div className="club-calendar__week-day-header">
+                <span className="club-calendar__week-day-name">{format(day, "EEE")}</span>
+                <span className="club-calendar__week-day-number">{format(day, "d")}</span>
               </div>
-              <div className="week-day-events">
+              <div className="club-calendar__week-day-events">
                 {dayEvents.map(event => (
                   <div
                     key={event.id}
-                    className="week-event"
+                    className="club-calendar__week-event"
                     onClick={() => {
                       setSelectedDate(day);
                       setShowEventModal(true);
                     }}
                   >
-                    <span className="event-time">{event.time.split(' - ')[0]}</span>
-                    <span className="event-title">{event.title}</span>
+                    <span className="club-calendar__event-time">{event.time.split(' - ')[0]}</span>
+                    <span className="club-calendar__event-title">{event.title}</span>
                   </div>
                 ))}
               </div>
@@ -234,35 +234,118 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
     const dateEvents = events[format(date, 'yyyy-MM-dd')] || [];
 
     return (
-      <div className="modal-overlay">
-        <div className="event-modal">
-          <button className="close-modal" onClick={onClose}>
+      <div className="club-modal__overlay">
+        <div className="club-modal">
+          <button className="club-modal__close" onClick={onClose}>
             <X size={20} />
           </button>
-          <h3>{format(date, 'EEEE, MMMM d, yyyy')}</h3>
+          <h3 className="club-modal__title">{format(date, 'EEEE, MMMM d, yyyy')}</h3>
           
           {dateEvents.length > 0 ? (
-            <div className="event-list">
+            <div className="club-modal__event-list">
               {dateEvents.map(event => (
-                <div key={event.id} className="event-item">
-                  <div className="event-time">{event.time}</div>
-                  <div className="event-title">{event.title}</div>
-                  <div className="event-location">{event.location}</div>
+                <div key={event.id} className="club-modal__event-item">
+                  <div className="club-modal__event-time">{event.time}</div>
+                  <div className="club-modal__event-title">{event.title}</div>
+                  <div className="club-modal__event-location">{event.location}</div>
                   {event.poster && (
-                    <div className="event-poster-preview">
-                      <img src={event.poster} alt={event.title} />
+                    <div className="club-modal__event-poster">
+                      <img src={event.poster} alt={event.title} className="club-modal__event-poster-image" />
                     </div>
                   )}
                 </div>
               ))}
             </div>
           ) : (
-            <div className="no-events">No events scheduled for this day</div>
+            <div className="club-modal__no-events">No events scheduled for this day</div>
           )}
           
-          <div className="event-actions">
-            <button onClick={onAddEvent} className="action-btn primary">
-              <FaPlus /> Add Event
+          <div className="club-modal__actions">
+            <button onClick={onAddEvent} className="club-modal__button club-modal__button--primary">
+              <FaPlus className="club-modal__button-icon" /> Add Event
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const AddEventModal = ({ date, onClose, onSave }) => {
+    return (
+      <div className="club-modal__overlay">
+        <div className="club-modal">
+          <button className="club-modal__close" onClick={onClose}>
+            <X size={20} />
+          </button>
+          <h3 className="club-modal__title">Add Event for {format(date, 'MMMM d, yyyy')}</h3>
+          
+          <div className="club-modal__field">
+            <label className="club-modal__label">Event Title*</label>
+            <input 
+              type="text" 
+              className="club-modal__input"
+              value={newEvent.title}
+              onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
+              placeholder="Enter event title"
+            />
+          </div>
+          
+          <div className="club-modal__field">
+            <label className="club-modal__label">Time*</label>
+            <input 
+              type="text" 
+              className="club-modal__input"
+              value={newEvent.time}
+              onChange={(e) => setNewEvent({...newEvent, time: e.target.value})}
+              placeholder="e.g. 2:00 PM - 4:00 PM"
+            />
+          </div>
+          
+          <div className="club-modal__field">
+            <label className="club-modal__label">Location</label>
+            <input 
+              type="text" 
+              className="club-modal__input"
+              value={newEvent.location}
+              onChange={(e) => setNewEvent({...newEvent, location: e.target.value})}
+              placeholder="Enter location"
+            />
+          </div>
+          
+          <div className="club-modal__field">
+            <label className="club-modal__label">Poster Image URL</label>
+            <input 
+              type="text" 
+              className="club-modal__input"
+              value={newEvent.poster}
+              onChange={(e) => setNewEvent({...newEvent, poster: e.target.value})}
+              placeholder="Enter image URL"
+            />
+          </div>
+          
+          <div className="club-modal__field">
+            <label className="club-modal__label">Description</label>
+            <textarea 
+              className="club-modal__textarea"
+              value={newEvent.description}
+              onChange={(e) => setNewEvent({...newEvent, description: e.target.value})}
+              placeholder="Enter event description"
+              rows="4"
+            />
+          </div>
+          
+          <div className="club-modal__actions">
+            <button 
+              className="club-modal__button club-modal__button--cancel"
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+            <button 
+              className="club-modal__button club-modal__button--save"
+              onClick={onSave}
+            >
+              Save Event
             </button>
           </div>
         </div>
@@ -289,9 +372,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
         <div className="club-profile">
           <div className="club-profile__banner">
             <div className="club-profile__banner-overlay"></div>
-            <button className="club-profile__edit">
-              <FaEdit className="club-profile__edit-icon" /> Edit Profile
-            </button>
+           
           </div>
 
           <div className="club-profile__details">
@@ -384,82 +465,11 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
 
       {/* Add Event Modal */}
       {showAddEventModal && selectedDate && (
-        <div className="club-modal__overlay">
-          <div className="club-modal">
-            <button 
-              className="club-modal__close"
-              onClick={() => setShowAddEventModal(false)}
-            >
-              <X size={20} />
-            </button>
-            <h3 className="club-modal__title">Add Event for {format(selectedDate, 'MMMM d, yyyy')}</h3>
-            
-            <div className="club-modal__field">
-              <label className="club-modal__label">Event Title*</label>
-              <input 
-                type="text" 
-                className="club-modal__input"
-                value={newEvent.title}
-                onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
-                placeholder="Enter event title"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>Time*</label>
-              <input 
-                type="text" 
-                value={newEvent.time}
-                onChange={(e) => setNewEvent({...newEvent, time: e.target.value})}
-                placeholder="e.g. 2:00 PM - 4:00 PM"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>Location</label>
-              <input 
-                type="text" 
-                value={newEvent.location}
-                onChange={(e) => setNewEvent({...newEvent, location: e.target.value})}
-                placeholder="Enter location"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>Poster Image URL</label>
-              <input 
-                type="text" 
-                value={newEvent.poster}
-                onChange={(e) => setNewEvent({...newEvent, poster: e.target.value})}
-                placeholder="Enter image URL"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label>Description</label>
-              <textarea 
-                value={newEvent.description}
-                onChange={(e) => setNewEvent({...newEvent, description: e.target.value})}
-                placeholder="Enter event description"
-              />
-            </div>
-            
-            <div className="club-modal__actions">
-              <button 
-                className="club-modal__button club-modal__button--cancel"
-                onClick={() => setShowAddEventModal(false)}
-              >
-                Cancel
-              </button>
-              <button 
-                className="club-modal__button club-modal__button--save"
-                onClick={handleSaveEvent}
-              >
-                Save Event
-              </button>
-            </div>
-          </div>
-        </div>
+        <AddEventModal
+          date={selectedDate}
+          onClose={() => setShowAddEventModal(false)}
+          onSave={handleSaveEvent}
+        />
       )}
     </div>
   );
