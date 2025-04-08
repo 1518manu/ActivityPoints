@@ -54,27 +54,6 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
 
       <div className="main-content">
         <div className="sidebar-menu">
-          <button onClick={onCertificate}>
-            <FaThLarge className="menu-icon" /> Certificates
-          </button>
-
-          <button>
-            <FaCog className="menu-icon" /> Settings
-          </button>
-
-          <button  onClick={onEvent}>
-            <FaFileAlt className="menu-icon" /> Event <span className="badge">new</span>
-          </button>
-          
-          <button onClick={onDutyLeave}>
-            <FaCalendarAlt className="menu-icon" /> Duty leave 
-          </button>
-
-          <button onClick={onNotification} >
-          <FaBell className="menu-icon" /> Notifications  
-          {notificationCount > 0 && <span className="badge">{notificationCount}</span>}
-        </button>
-
           <button onClick={onLogout} style={{ color: "#df0000" }}>
             <FaSignOutAlt style={{ color: "#df0000" }}className="menu-icon" /> Logout
           </button>

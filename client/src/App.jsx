@@ -26,7 +26,7 @@ import { AddStudent } from "./Users/Admin/AddStudent/AddStudent";
 import { AddFaculty } from "./Users/Admin/AddFaculty/AddFaculty";
 import { SettingsAdmin } from "./Users/Admin/SettingsAdmin/SettingsAdmin"
 
-import { Club } from "./Users/Admin/Club/Club";
+import { Club } from "./Users/Club/Club";
 
 import "./App.css";
 
