@@ -26,6 +26,8 @@ import { AddStudent } from "./Users/Admin/AddStudent/AddStudent";
 import { AddFaculty } from "./Users/Admin/AddFaculty/AddFaculty";
 import { SettingsAdmin } from "./Users/Admin/SettingsAdmin/SettingsAdmin"
 
+import { Club } from "./Users/Admin/Club/Club";
+
 import "./App.css";
 
 
@@ -201,6 +203,13 @@ function App() {
                 path = "/AddFaculty"
                 element ={
                   <AddFaculty token={token} userData={userData} onLogout={handleLogout} />
+                }
+              />
+              
+              <Route
+                path = "/Club"
+                element ={
+                  <Club token={token} userData={userData} onLogout={handleLogout} />
                 }
               />
 
