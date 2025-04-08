@@ -1,102 +1,466 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {  FaEdit, FaUser, FaUniversity, FaUpload , FaSignOutAlt } from "react-icons/fa"; 
-import 'react-circular-progressbar/dist/styles.css';
+import { FaEdit, FaUser, FaUniversity, FaSignOutAlt, FaEye, FaPlus } from "react-icons/fa";
+import { CalendarPlus, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import './Club.css';
-
-
-
+import {
+  format,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isSameMonth,
+  isToday,
+  startOfWeek,
+  endOfWeek,
+  addMonths,
+  isSameDay,
+  addDays,
+  parseISO
+} from "date-fns";
 
 export const Club = ({ token, userData: initialUserData, onLogout }) => {
   const [userData, setUserData] = useState(initialUserData);
-  const [notificationCount, setNotificationCount] = useState(0);
   const navigate = useNavigate();
 
-  console.log("Club Data:", userData);
-  console.log("Token:", token);
+  // Calendar state
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [events, setEvents] = useState({});
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [showAddEventModal, setShowAddEventModal] = useState(false);
+  const [newEvent, setNewEvent] = useState({
+    title: '',
+    description: '',
+    time: '',
+    location: '',
+    poster: ''
+  });
+  const [viewMode, setViewMode] = useState('month'); // 'month' or 'week'
 
+  // Sample events data
+  useEffect(() => {
+    const sampleEvents = {
+      [format(new Date(), 'yyyy-MM-dd')]: [
+        {
+          id: 1,
+          title: "Club Orientation",
+          time: "3:00 PM - 5:00 PM",
+          description: "Welcome new members to our club and introduce them to our activities.",
+          location: "Main Auditorium",
+          poster: "https://images.unsplash.com/photo-1524179091875-bf99a9a6af57",
+          createdBy: "Admin"
+        }
+      ],
+      [format(addDays(new Date(), 3), 'yyyy-MM-dd')]: [
+        {
+          id: 2,
+          title: "Workshop: Public Speaking",
+          time: "10:00 AM - 12:00 PM",
+          description: "Improve your public speaking skills with our expert trainers.",
+          location: "Room 302",
+          poster: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678",
+          createdBy: "Admin"
+        }
+      ]
+    };
+    setEvents(sampleEvents);
+  }, []);
 
-
+  // Navigation handlers
   useEffect(() => {
     if (!token) {
       navigate("/");
+    }
+  }, [token, navigate]);
+
+  // Calendar handlers
+  const navigateCalendar = (direction) => {
+    if (viewMode === 'month') {
+      setCurrentMonth(addMonths(currentMonth, direction));
+    } else {
+      setCurrentMonth(addDays(currentMonth, direction * 7));
+    }
+  };
+
+  const goToToday = () => {
+    const today = new Date();
+    setCurrentMonth(today);
+    setSelectedDate(today);
+  };
+
+  const handleDateClick = (day) => {
+    setSelectedDate(day);
+    setShowEventModal(true);
+  };
+
+  const handleAddEvent = () => {
+    setShowEventModal(false);
+    setShowAddEventModal(true);
+  };
+
+  const handleSaveEvent = () => {
+    if (!newEvent.title || !newEvent.time) {
+      alert('Please fill in required fields');
       return;
     }
-  });
 
-  
-  
-  return (
-    <div className="container">
-      <header className="header">
-        <div className="header-left">
-          <div className="logo-container">
-            <img src="/api/placeholder/100/40" alt="Logo" className="logo" />
+    const dateKey = format(selectedDate, 'yyyy-MM-dd');
+    const updatedEvents = { ...events };
+    
+    if (!updatedEvents[dateKey]) {
+      updatedEvents[dateKey] = [];
+    }
+
+    updatedEvents[dateKey].push({
+      id: Date.now(),
+      ...newEvent,
+      createdBy: userData.name
+    });
+
+    setEvents(updatedEvents);
+    setNewEvent({
+      title: '',
+      description: '',
+      time: '',
+      location: '',
+      poster: ''
+    });
+    setShowAddEventModal(false);
+  };
+
+  // Calendar sub-components
+  const EventDot = () => (
+    <div className="event-dot" />
+  );
+
+  const DayCell = ({ day, monthStart }) => {
+    const formattedDate = format(day, "yyyy-MM-dd");
+    const dayEvents = events[formattedDate] || [];
+    const isDisabled = !isSameMonth(day, monthStart);
+    const isCurrentDay = isToday(day);
+    const hasEvents = dayEvents.length > 0;
+
+    return (
+      <div
+        className={`day-cell ${isDisabled ? "disabled" : ""} ${
+          isCurrentDay ? "today" : ""
+        } ${hasEvents ? "has-events" : ""}`}
+        onClick={() => !isDisabled && handleDateClick(day)}
+      >
+        <span className="day-number">{format(day, "d")}</span>
+        {hasEvents && (
+          <div className="event-dots">
+            {dayEvents.slice(0, 3).map((_, i) => (
+              <EventDot key={i} />
+            ))}
           </div>
-        </div>
+        )}
+      </div>
+    );
+  };
 
-        <div className="header-right">
-          <button className="business-btn" onClick={onLogout}>Logout</button>
-        </div>
-      </header>
+  const MonthView = ({ currentMonth }) => {
+    const monthStart = startOfMonth(currentMonth);
+    const monthEnd = endOfMonth(monthStart);
+    const startDate = startOfWeek(monthStart);
+    const endDate = endOfWeek(monthEnd);
 
-      <div className="main-content">
-        <div className="sidebar-menu">
-          <button onClick={onLogout} style={{ color: "#df0000" }}>
-            <FaSignOutAlt style={{ color: "#df0000" }}className="menu-icon" /> Logout
-          </button>
-        </div>
+    const days = eachDayOfInterval({ start: startDate, end: endDate });
 
-        <div className="profile-content">
-          <div className="profile-banner">
-            <div className="banner-background"></div>
-            <div className="edit-button">
-              <FaEdit style={{ color: "#ccc", fontSize: "15px", margin: "5px", fontWeight: "100" }} />
-            </div>
+    const weeks = [];
+    for (let i = 0; i < days.length; i += 7) {
+      weeks.push(days.slice(i, i + 7));
+    }
+
+    return (
+      <div className="days-grid">
+        {weeks.map((week, weekIdx) => (
+          <div className="week-row" key={weekIdx}>
+            {week.map(day => (
+              <DayCell
+                key={day}
+                day={day}
+                monthStart={monthStart}
+              />
+            ))}
           </div>
+        ))}
+      </div>
+    );
+  };
 
-          <div className="profile-details">
-            <div className="profile-header">
-              <div className="profile-pic-container">
-                <div className="progress-container">
-                  
-                  <div className="progress-icon">
-                    <FaUser style={{ color: "#ccc", fontSize: "40px", margin: "5px", fontWeight: "100" }} />
+  const WeekView = ({ currentMonth }) => {
+    const weekStart = startOfWeek(currentMonth);
+    const weekEnd = endOfWeek(currentMonth);
+
+    const days = eachDayOfInterval({ start: weekStart, end: weekEnd });
+
+    return (
+      <div className="week-view">
+        {days.map(day => {
+          const formattedDate = format(day, "yyyy-MM-dd");
+          const dayEvents = events[formattedDate] || [];
+          const isCurrentDay = isToday(day);
+
+          return (
+            <div key={day} className={`week-day ${isCurrentDay ? 'today' : ''}`}>
+              <div className="week-day-header">
+                <span className="week-day-name">{format(day, "EEE")}</span>
+                <span className="week-day-number">{format(day, "d")}</span>
+              </div>
+              <div className="week-day-events">
+                {dayEvents.map(event => (
+                  <div
+                    key={event.id}
+                    className="week-event"
+                    onClick={() => {
+                      setSelectedDate(day);
+                      setShowEventModal(true);
+                    }}
+                  >
+                    <span className="event-time">{event.time.split(' - ')[0]}</span>
+                    <span className="event-title">{event.title}</span>
                   </div>
-                </div>
-              </div>
-
-              <div className="profile-header-info">
-                <div className="profile-name_points">
-                  <h2>{userData?.name || "N/A"}</h2> 
-                  <div className = "points"   >{userData?.point || 0} </div>
-                  <div className="points_text">points</div>
-                </div>
-                <div className = "profile-username">{userData?.rollNo || "unknown"}</div>
-                <div className = "profile-contact">
-                  <span>{userData?.phone || "N/A"}</span><div>|</div>
-                  <span className="profile-email">{userData?.email || "N/A"}</span>
-                </div>
-                <div className="profile-education">
-                  <FaUniversity style={{ fontSize: "15px", margin: "10px", fontWeight: "100" }} />
-                  <span>{userData?.college || "unknown"}</span>
-                </div>
+                ))}
               </div>
             </div>
+          );
+        })}
+      </div>
+    );
+  };
 
-            <div className="section-container">
-                <div className="section-header">
-                    <h3>About</h3>
+  const EventDetailsModal = ({ date, events, onClose, onAddEvent }) => {
+    const dateEvents = events[format(date, 'yyyy-MM-dd')] || [];
+
+    return (
+      <div className="modal-overlay">
+        <div className="event-modal">
+          <button className="close-modal" onClick={onClose}>
+            <X size={20} />
+          </button>
+          <h3>{format(date, 'EEEE, MMMM d, yyyy')}</h3>
+          
+          {dateEvents.length > 0 ? (
+            <div className="event-list">
+              {dateEvents.map(event => (
+                <div key={event.id} className="event-item">
+                  <div className="event-time">{event.time}</div>
+                  <div className="event-title">{event.title}</div>
+                  <div className="event-location">{event.location}</div>
+                  {event.poster && (
+                    <div className="event-poster-preview">
+                      <img src={event.poster} alt={event.title} />
+                    </div>
+                  )}
                 </div>
-                <p className="section-prompt">
-                    {userData?.about || "Craft an engaging story in your bio and make meaningful connections with peers and recruiters alike!"}
-                </p>
-                <button className="add-button">Add About</button>
+              ))}
             </div>
-
+          ) : (
+            <div className="no-events">No events scheduled for this day</div>
+          )}
+          
+          <div className="event-actions">
+            <button onClick={onAddEvent} className="action-btn primary">
+              <FaPlus /> Add Event
+            </button>
           </div>
         </div>
       </div>
+    );
+  };
+
+  return (
+    <div className="club-dashboard">
+      <header className="club-header">
+        <div className="club-header__left">
+          <div className="club-logo">
+            <img src="/logo.png" alt="Club Logo" className="club-logo__image" />
+          </div>
+        </div>
+        <div className="club-header__right">
+          <button className="club-logout" onClick={onLogout}>
+            <FaSignOutAlt className="club-logout__icon" /> Logout
+          </button>
+        </div>
+      </header>
+
+      <div className="club-content">
+        <div className="club-profile">
+          <div className="club-profile__banner">
+            <div className="club-profile__banner-overlay"></div>
+            <button className="club-profile__edit">
+              <FaEdit className="club-profile__edit-icon" /> Edit Profile
+            </button>
+          </div>
+
+          <div className="club-profile__details">
+            <div className="club-profile__picture">
+              <FaUser className="club-profile__picture-icon" />
+            </div>
+            <div className="club-profile__info">
+              <h2 className="club-profile__name">{userData?.name || "Club Member"}</h2>
+              <p className="club-profile__role">{userData?.role || "Member"}</p>
+              <p className="club-profile__contact">
+                {userData?.email || "email@example.com"} | {userData?.phone || "000-000-0000"}
+              </p>
+              <div className="club-profile__college">
+                <FaUniversity className="club-profile__college-icon" /> {userData?.college || "University"}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="club-calendar">
+          <div className="club-calendar__header">
+            <h2 className="club-calendar__title">Club Events Calendar</h2>
+            <div className="club-calendar__controls">
+              <div className="club-calendar__view-toggle">
+                <button 
+                  className={`club-calendar__view-button ${viewMode === 'month' ? 'club-calendar__view-button--active' : ''}`}
+                  onClick={() => setViewMode('month')}
+                >
+                  Month
+                </button>
+                <button 
+                  className={`club-calendar__view-button ${viewMode === 'week' ? 'club-calendar__view-button--active' : ''}`}
+                  onClick={() => setViewMode('week')}
+                >
+                  Week
+                </button>
+              </div>
+              <div className="club-calendar__navigation">
+                <button 
+                  className="club-calendar__nav-button"
+                  onClick={() => navigateCalendar(-1)}
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <h3 className="club-calendar__current-date">
+                  {viewMode === 'month' 
+                    ? format(currentMonth, 'MMMM yyyy') 
+                    : `${format(startOfWeek(currentMonth), 'MMM d')} - ${format(endOfWeek(currentMonth), 'MMM d, yyyy')}`
+                  }
+                </h3>
+                <button 
+                  className="club-calendar__nav-button"
+                  onClick={() => navigateCalendar(1)}
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+              <button 
+                className="club-calendar__today-button"
+                onClick={goToToday}
+              >
+                Today
+              </button>
+            </div>
+          </div>
+
+          <div className="club-calendar__days-header">
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, i) => (
+              <div key={i} className="club-calendar__day-name">{day}</div>
+            ))}
+          </div>
+
+          {viewMode === 'month' ? (
+            <MonthView currentMonth={currentMonth} />
+          ) : (
+            <WeekView currentMonth={currentMonth} />
+          )}
+        </div>
+      </div>
+
+      {/* Event Details Modal */}
+      {showEventModal && selectedDate && (
+        <EventDetailsModal 
+          date={selectedDate}
+          events={events}
+          onClose={() => setShowEventModal(false)}
+          onAddEvent={handleAddEvent}
+        />
+      )}
+
+      {/* Add Event Modal */}
+      {showAddEventModal && selectedDate && (
+        <div className="club-modal__overlay">
+          <div className="club-modal">
+            <button 
+              className="club-modal__close"
+              onClick={() => setShowAddEventModal(false)}
+            >
+              <X size={20} />
+            </button>
+            <h3 className="club-modal__title">Add Event for {format(selectedDate, 'MMMM d, yyyy')}</h3>
+            
+            <div className="club-modal__field">
+              <label className="club-modal__label">Event Title*</label>
+              <input 
+                type="text" 
+                className="club-modal__input"
+                value={newEvent.title}
+                onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
+                placeholder="Enter event title"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label>Time*</label>
+              <input 
+                type="text" 
+                value={newEvent.time}
+                onChange={(e) => setNewEvent({...newEvent, time: e.target.value})}
+                placeholder="e.g. 2:00 PM - 4:00 PM"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label>Location</label>
+              <input 
+                type="text" 
+                value={newEvent.location}
+                onChange={(e) => setNewEvent({...newEvent, location: e.target.value})}
+                placeholder="Enter location"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label>Poster Image URL</label>
+              <input 
+                type="text" 
+                value={newEvent.poster}
+                onChange={(e) => setNewEvent({...newEvent, poster: e.target.value})}
+                placeholder="Enter image URL"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label>Description</label>
+              <textarea 
+                value={newEvent.description}
+                onChange={(e) => setNewEvent({...newEvent, description: e.target.value})}
+                placeholder="Enter event description"
+              />
+            </div>
+            
+            <div className="club-modal__actions">
+              <button 
+                className="club-modal__button club-modal__button--cancel"
+                onClick={() => setShowAddEventModal(false)}
+              >
+                Cancel
+              </button>
+              <button 
+                className="club-modal__button club-modal__button--save"
+                onClick={handleSaveEvent}
+              >
+                Save Event
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
