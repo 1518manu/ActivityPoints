@@ -61,7 +61,7 @@ export function LoginPage({ onLoginSuccess }) {
                 case "Faculty":
                   navigate("/FacultyDashboard");
                   break;
-                case "Club":
+                case "Clubs":
                   navigate("/ClubDashboard");
                   break;
                 case "Students":
@@ -130,7 +130,7 @@ const handleGoogleSignIn = async (e) => {
               console.log("Faculty role found!");
               navigate("/FacultyDashboard");
               break;
-            case "Club":
+            case "Clubs":
               console.log("Club role found!");
               navigate("/ClubDashboard");
               break;
@@ -207,7 +207,7 @@ const handleSubmit = async (e) => {
               console.log("Faculty role found!");
               navigate("/FacultyDashboard");
               break;
-            case "Club":
+            case "Clubs":
               console.log("Club role found!");
               navigate("/ClubDashboard");
               break;
