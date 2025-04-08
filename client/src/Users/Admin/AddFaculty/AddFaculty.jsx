@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState , useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUserTie, FaCog, FaPlus, FaSignOutAlt, FaBell, FaFilter, FaCheckCircle, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { db } from '../../../firebaseFile/firebaseConfig';
@@ -25,6 +25,13 @@ export const AddFaculty = ({ token, userData, onLogout }) => {
   const [success, setSuccess] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const fileInputRef = useRef(null);
+
+const handleUploadButtonClick = () => {
+  if (fileInputRef.current) {
+    fileInputRef.current.click();
+  }
+};
 
   
   const navigate = useNavigate();
@@ -139,7 +146,79 @@ export const AddFaculty = ({ token, userData, onLogout }) => {
       setLoading(false);
     }
   };
-
+  const handleJSONUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+  
+    setLoading(true);
+    setError('');
+    setSuccess('');
+  
+    const auth = getAuth();
+  
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+  
+      if (!Array.isArray(data)) {
+        throw new Error("JSON must be an array of faculty objects");
+      }
+  
+      for (const entry of data) {
+        try {
+          const {
+            name, email, password, phone,
+            faculty_id, department, designation,
+            faculty_type, assigned_class, college
+          } = entry;
+  
+          if (!email.endsWith('@tkmce.ac.in')) {
+            throw new Error(`Invalid email for ${name}`);
+          }
+  
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          const uid = userCredential.user.uid;
+  
+          const userDoc = {
+            name,
+            email,
+            faculty_type,
+            role: "Faculty",
+            user_id: faculty_id,
+            createdAt: serverTimestamp()
+          };
+  
+          const facultyDoc = {
+            name,
+            email,
+            phone,
+            faculty_id,
+            department,
+            designation,
+            faculty_type,
+            assigned_class,
+            college,
+            createdAt: serverTimestamp()
+          };
+  
+          await setDoc(doc(db, "Users", uid), userDoc);
+          await setDoc(doc(db, "Faculty", faculty_id), facultyDoc);
+  
+        } catch (entryErr) {
+          console.error(`Error adding faculty from JSON:`, entryErr.message);
+          setError(prev => `${prev}\n${entryErr.message}`);
+        }
+      }
+  
+      setSuccess('Faculty members uploaded successfully!');
+    } catch (err) {
+      console.error("JSON Upload Error:", err);
+      setError(err.message || "Failed to process JSON upload");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
   return (
     <div className="container">
@@ -344,7 +423,28 @@ export const AddFaculty = ({ token, userData, onLogout }) => {
                   'Add Faculty Member'
                 )}
               </button>
+              <hr style={{ margin: "20px 0" }} />
+
+
+
             </form>
+            <div className="upload-json-section mt-4">
+  <button
+    type="button"
+    className="submit-btn bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+    onClick={handleUploadButtonClick}
+  >
+    Upload JSON
+  </button>
+  
+  <input
+    type="file"
+    ref={fileInputRef}
+    accept=".json"
+    onChange={handleJSONUpload}
+    style={{ display: 'none' }}
+  />
+</div>
           </div>
         </div>
       </div>
