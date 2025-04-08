@@ -82,12 +82,11 @@
   }
   
   .logout-btn {
-    color: #d93025 !important;
-    margin-top: auto;
+    color: #d93025;
   }
   
   .logout-btn:hover {
-    background-color: #fce8e6 !important;
+    background-color: #fce8e6 ;
   }
   
   /* ===== Student Form Styles ===== */

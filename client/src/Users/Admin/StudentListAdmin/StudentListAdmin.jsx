@@ -83,17 +83,17 @@ export const StudentListAdmin = ({ token, userData, onLogout }) => {
             <img src="/api/placeholder/100/40" alt="Logo" className="logo" />
           </div>
         </div>
-        <div className="header-right-faculty">
+        <div className="header-right-Admin">
           <button className="business-btn" onClick={onLogout}>Logout</button>
         </div>
       </header>
 
       <div className="main-content">
-        <div className="sidebar-menu-faculty">
-        <button onClick={() => navigate("/Admin")}><FaUserTie className="menu-icon-faculty" /> Dashboard</button>
-          <button><FaCog className="menu-icon-faculty" /> Settings</button>
+        <div className="sidebar-menu-Admin">
+        <button onClick={() => navigate("/Admin")}><FaUserTie className="menu-icon-Admin" /> Dashboard</button>
+          <button><FaCog className="menu-icon-Admin" /> Settings</button>
           <button onClick={onLogout} className="logout-btn">
-            <FaSignOutAlt className="menu-icon-faculty" /> Logout
+            <FaSignOutAlt className="menu-icon-Admin" /> Logout
           </button>
         </div>
 
