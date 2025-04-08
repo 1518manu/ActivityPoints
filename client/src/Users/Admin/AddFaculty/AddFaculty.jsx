@@ -7,7 +7,6 @@ import { createUserWithEmailAndPassword, getAuth, deleteUser } from 'firebase/au
 import './AddFaculty.css'; // Create similar CSS file as AddStudent.css
 
 export const AddFaculty = ({ token, userData, onLogout }) => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -27,6 +26,11 @@ export const AddFaculty = ({ token, userData, onLogout }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  
+  const navigate = useNavigate();
+  const onAddFaculty = () => { navigate("/AddStudent"); }
+  const onDashboard = () => { navigate("/Admin"); }
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -156,15 +160,12 @@ export const AddFaculty = ({ token, userData, onLogout }) => {
 
       <div className="main-content">
         <div className="sidebar-menu-faculty">
-          <button onClick={() => navigate("/Admin")}>
-            <FaUserTie className="menu-icon-faculty" /> Dashboard
-          </button>
-          <button>
-            <FaCog className="menu-icon-faculty" /> Settings
-          </button>
-          <button onClick={onLogout} className="logout-btn">
-            <FaSignOutAlt className="menu-icon-faculty" /> Logout
-          </button>
+           <button onClick={onDashboard}><FaUserTie className="menu-icon-Admin" /> Dashboard</button>
+           <button><FaBell className="menu-icon-Admin" /> Notifications</button>
+           <button><FaFilter className="menu-icon-Admin" /> Filter</button>
+           <button><FaCog className="menu-icon-faculty" /> Settings  </button>
+           <button onClick={onAddStudent}><FaPlus className="menu-icon-Admin" /> ADD Student </button>
+           <button onClick={onLogout} className="logout-btn"> <FaSignOutAlt className="menu-icon-faculty" /> Logout </button>
         </div>
 
         <div className="profile-content">

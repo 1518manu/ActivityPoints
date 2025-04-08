@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaUserTie, FaCog, FaSignOutAlt, FaCheckCircle, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaUserTie, FaCog, FaSignOutAlt, FaBell, FaFilter, FaCheckCircle, FaPlus, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { db } from '../../../firebaseFile/firebaseConfig';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import './AddStudent.css';
 
 export const AddStudent = ({ token, userData, onLogout }) => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,6 +27,12 @@ export const AddStudent = ({ token, userData, onLogout }) => {
   const [success, setSuccess] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  
+  const navigate = useNavigate();
+  const onAddStudent = () => { navigate("/AddStudent"); }
+  const onAddFaculty = () => { navigate("/AddFaculty"); }
+  const onDashboard = () => { navigate("/Admin"); }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -153,16 +158,14 @@ export const AddStudent = ({ token, userData, onLogout }) => {
       </header>
 
       <div className="main-content">
+         
         <div className="sidebar-menu-faculty">
-          <button onClick={() => navigate("/Admin")}>
-            <FaUserTie className="menu-icon-faculty" /> Dashboard
-          </button>
-          <button>
-            <FaCog className="menu-icon-faculty" /> Settings
-          </button>
-          <button onClick={onLogout} className="logout-btn">
-            <FaSignOutAlt className="menu-icon-faculty" /> Logout
-          </button>
+           <button onClick={onDashboard}><FaUserTie className="menu-icon-Admin" /> Dashboard</button>
+           <button><FaBell className="menu-icon-Admin" /> Notifications</button>
+           <button><FaFilter className="menu-icon-Admin" /> Filter</button>
+           <button><FaCog className="menu-icon-faculty" /> Settings  </button>
+           <button onClick={onAddStudent}><FaPlus className="menu-icon-Admin" /> ADD Student </button>
+           <button onClick={onLogout} className="logout-btn"> <FaSignOutAlt className="menu-icon-faculty" /> Logout </button>
         </div>
 
         <div className="profile-content">

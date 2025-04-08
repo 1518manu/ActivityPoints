@@ -23,6 +23,7 @@ import { Admin } from "./Users/Admin/Admin"
 import { StudentListAdmin } from "./Users/Admin/StudentListAdmin/StudentListAdmin";
 import { AddStudent } from "./Users/Admin/AddStudent/AddStudent";
 import { AddFaculty } from "./Users/Admin/AddFaculty/AddFaculty";
+import { SettingsAdmin } from "./Users/Admin/SettingsAdmin/SettingsAdmin"
 
 import "./App.css";
 

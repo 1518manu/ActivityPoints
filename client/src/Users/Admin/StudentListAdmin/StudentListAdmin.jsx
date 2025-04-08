@@ -95,7 +95,7 @@ export const StudentListAdmin = ({ token, userData, onLogout }) => {
       <div className="main-content">
         <div className="sidebar-menu-Admin">
 
-            <button ><FaUserTie className="menu-icon-Admin" /> Dashboard</button>
+            <button onClick={onDashboard} ><FaUserTie className="menu-icon-Admin" /> Dashboard</button>
             <button > <FaBell   className="menu-icon-Admin" /> Notifications  {/* notificationCount > 0 && <span className="badge">{notificationCount}</span> */} </button>
             <button> <FaFilter   className="menu-icon-Admin" /> Filter  </button>
             <button onClick={onAddFaculty}> <FaPlus    className="menu-icon-Admin" /> ADD Faculty  </button>
