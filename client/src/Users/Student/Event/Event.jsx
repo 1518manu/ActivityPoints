@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaFileAlt, FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt } from "react-icons/fa";
+import { FaFileAlt, FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaUser, FaUserTie } from "react-icons/fa";
 import './Event.css';
 import { X, ExternalLink, CalendarPlus } from 'lucide-react';
 
@@ -86,7 +86,36 @@ const DUMMY_EVENTS = {
     }
   ]
 };
+const DayCell = ({ day, monthStart, events, onDateClick }) => {
+  const formattedDate = format(day, "yyyy-MM-dd");
+  const dayEvents = events[formattedDate] || [];
+  const isDisabled = !isSameMonth(day, monthStart);
+  const isCurrentDay = isToday(day);
+  const hasEvents = dayEvents.length > 0;
 
+  return (
+    <div
+      className={`day-cell ${isDisabled ? "disabled" : ""} ${
+        isCurrentDay ? "today" : ""
+      } ${hasEvents ? "has-events" : ""}`}
+      onClick={() => !isDisabled && hasEvents && onDateClick(day)}
+    >
+      <span className="day-number">{format(day, "d")}</span>
+      {hasEvents ? (
+        <div className="event-preview">
+          {dayEvents.slice(0, 2).map(event => (
+            <EventDot key={event.id} event={event} />
+          ))}
+          {dayEvents.length > 2 && (
+            <div className="more-events">+{dayEvents.length - 2}</div>
+          )}
+        </div>
+      ) : (
+        !isDisabled && <div className="no-events">N/A</div>
+      )}
+    </div>
+  );
+};
 export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => {
   const navigate = useNavigate();
   
@@ -212,7 +241,7 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
   const onCertificate = () => navigate("/certificate");
   const onNotification = () => navigate("/Notification");
   const onDutyLeave = () => navigate("/duty-leave");
-  const onEvent = () => navigate("/StudentEvents");
+  const onDashboard = () => navigate("/StudentDashboard");
 
   // Sub-components
   const EventDot = ({ event }) => (
@@ -328,7 +357,7 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
   }) => {
     const [activeEventIndex, setActiveEventIndex] = useState(0);
     const event = selectedEvents[activeEventIndex];
-
+  
     if (!event) {
       return (
         <div className="modal-overlay">
@@ -536,8 +565,8 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
           <button>
             <FaCog className="menu-icon" /> Settings
           </button>
-          <button onClick={onEvent}>
-            <FaFileAlt className="menu-icon" /> Events
+          <button onClick={onDashboard}>
+            <FaUserTie className="menu-icon" /> Dashboard
           </button>
           <button onClick={onDutyLeave}>
             <FaCalendarAlt className="menu-icon" /> Duty leave
