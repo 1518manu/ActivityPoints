@@ -363,6 +363,12 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
       setActiveEventIndex(prev => (prev < selectedEvents.length - 1 ? prev + 1 : 0));
     };
 
+      
+    if (!token) {
+      navigate("/");
+      return null;
+    }
+
     return (
       <div className="modal-overlay">
         <div className="event-details-modal">

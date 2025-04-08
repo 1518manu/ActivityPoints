@@ -140,10 +140,6 @@ export const AddFaculty = ({ token, userData, onLogout }) => {
     }
   };
 
-  if (!token) {
-    navigate("/");
-    return null;
-  }
 
   return (
     <div className="container">
