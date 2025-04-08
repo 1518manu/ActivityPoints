@@ -71,7 +71,7 @@ function App() {
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
+      await signOut(auth).then(console.log("User signed out"));
       setIsLoggedIn(false);
       setToken(null);
       setUserData(null);
@@ -80,7 +80,7 @@ function App() {
     } catch (error) {
       console.error("Error logging out:", error);
     } finally {
-      console.log("User logged out");
+      console.log("User logged out in finally");
     }
   };
 // just for develeopment fase to see the user data , u can remove it any time

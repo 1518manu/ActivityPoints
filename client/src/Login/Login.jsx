@@ -162,6 +162,7 @@ const handleGoogleSignIn = async (e) => {
   }
   
 };
+
 const handleSubmit = async (e) => {
   e.preventDefault();
   if (!email || !password) {

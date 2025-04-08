@@ -365,6 +365,7 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
 
       
     if (!token) {
+      console.log("Token not found, redirecting to login page...");
       navigate("/");
       return null;
     }
