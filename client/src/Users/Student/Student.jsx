@@ -7,7 +7,6 @@ import { collection, query, where, onSnapshot ,getDocs} from "firebase/firestore
 import { db } from "../../firebaseFile/firebaseConfig";
 import 'react-circular-progressbar/dist/styles.css';
 import './Student.css';
-import { use } from "react";
 
 const getColor = (point) => {
   if (point <= 40) {
@@ -111,6 +110,8 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
   const onCertificate = () => navigate("/certificate");
   const onNotification = () => navigate("/Notification");
   const onDutyLeave = () => navigate("/duty-leave");
+  const onEvent = () => navigate("/StudentEvents");
+  
   if (!userData) {
     return <div>Loading user data...</div>;
   }
@@ -139,7 +140,7 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
             <FaCog className="menu-icon" /> Settings
           </button>
 
-          <button>
+          <button  onClick={onEvent}>
             <FaFileAlt className="menu-icon" /> Event <span className="badge">new</span>
           </button>
           

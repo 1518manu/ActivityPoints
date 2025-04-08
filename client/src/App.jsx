@@ -10,6 +10,7 @@ import { Loading } from "./Loading/Loading";
 import { Student } from "./Users/Student/Student";
 import { DutyLeaveForm } from "./Users/Student/DutyLeave/DutyLeaveStudent";
 import { CertificateUploadPage } from "./Users/Student/Upload/Upload";
+import { StudentEvent } from "./Users/Student/Event/Event"
 import { Certificate } from "./Users/Student/Certificates/Certificate";
 import { NotificationPageStudent } from "./Users/Student/Notification/NotificationStudent";
 
@@ -134,7 +135,12 @@ function App() {
                 }
               />
               /duty-leave
-
+              <Route
+                path = "/StudentEvents"
+                element ={
+                  <StudentEvent token={token} userData={userData} onLogout={handleLogout} />
+                }
+              />
               <Route 
                 path = "/FacultyDashboard"
                 element={
