@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaUser, FaUniversity, FaSignOutAlt, FaPlus, FaTimes } from "react-icons/fa";
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { FaUser, FaUniversity, FaSignOutAlt, FaPlus, FaTimes, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import './Club.css';
 import {
   format,
@@ -35,6 +34,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
     poster: ''
   });
   const [editingEvent, setEditingEvent] = useState(null);
+  const [showDayEvents, setShowDayEvents] = useState(false);
 
   // Sample events data
   useEffect(() => {
@@ -85,11 +85,17 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
     const today = new Date();
     setCurrentMonth(today);
     setSelectedDate(today);
+    setShowDayEvents(true);
   };
 
   const handleDateClick = (day) => {
     setSelectedDate(day);
+    setShowDayEvents(true);
     setEditingEvent(null);
+  };
+
+  const closeDayEvents = () => {
+    setShowDayEvents(false);
   };
 
   const handleAddEvent = () => {
@@ -104,6 +110,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
         poster: ''
       }
     });
+    setShowDayEvents(false);
   };
 
   const handleEditEvent = (event) => {
@@ -112,6 +119,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
       date: selectedDate,
       event: { ...event }
     });
+    setShowDayEvents(false);
   };
 
   const handleSaveEvent = () => {
@@ -141,6 +149,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
 
     setEvents(updatedEvents);
     setEditingEvent(null);
+    setShowDayEvents(true);
   };
 
   const handleDeleteEvent = () => {
@@ -156,10 +165,12 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
       setEvents(updatedEvents);
     }
     setEditingEvent(null);
+    setShowDayEvents(true);
   };
 
   const handleCancelEdit = () => {
     setEditingEvent(null);
+    setShowDayEvents(true);
   };
 
   // Calendar sub-components
@@ -276,58 +287,65 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
     );
   };
 
-  const EventList = () => {
-    if (!selectedDate) return null;
+  const DayEventsPopup = () => {
+    if (!selectedDate || !showDayEvents) return null;
     
     const dateKey = format(selectedDate, 'yyyy-MM-dd');
     const dayEvents = events[dateKey] || [];
 
     return (
-      <div className="club-events">
-        <h3 className="club-events__title">
-          Events for {format(selectedDate, 'EEEE, MMMM d, yyyy')}
-          {!editingEvent && (
-            <button 
-              className="club-events__add-button"
-              onClick={handleAddEvent}
-            >
-              <FaPlus /> Add Event
-            </button>
-          )}
-        </h3>
+      <div className="club-day-events-popup">
+        <div className="club-day-events-popup__header">
+          <h3 className="club-day-events-popup__title">
+            Events for {format(selectedDate, 'EEEE, MMMM d, yyyy')}
+          </h3>
+          <button 
+            className="club-day-events-popup__close"
+            onClick={closeDayEvents}
+          >
+            <FaTimes />
+          </button>
+        </div>
         
         {dayEvents.length > 0 ? (
-          <div className="club-events__list">
+          <div className="club-day-events-popup__list">
             {dayEvents.map(event => (
               <div 
                 key={event.id} 
-                className="club-events__item"
+                className="club-day-events-popup__item"
                 onClick={() => handleEditEvent(event)}
               >
-                <div className="club-events__item-header">
-                  <span className="club-events__item-time">{event.time}</span>
-                  <span className="club-events__item-title">{event.title}</span>
+                <div className="club-day-events-popup__item-header">
+                  <span className="club-day-events-popup__item-time">{event.time}</span>
+                  <span className="club-day-events-popup__item-title">{event.title}</span>
                 </div>
-                <div className="club-events__item-location">{event.location}</div>
+                <div className="club-day-events-popup__item-location">{event.location}</div>
                 {event.description && (
-                  <div className="club-events__item-description">{event.description}</div>
+                  <div className="club-day-events-popup__item-description">{event.description}</div>
                 )}
                 {event.poster && (
-                  <div className="club-events__item-poster">
+                  <div className="club-day-events-popup__item-poster">
                     <img src={event.poster} alt={event.title} />
                   </div>
                 )}
-                <div className="club-events__item-footer">
+                <div className="club-day-events-popup__item-footer">
                   Created by: {event.createdBy}
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="club-events__empty">
+          <div className="club-day-events-popup__empty">
             No events scheduled for this day
           </div>
         )}
+        
+        <button 
+          className="club-day-events-popup__add-button"
+          onClick={handleAddEvent}
+        >
+          <FaPlus /> Add Event
+        </button>
       </div>
     );
   };
@@ -522,7 +540,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
                     className="club-calendar__nav-button"
                     onClick={() => navigateCalendar(-1)}
                   >
-                    <ChevronLeft size={20} />
+                    <FaChevronLeft size={16} />
                   </button>
                   <h3 className="club-calendar__current-date">
                     {viewMode === 'month' 
@@ -534,7 +552,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
                     className="club-calendar__nav-button"
                     onClick={() => navigateCalendar(1)}
                   >
-                    <ChevronRight size={20} />
+                    <FaChevronRight size={16} />
                   </button>
                 </div>
                 <button 
@@ -562,7 +580,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
           </div>
 
           <div className="club-sidebar">
-            {editingEvent ? <EventEditor /> : <EventList />}
+            {editingEvent ? <EventEditor /> : <DayEventsPopup />}
           </div>
         </div>
       </div>

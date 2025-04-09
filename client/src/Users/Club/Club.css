@@ -610,3 +610,175 @@
     min-height: 100px;
   }
 }
+
+
+.club-day-events-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  overflow-y: auto;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -40%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.club-day-events-popup__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.club-day-events-popup__title {
+  font-size: 1.2rem;
+  color: #2c3e50;
+  margin: 0;
+  padding-right: 2rem;
+}
+
+.club-day-events-popup__close {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #95a5a6;
+  font-size: 1.2rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.club-day-events-popup__close:hover {
+  background-color: #f0f0f0;
+  color: #7f8c8d;
+}
+
+.club-day-events-popup__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.club-day-events-popup__item {
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.club-day-events-popup__item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.club-day-events-popup__item-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.club-day-events-popup__item-time {
+  color: #3498db;
+  font-weight: 500;
+}
+
+.club-day-events-popup__item-title {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.club-day-events-popup__item-location {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin-bottom: 0.5rem;
+}
+
+.club-day-events-popup__item-description {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.club-day-events-popup__item-poster img {
+  width: 100%;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+.club-day-events-popup__item-footer {
+  font-size: 0.8rem;
+  color: #95a5a6;
+  margin-top: 0.5rem;
+}
+
+.club-day-events-popup__empty {
+  color: #95a5a6;
+  text-align: center;
+  padding: 2rem 0;
+  margin-bottom: 1.5rem;
+}
+
+.club-day-events-popup__add-button {
+  width: 100%;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.club-day-events-popup__add-button:hover {
+  background-color: #2980b9;
+}
+
+/* Overlay for the popup */
+.club-day-events-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  animation: fadeInOverlay 0.3s ease-out;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .club-day-events-popup {
+    width: 95%;
+    max-height: 85vh;
+  }
+}
