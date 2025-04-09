@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaUser, FaUniversity, FaSignOutAlt, FaPlus } from "react-icons/fa";
-import { CalendarPlus, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { FaUser, FaUniversity, FaSignOutAlt, FaPlus, FaTimes } from "react-icons/fa";
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import './Club.css';
 import {
   format,
@@ -24,10 +24,9 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
 
   // Calendar state
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [events, setEvents] = useState({});
-  const [showEventModal, setShowEventModal] = useState(false);
-  const [showAddEventModal, setShowAddEventModal] = useState(false);
+  const [viewMode, setViewMode] = useState('month'); // 'month' or 'week'
   const [newEvent, setNewEvent] = useState({
     title: '',
     description: '',
@@ -35,7 +34,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
     location: '',
     poster: ''
   });
-  const [viewMode, setViewMode] = useState('month'); // 'month' or 'week'
+  const [editingEvent, setEditingEvent] = useState(null);
 
   // Sample events data
   useEffect(() => {
@@ -90,42 +89,77 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
 
   const handleDateClick = (day) => {
     setSelectedDate(day);
-    setShowEventModal(true);
+    setEditingEvent(null);
   };
 
   const handleAddEvent = () => {
-    setShowEventModal(false);
-    setShowAddEventModal(true);
+    setEditingEvent({
+      mode: 'create',
+      date: selectedDate,
+      event: {
+        title: '',
+        description: '',
+        time: '',
+        location: '',
+        poster: ''
+      }
+    });
+  };
+
+  const handleEditEvent = (event) => {
+    setEditingEvent({
+      mode: 'edit',
+      date: selectedDate,
+      event: { ...event }
+    });
   };
 
   const handleSaveEvent = () => {
-    if (!newEvent.title || !newEvent.time) {
+    if (!editingEvent.event.title || !editingEvent.event.time) {
       alert('Please fill in required fields');
       return;
     }
 
-    const dateKey = format(selectedDate, 'yyyy-MM-dd');
+    const dateKey = format(editingEvent.date, 'yyyy-MM-dd');
     const updatedEvents = { ...events };
     
-    if (!updatedEvents[dateKey]) {
-      updatedEvents[dateKey] = [];
+    if (editingEvent.mode === 'create') {
+      if (!updatedEvents[dateKey]) {
+        updatedEvents[dateKey] = [];
+      }
+      updatedEvents[dateKey].push({
+        id: Date.now(),
+        ...editingEvent.event,
+        createdBy: userData.name
+      });
+    } else {
+      const eventIndex = updatedEvents[dateKey].findIndex(e => e.id === editingEvent.event.id);
+      if (eventIndex !== -1) {
+        updatedEvents[dateKey][eventIndex] = editingEvent.event;
+      }
     }
 
-    updatedEvents[dateKey].push({
-      id: Date.now(),
-      ...newEvent,
-      createdBy: userData.name
-    });
-
     setEvents(updatedEvents);
-    setNewEvent({
-      title: '',
-      description: '',
-      time: '',
-      location: '',
-      poster: ''
-    });
-    setShowAddEventModal(false);
+    setEditingEvent(null);
+  };
+
+  const handleDeleteEvent = () => {
+    if (editingEvent.mode === 'edit') {
+      const dateKey = format(editingEvent.date, 'yyyy-MM-dd');
+      const updatedEvents = { ...events };
+      updatedEvents[dateKey] = updatedEvents[dateKey].filter(e => e.id !== editingEvent.event.id);
+      
+      if (updatedEvents[dateKey].length === 0) {
+        delete updatedEvents[dateKey];
+      }
+      
+      setEvents(updatedEvents);
+    }
+    setEditingEvent(null);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingEvent(null);
   };
 
   // Calendar sub-components
@@ -138,13 +172,16 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
     const dayEvents = events[formattedDate] || [];
     const isDisabled = !isSameMonth(day, monthStart);
     const isCurrentDay = isToday(day);
+    const isSelected = selectedDate && isSameDay(day, selectedDate);
     const hasEvents = dayEvents.length > 0;
 
     return (
       <div
         className={`club-calendar__day-cell ${isDisabled ? "club-calendar__day-cell--disabled" : ""} ${
           isCurrentDay ? "club-calendar__day-cell--today" : ""
-        } ${hasEvents ? "club-calendar__day-cell--has-events" : ""}`}
+        } ${isSelected ? "club-calendar__day-cell--selected" : ""} ${
+          hasEvents ? "club-calendar__day-cell--has-events" : ""
+        }`}
         onClick={() => !isDisabled && handleDateClick(day)}
       >
         <span className="club-calendar__day-number">{format(day, "d")}</span>
@@ -201,9 +238,18 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
           const formattedDate = format(day, "yyyy-MM-dd");
           const dayEvents = events[formattedDate] || [];
           const isCurrentDay = isToday(day);
+          const isSelected = selectedDate && isSameDay(day, selectedDate);
 
           return (
-            <div key={day} className={`club-calendar__week-day ${isCurrentDay ? 'club-calendar__week-day--today' : ''}`}>
+            <div 
+              key={day} 
+              className={`club-calendar__week-day ${
+                isCurrentDay ? 'club-calendar__week-day--today' : ''
+              } ${
+                isSelected ? 'club-calendar__week-day--selected' : ''
+              }`}
+              onClick={() => handleDateClick(day)}
+            >
               <div className="club-calendar__week-day-header">
                 <span className="club-calendar__week-day-name">{format(day, "EEE")}</span>
                 <span className="club-calendar__week-day-number">{format(day, "d")}</span>
@@ -213,9 +259,9 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
                   <div
                     key={event.id}
                     className="club-calendar__week-event"
-                    onClick={() => {
-                      setSelectedDate(day);
-                      setShowEventModal(true);
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditEvent(event);
                     }}
                   >
                     <span className="club-calendar__event-time">{event.time.split(' - ')[0]}</span>
@@ -230,124 +276,185 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
     );
   };
 
-  const EventDetailsModal = ({ date, events, onClose, onAddEvent }) => {
-    const dateEvents = events[format(date, 'yyyy-MM-dd')] || [];
+  const EventList = () => {
+    if (!selectedDate) return null;
+    
+    const dateKey = format(selectedDate, 'yyyy-MM-dd');
+    const dayEvents = events[dateKey] || [];
 
     return (
-      <div className="club-modal__overlay">
-        <div className="club-modal">
-          <button className="club-modal__close" onClick={onClose}>
-            <X size={20} />
-          </button>
-          <h3 className="club-modal__title">{format(date, 'EEEE, MMMM d, yyyy')}</h3>
-          
-          {dateEvents.length > 0 ? (
-            <div className="club-modal__event-list">
-              {dateEvents.map(event => (
-                <div key={event.id} className="club-modal__event-item">
-                  <div className="club-modal__event-time">{event.time}</div>
-                  <div className="club-modal__event-title">{event.title}</div>
-                  <div className="club-modal__event-location">{event.location}</div>
-                  {event.poster && (
-                    <div className="club-modal__event-poster">
-                      <img src={event.poster} alt={event.title} className="club-modal__event-poster-image" />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="club-modal__no-events">No events scheduled for this day</div>
-          )}
-          
-          <div className="club-modal__actions">
-            <button onClick={onAddEvent} className="club-modal__button club-modal__button--primary">
-              <FaPlus className="club-modal__button-icon" /> Add Event
+      <div className="club-events">
+        <h3 className="club-events__title">
+          Events for {format(selectedDate, 'EEEE, MMMM d, yyyy')}
+          {!editingEvent && (
+            <button 
+              className="club-events__add-button"
+              onClick={handleAddEvent}
+            >
+              <FaPlus /> Add Event
             </button>
+          )}
+        </h3>
+        
+        {dayEvents.length > 0 ? (
+          <div className="club-events__list">
+            {dayEvents.map(event => (
+              <div 
+                key={event.id} 
+                className="club-events__item"
+                onClick={() => handleEditEvent(event)}
+              >
+                <div className="club-events__item-header">
+                  <span className="club-events__item-time">{event.time}</span>
+                  <span className="club-events__item-title">{event.title}</span>
+                </div>
+                <div className="club-events__item-location">{event.location}</div>
+                {event.description && (
+                  <div className="club-events__item-description">{event.description}</div>
+                )}
+                {event.poster && (
+                  <div className="club-events__item-poster">
+                    <img src={event.poster} alt={event.title} />
+                  </div>
+                )}
+                <div className="club-events__item-footer">
+                  Created by: {event.createdBy}
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
+        ) : (
+          <div className="club-events__empty">
+            No events scheduled for this day
+          </div>
+        )}
       </div>
     );
   };
 
-  const AddEventModal = ({ date, onClose, onSave }) => {
+  const EventEditor = () => {
+    if (!editingEvent) return null;
+
     return (
-      <div className="club-modal__overlay">
-        <div className="club-modal">
-          <button className="club-modal__close" onClick={onClose}>
-            <X size={20} />
+      <div className="club-event-editor">
+        <div className="club-event-editor__header">
+          <h3 className="club-event-editor__title">
+            {editingEvent.mode === 'create' ? 'Add New Event' : 'Edit Event'}
+          </h3>
+          <button 
+            className="club-event-editor__close"
+            onClick={handleCancelEdit}
+          >
+            <FaTimes />
           </button>
-          <h3 className="club-modal__title">Add Event for {format(date, 'MMMM d, yyyy')}</h3>
-          
-          <div className="club-modal__field">
-            <label className="club-modal__label">Event Title*</label>
-            <input 
-              type="text" 
-              className="club-modal__input"
-              value={newEvent.title}
-              onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
-              placeholder="Enter event title"
-            />
-          </div>
-          
-          <div className="club-modal__field">
-            <label className="club-modal__label">Time*</label>
-            <input 
-              type="text" 
-              className="club-modal__input"
-              value={newEvent.time}
-              onChange={(e) => setNewEvent({...newEvent, time: e.target.value})}
-              placeholder="e.g. 2:00 PM - 4:00 PM"
-            />
-          </div>
-          
-          <div className="club-modal__field">
-            <label className="club-modal__label">Location</label>
-            <input 
-              type="text" 
-              className="club-modal__input"
-              value={newEvent.location}
-              onChange={(e) => setNewEvent({...newEvent, location: e.target.value})}
-              placeholder="Enter location"
-            />
-          </div>
-          
-          <div className="club-modal__field">
-            <label className="club-modal__label">Poster Image URL</label>
-            <input 
-              type="text" 
-              className="club-modal__input"
-              value={newEvent.poster}
-              onChange={(e) => setNewEvent({...newEvent, poster: e.target.value})}
-              placeholder="Enter image URL"
-            />
-          </div>
-          
-          <div className="club-modal__field">
-            <label className="club-modal__label">Description</label>
-            <textarea 
-              className="club-modal__textarea"
-              value={newEvent.description}
-              onChange={(e) => setNewEvent({...newEvent, description: e.target.value})}
-              placeholder="Enter event description"
-              rows="4"
-            />
-          </div>
-          
-          <div className="club-modal__actions">
+        </div>
+        
+        <div className="club-event-editor__field">
+          <label className="club-event-editor__label">Event Title*</label>
+          <input 
+            type="text" 
+            className="club-event-editor__input"
+            value={editingEvent.event.title}
+            onChange={(e) => setEditingEvent({
+              ...editingEvent,
+              event: {
+                ...editingEvent.event,
+                title: e.target.value
+              }
+            })}
+            placeholder="Enter event title"
+          />
+        </div>
+        
+        <div className="club-event-editor__field">
+          <label className="club-event-editor__label">Time*</label>
+          <input 
+            type="text" 
+            className="club-event-editor__input"
+            value={editingEvent.event.time}
+            onChange={(e) => setEditingEvent({
+              ...editingEvent,
+              event: {
+                ...editingEvent.event,
+                time: e.target.value
+              }
+            })}
+            placeholder="e.g. 2:00 PM - 4:00 PM"
+          />
+        </div>
+        
+        <div className="club-event-editor__field">
+          <label className="club-event-editor__label">Location</label>
+          <input 
+            type="text" 
+            className="club-event-editor__input"
+            value={editingEvent.event.location}
+            onChange={(e) => setEditingEvent({
+              ...editingEvent,
+              event: {
+                ...editingEvent.event,
+                location: e.target.value
+              }
+            })}
+            placeholder="Enter location"
+          />
+        </div>
+        
+        <div className="club-event-editor__field">
+          <label className="club-event-editor__label">Poster Image URL</label>
+          <input 
+            type="text" 
+            className="club-event-editor__input"
+            value={editingEvent.event.poster}
+            onChange={(e) => setEditingEvent({
+              ...editingEvent,
+              event: {
+                ...editingEvent.event,
+                poster: e.target.value
+              }
+            })}
+            placeholder="Enter image URL"
+          />
+        </div>
+        
+        <div className="club-event-editor__field">
+          <label className="club-event-editor__label">Description</label>
+          <textarea 
+            className="club-event-editor__textarea"
+            value={editingEvent.event.description}
+            onChange={(e) => setEditingEvent({
+              ...editingEvent,
+              event: {
+                ...editingEvent.event,
+                description: e.target.value
+              }
+            })}
+            placeholder="Enter event description"
+            rows="4"
+          />
+        </div>
+        
+        <div className="club-event-editor__actions">
+          {editingEvent.mode === 'edit' && (
             <button 
-              className="club-modal__button club-modal__button--cancel"
-              onClick={onClose}
+              className="club-event-editor__button club-event-editor__button--delete"
+              onClick={handleDeleteEvent}
             >
-              Cancel
+              Delete
             </button>
-            <button 
-              className="club-modal__button club-modal__button--save"
-              onClick={onSave}
-            >
-              Save Event
-            </button>
-          </div>
+          )}
+          <button 
+            className="club-event-editor__button club-event-editor__button--cancel"
+            onClick={handleCancelEdit}
+          >
+            Cancel
+          </button>
+          <button 
+            className="club-event-editor__button club-event-editor__button--save"
+            onClick={handleSaveEvent}
+          >
+            Save
+          </button>
         </div>
       </div>
     );
@@ -372,7 +479,6 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
         <div className="club-profile">
           <div className="club-profile__banner">
             <div className="club-profile__banner-overlay"></div>
-           
           </div>
 
           <div className="club-profile__details">
@@ -392,85 +498,74 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
           </div>
         </div>
 
-        <div className="club-calendar">
-          <div className="club-calendar__header">
-            <h2 className="club-calendar__title">Club Events Calendar</h2>
-            <div className="club-calendar__controls">
-              <div className="club-calendar__view-toggle">
+        <div className="club-main">
+          <div className="club-calendar">
+            <div className="club-calendar__header">
+              <h2 className="club-calendar__title">Club Events Calendar</h2>
+              <div className="club-calendar__controls">
+                <div className="club-calendar__view-toggle">
+                  <button 
+                    className={`club-calendar__view-button ${viewMode === 'month' ? 'club-calendar__view-button--active' : ''}`}
+                    onClick={() => setViewMode('month')}
+                  >
+                    Month
+                  </button>
+                  <button 
+                    className={`club-calendar__view-button ${viewMode === 'week' ? 'club-calendar__view-button--active' : ''}`}
+                    onClick={() => setViewMode('week')}
+                  >
+                    Week
+                  </button>
+                </div>
+                <div className="club-calendar__navigation">
+                  <button 
+                    className="club-calendar__nav-button"
+                    onClick={() => navigateCalendar(-1)}
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  <h3 className="club-calendar__current-date">
+                    {viewMode === 'month' 
+                      ? format(currentMonth, 'MMMM yyyy') 
+                      : `${format(startOfWeek(currentMonth), 'MMM d')} - ${format(endOfWeek(currentMonth), 'MMM d, yyyy')}`
+                    }
+                  </h3>
+                  <button 
+                    className="club-calendar__nav-button"
+                    onClick={() => navigateCalendar(1)}
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </div>
                 <button 
-                  className={`club-calendar__view-button ${viewMode === 'month' ? 'club-calendar__view-button--active' : ''}`}
-                  onClick={() => setViewMode('month')}
+                  className="club-calendar__today-button"
+                  onClick={goToToday}
                 >
-                  Month
-                </button>
-                <button 
-                  className={`club-calendar__view-button ${viewMode === 'week' ? 'club-calendar__view-button--active' : ''}`}
-                  onClick={() => setViewMode('week')}
-                >
-                  Week
+                  Today
                 </button>
               </div>
-              <div className="club-calendar__navigation">
-                <button 
-                  className="club-calendar__nav-button"
-                  onClick={() => navigateCalendar(-1)}
-                >
-                  <ChevronLeft size={20} />
-                </button>
-                <h3 className="club-calendar__current-date">
-                  {viewMode === 'month' 
-                    ? format(currentMonth, 'MMMM yyyy') 
-                    : `${format(startOfWeek(currentMonth), 'MMM d')} - ${format(endOfWeek(currentMonth), 'MMM d, yyyy')}`
-                  }
-                </h3>
-                <button 
-                  className="club-calendar__nav-button"
-                  onClick={() => navigateCalendar(1)}
-                >
-                  <ChevronRight size={20} />
-                </button>
-              </div>
-              <button 
-                className="club-calendar__today-button"
-                onClick={goToToday}
-              >
-                Today
-              </button>
             </div>
+
+            {viewMode === 'month' && (
+              <div className="club-calendar__days-header">
+                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, i) => (
+                  <div key={i} className="club-calendar__day-name">{day}</div>
+                ))}
+              </div>
+            )}
+
+            {viewMode === 'month' ? (
+              <MonthView currentMonth={currentMonth} />
+            ) : (
+              <WeekView currentMonth={currentMonth} />
+            )}
           </div>
 
-          <div className="club-calendar__days-header">
-            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, i) => (
-              <div key={i} className="club-calendar__day-name">{day}</div>
-            ))}
+          <div className="club-sidebar">
+            {editingEvent ? <EventEditor /> : <EventList />}
           </div>
-
-          {viewMode === 'month' ? (
-            <MonthView currentMonth={currentMonth} />
-          ) : (
-            <WeekView currentMonth={currentMonth} />
-          )}
         </div>
       </div>
-
-      {/* Event Details Modal */}
-      {showEventModal && selectedDate && (
-        <EventDetailsModal 
-          date={selectedDate}
-          events={events}
-          onClose={() => setShowEventModal(false)}
-          onAddEvent={handleAddEvent}
-        />
-      )}
-
-      {/* Add Event Modal */}
-      {showAddEventModal && selectedDate && (
-        <AddEventModal
-          date={selectedDate}
-          onClose={() => setShowAddEventModal(false)}
-          onSave={handleSaveEvent}
-        />
-      )}
     </div>
   );
 };

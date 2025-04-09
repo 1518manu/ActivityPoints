@@ -1,3 +1,4 @@
+/* Base styles */
 .club-dashboard {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
@@ -12,23 +13,24 @@
   padding: 1rem 2rem;
   background-color: #2c3e50;
   color: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .club-logo__image {
-  height: 50px;
+  height: 40px;
 }
 
 .club-logout {
-  display: flex;
-  align-items: center;
   background-color: #e74c3c;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s;
 }
 
 .club-logout:hover {
@@ -36,133 +38,104 @@
 }
 
 .club-logout__icon {
-  margin-right: 0.5rem;
+  font-size: 0.9rem;
 }
 
 .club-content {
   padding: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
 }
 
 .club-profile {
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
-  overflow: hidden;
-}
-
-.club-profile__banner {
-  height: 150px;
-  background-color: #3498db;
   position: relative;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.club-profile__banner-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(to right, rgba(41, 128, 185, 0.7), rgba(142, 68, 173, 0.7));
-}
 
-.club-profile__edit {
-  position: absolute;
-  right: 1rem;
-  bottom: 1rem;
-  display: flex;
-  align-items: center;
-  background-color: white;
-  color: #2c3e50;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s;
-}
-
-.club-profile__edit:hover {
-  background-color: #f1f1f1;
-}
-
-.club-profile__edit-icon {
-  margin-right: 0.5rem;
-}
 
 .club-profile__details {
   display: flex;
-  padding: 1rem 2rem;
+  align-items: flex-end;
+  padding: 0 2rem 2rem;
+  background-color: white;
   position: relative;
 }
 
 .club-profile__picture {
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   background-color: #ecf0f1;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: -50px;
   border: 4px solid white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .club-profile__picture-icon {
-  font-size: 2.5rem;
+  font-size: 3rem;
   color: #7f8c8d;
 }
 
 .club-profile__info {
   margin-left: 2rem;
-  flex-grow: 1;
+  flex: 1;
 }
 
 .club-profile__name {
+  font-size: 1.8rem;
   margin: 0;
   color: #2c3e50;
 }
 
 .club-profile__role {
-  margin: 0.25rem 0;
+  font-size: 1rem;
   color: #7f8c8d;
-  font-size: 0.9rem;
+  margin: 0.2rem 0;
 }
 
 .club-profile__contact {
-  margin: 0.5rem 0;
-  color: #34495e;
   font-size: 0.9rem;
+  color: #34495e;
+  margin: 0.5rem 0;
 }
 
 .club-profile__college {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #34495e;
 }
 
 .club-profile__college-icon {
-  margin-right: 0.5rem;
+  color: #3498db;
+}
+
+.club-main {
+  display: flex;
+  gap: 2rem;
 }
 
 .club-calendar {
+  flex: 2;
   background-color: white;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .club-calendar__header {
-  display: flex;
-  flex-direction: column;
   margin-bottom: 1.5rem;
 }
 
 .club-calendar__title {
-  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
   color: #2c3e50;
+  margin: 0 0 1rem;
 }
 
 .club-calendar__controls {
@@ -175,9 +148,9 @@
 
 .club-calendar__view-toggle {
   display: flex;
-  border: 1px solid #ddd;
   border-radius: 4px;
   overflow: hidden;
+  border: 1px solid #ddd;
 }
 
 .club-calendar__view-button {
@@ -185,20 +158,13 @@
   background-color: white;
   border: none;
   cursor: pointer;
-  transition: all 0.3s;
-}
-
-.club-calendar__view-button:hover {
-  background-color: #f1f1f1;
+  font-weight: 500;
+  color: #7f8c8d;
 }
 
 .club-calendar__view-button--active {
   background-color: #3498db;
   color: white;
-}
-
-.club-calendar__view-button--active:hover {
-  background-color: #2980b9;
 }
 
 .club-calendar__navigation {
@@ -211,24 +177,24 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #2c3e50;
+  color: #7f8c8d;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  transition: background-color 0.3s;
+  padding: 0.3rem;
+  border-radius: 4px;
 }
 
 .club-calendar__nav-button:hover {
-  background-color: #ecf0f1;
+  background-color: #f0f0f0;
 }
 
 .club-calendar__current-date {
   margin: 0;
   font-size: 1.1rem;
-  color: #2c3e50;
+  font-weight: 500;
+  min-width: 180px;
+  text-align: center;
 }
 
 .club-calendar__today-button {
@@ -237,18 +203,19 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  font-weight: 500;
+  color: #34495e;
 }
 
 .club-calendar__today-button:hover {
-  background-color: #bdc3c7;
+  background-color: #d5dbdb;
 }
 
 .club-calendar__days-header {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   text-align: center;
-  font-weight: 600;
+  font-weight: 500;
   color: #7f8c8d;
   margin-bottom: 0.5rem;
 }
@@ -257,558 +224,389 @@
   padding: 0.5rem;
 }
 
-/* Month View Styles */
-.days-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(6, 1fr);
-  gap: 0.5rem;
-}
-
-.week-row {
-  display: contents;
-}
-
-.day-cell {
-  min-height: 80px;
-  padding: 0.5rem;
-  border: 1px solid #ecf0f1;
-  border-radius: 4px;
+.club-calendar__days-grid {
   display: flex;
   flex-direction: column;
+}
+
+.club-calendar__week-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  min-height: 80px;
+}
+
+.club-calendar__day-cell {
+  border: 1px solid #eee;
+  padding: 0.5rem;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: background-color 0.2s;
+  position: relative;
+  min-height: 80px;
 }
 
-.day-cell:hover {
-  background-color: #f8f9fa;
+.club-calendar__day-cell:hover {
+  background-color: #f9f9f9;
 }
 
-.day-cell.disabled {
-  color: #bdc3c7;
-  background-color: #f8f9fa;
+.club-calendar__day-cell--disabled {
+  color: #ccc;
+  background-color: #f9f9f9;
   cursor: default;
 }
 
-.day-cell.today {
-  background-color: #e3f2fd;
-  border-color: #bbdefb;
+.club-calendar__day-cell--today {
+  background-color: #e8f4fc;
 }
 
-.day-cell.has-events {
-  background-color: #e8f5e9;
-  border-color: #c8e6c9;
+.club-calendar__day-cell--selected {
+  background-color: #e1f0fa;
+  border: 1px solid #3498db;
 }
 
-.day-number {
-  font-weight: 600;
-  margin-bottom: 0.25rem;
+.club-calendar__day-cell--has-events {
+  background-color: #f8fafc;
 }
 
-.event-dots {
+.club-calendar__day-number {
+  font-weight: 500;
+}
+
+.club-calendar__event-dots {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: center;
-  gap: 0.25rem;
-  margin-top: auto;
+  gap: 0.2rem;
 }
 
-.event-dot {
+.club-calendar__event-dot {
   width: 6px;
   height: 6px;
-  background-color: #2ecc71;
   border-radius: 50%;
+  background-color: #3498db;
 }
 
-/* Week View Styles */
-.week-view {
+.club-calendar__week-view {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 0.5rem;
-  min-height: 500px;
+  min-height: 400px;
 }
 
-.week-day {
-  border: 1px solid #ecf0f1;
+.club-calendar__week-day {
+  border: 1px solid #eee;
   border-radius: 4px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.club-calendar__week-day:hover {
+  background-color: #f9f9f9;
+}
+
+.club-calendar__week-day--today {
+  background-color: #e8f4fc;
+}
+
+.club-calendar__week-day--selected {
+  background-color: #e1f0fa;
+  border: 1px solid #3498db;
+}
+
+.club-calendar__week-day-header {
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.club-calendar__week-day-name {
+  display: block;
+  font-size: 0.8rem;
+  color: #7f8c8d;
+}
+
+.club-calendar__week-day-number {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.club-calendar__week-day-events {
   display: flex;
   flex-direction: column;
+  gap: 0.3rem;
 }
 
-.week-day.today {
-  background-color: #e3f2fd;
-}
-
-.week-day-header {
-  padding: 0.5rem;
-  text-align: center;
-  border-bottom: 1px solid #ecf0f1;
-}
-
-.week-day-name {
-  display: block;
+.club-calendar__week-event {
+  background-color: #f0f7fd;
+  border-left: 3px solid #3498db;
+  padding: 0.3rem 0.5rem;
   font-size: 0.8rem;
-  color: #7f8c8d;
-}
-
-.week-day-number {
-  display: block;
-  font-weight: 600;
-  font-size: 1.2rem;
-}
-
-.week-day-events {
-  flex-grow: 1;
-  padding: 0.5rem;
-  overflow-y: auto;
-}
-
-.week-event {
-  background-color: #e8f5e9;
-  border-left: 3px solid #2ecc71;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
-  border-radius: 0 4px 4px 0;
+  border-radius: 0 3px 3px 0;
   cursor: pointer;
-  transition: all 0.3s;
 }
 
-.week-event:hover {
-  background-color: #d4edda;
+.club-calendar__week-event:hover {
+  background-color: #e1f0fa;
 }
 
-.event-time {
-  font-size: 0.8rem;
-  color: #27ae60;
+.club-calendar__event-time {
   display: block;
+  font-size: 0.7rem;
+  color: #3498db;
+  margin-bottom: 0.2rem;
 }
 
-.event-title {
-  font-weight: 600;
-  font-size: 0.9rem;
+.club-calendar__event-title {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Modal Styles */
-.club-modal__overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+.club-sidebar {
+  flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.club-modal {
+.club-events {
   background-color: white;
   border-radius: 8px;
-  width: 90%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
   padding: 1.5rem;
-  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.club-modal__close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
+.club-events__title {
+  font-size: 1.2rem;
+  color: #2c3e50;
+  margin: 0 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.club-events__add-button {
+  background-color: #3498db;
+  color: white;
   border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
   cursor: pointer;
-  color: #7f8c8d;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
-.club-modal__title {
-  margin-top: 0;
+.club-events__add-button:hover {
+  background-color: #2980b9;
+}
+
+.club-events__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.club-events__item {
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.club-events__item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.club-events__item-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.club-events__item-time {
+  color: #3498db;
+  font-weight: 500;
+}
+
+.club-events__item-title {
+  font-weight: 600;
   color: #2c3e50;
 }
 
-.club-modal__field {
+.club-events__item-location {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin-bottom: 0.5rem;
+}
+
+.club-events__item-description {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.club-events__item-poster img {
+  width: 100%;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+.club-events__item-footer {
+  font-size: 0.8rem;
+  color: #95a5a6;
+  margin-top: 0.5rem;
+}
+
+.club-events__empty {
+  color: #95a5a6;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.club-event-editor {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.club-event-editor__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.club-event-editor__title {
+  font-size: 1.2rem;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.club-event-editor__close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #95a5a6;
+  font-size: 1.2rem;
+}
+
+.club-event-editor__close:hover {
+  color: #7f8c8d;
+}
+
+.club-event-editor__field {
   margin-bottom: 1rem;
 }
 
-.club-modal__label {
+.club-event-editor__label {
   display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #34495e;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin-bottom: 0.3rem;
 }
 
-.club-modal__input,
-.club-modal__textarea {
+.club-event-editor__input {
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
-.club-modal__textarea {
-  min-height: 100px;
+.club-event-editor__textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
   resize: vertical;
 }
 
-.club-modal__actions {
+.club-event-editor__actions {
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
+  gap: 0.5rem;
   margin-top: 1.5rem;
 }
 
-.club-modal__button {
-  padding: 0.75rem 1.5rem;
-  border: none;
+.club-event-editor__button {
+  padding: 0.5rem 1rem;
   border-radius: 4px;
+  font-size: 0.9rem;
   cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s;
+  border: none;
 }
 
-.club-modal__button--cancel {
+.club-event-editor__button--cancel {
   background-color: #ecf0f1;
   color: #7f8c8d;
 }
 
-.club-modal__button--cancel:hover {
-  background-color: #bdc3c7;
+.club-event-editor__button--cancel:hover {
+  background-color: #d5dbdb;
 }
 
-.club-modal__button--save {
+.club-event-editor__button--save {
   background-color: #2ecc71;
   color: white;
 }
 
-.club-modal__button--save:hover {
+.club-event-editor__button--save:hover {
   background-color: #27ae60;
 }
 
-/* Event Details Modal */
-.event-list {
-  margin-top: 1rem;
-}
-
-.event-item {
-  padding: 1rem;
-  border: 1px solid #ecf0f1;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-}
-
-.no-events {
-  text-align: center;
-  color: #7f8c8d;
-  padding: 2rem;
-}
-
-.action-btn {
-  display: flex;
-  align-items: center;
-  padding: 0.75rem 1.5rem;
-  background-color: #3498db;
+.club-event-editor__button--delete {
+  background-color: #e74c3c;
   color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background-color 0.3s;
-  margin-top: 1rem;
+  margin-right: auto;
 }
 
-.action-btn:hover {
-  background-color: #2980b9;
+.club-event-editor__button--delete:hover {
+  background-color: #c0392b;
 }
 
-.primary {
-  background-color: #2ecc71;
-}
-
-.primary:hover {
-  background-color: #27ae60;
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .club-main {
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 768px) {
-  .club-content {
-    padding: 1rem;
-  }
-  
-  .club-profile__details {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  
-  .club-profile__info {
-    margin-left: 0;
-    margin-top: 1rem;
-  }
-  
   .club-calendar__controls {
     flex-direction: column;
     align-items: stretch;
   }
   
   .club-calendar__navigation {
+    order: 1;
     justify-content: center;
-    margin: 0.5rem 0;
   }
   
-  .week-view {
+  .club-calendar__view-toggle {
+    order: 2;
+    justify-content: center;
+  }
+  
+  .club-calendar__today-button {
+    order: 3;
+  }
+  
+  .club-calendar__week-view {
     grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  
+  .club-calendar__week-day {
+    min-height: 100px;
   }
 }
-
-
-.club-modal__overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    backdrop-filter: blur(2px);
-  }
-  
-  /* Modal Container */
-  .club-modal {
-    background-color: white;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-    padding: 1.5rem;
-    position: relative;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    animation: modalFadeIn 0.3s ease-out;
-  }
-  
-  @keyframes modalFadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Modal Close Button */
-  .club-modal__close {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #7f8c8d;
-    transition: color 0.2s;
-  }
-  
-  .club-modal__close:hover {
-    color: #e74c3c;
-  }
-  
-  /* Modal Title */
-  .club-modal__title {
-    margin-top: 0;
-    margin-bottom: 1.5rem;
-    color: #2c3e50;
-    font-size: 1.5rem;
-  }
-  
-  /* Modal Fields */
-  .club-modal__field {
-    margin-bottom: 1.5rem;
-  }
-  
-  .club-modal__label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #34495e;
-  }
-  
-  .club-modal__input,
-  .club-modal__textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-    transition: border-color 0.2s;
-  }
-  
-  .club-modal__input:focus,
-  .club-modal__textarea:focus {
-    border-color: #3498db;
-    outline: none;
-  }
-  
-  .club-modal__textarea {
-    min-height: 100px;
-    resize: vertical;
-  }
-  
-  /* Event List in Modal */
-  .club-modal__event-list {
-    margin-bottom: 1.5rem;
-  }
-  
-  .club-modal__event-item {
-    padding: 1rem;
-    border: 1px solid #ecf0f1;
-    border-radius: 4px;
-    margin-bottom: 1rem;
-    transition: all 0.2s;
-  }
-  
-  .club-modal__event-item:hover {
-    border-color: #bdc3c7;
-  }
-  
-  .club-modal__event-time {
-    color: #3498db;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-  
-  .club-modal__event-title {
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .club-modal__event-location {
-    color: #7f8c8d;
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .club-modal__event-poster {
-    margin-top: 1rem;
-  }
-  
-  .club-modal__event-poster-image {
-    max-width: 100%;
-    border-radius: 4px;
-    border: 1px solid #eee;
-  }
-  
-  /* No Events Message */
-  .club-modal__no-events {
-    text-align: center;
-    padding: 2rem;
-    color: #7f8c8d;
-    font-style: italic;
-  }
-  
-  /* Modal Actions */
-  .club-modal__actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-  
-  .club-modal__button {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-  }
-  
-  .club-modal__button-icon {
-    margin-right: 0.5rem;
-  }
-  
-  .club-modal__button--cancel {
-    background-color: #ecf0f1;
-    color: #7f8c8d;
-  }
-  
-  .club-modal__button--cancel:hover {
-    background-color: #bdc3c7;
-  }
-  
-  .club-modal__button--save {
-    background-color: #2ecc71;
-    color: white;
-  }
-  
-  .club-modal__button--save:hover {
-    background-color: #27ae60;
-  }
-  
-  .club-modal__button--primary {
-    background-color: #3498db;
-    color: white;
-  }
-  
-  .club-modal__button--primary:hover {
-    background-color: #2980b9;
-  }
-  
-  /* Day Cell Styles */
-  .club-calendar__day-cell {
-    min-height: 80px;
-    padding: 0.5rem;
-    border: 1px solid #ecf0f1;
-    border-radius: 4px;
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-  }
-  
-  .club-calendar__day-cell:hover {
-    background-color: #f8f9fa;
-  }
-  
-  .club-calendar__day-cell--disabled {
-    color: #bdc3c7;
-    background-color: #f8f9fa;
-    cursor: default;
-  }
-  
-  .club-calendar__day-cell--today {
-    background-color: #e3f2fd;
-    border-color: #bbdefb;
-  }
-  
-  .club-calendar__day-cell--has-events {
-    background-color: #e8f5e9;
-    border-color: #c8e6c9;
-  }
-  
-  .club-calendar__day-number {
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-  }
-  
-  .club-calendar__event-dots {
-    display: flex;
-    justify-content: center;
-    gap: 0.25rem;
-    margin-top: auto;
-  }
-  
-  .club-calendar__event-dot {
-    width: 6px;
-    height: 6px;
-    background-color: #2ecc71;
-    border-radius: 50%;
-  }
