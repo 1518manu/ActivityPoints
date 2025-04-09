@@ -49,23 +49,37 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
+        // Step 1: Fetch all clubs first
+        const clubsSnapshot = await getDocs(collection(db, "Clubs"));
+        const clubMap = {}; // club_id => club name
+  
+        clubsSnapshot.forEach((clubDoc) => {
+          const clubData = clubDoc.data();
+          if (clubData.club_id && clubData.name) {
+            clubMap[clubData.club_id] = clubData.name;
+          }
+        });
+  
+        // Step 2: Fetch events
         const querySnapshot = await getDocs(collection(db, "Events"));
         const fetchedEvents = {};
   
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
+        for (const docSnap of querySnapshot.docs) {
+          const data = docSnap.data();
           const eventDate = data.date?.toDate();
   
-          if (!(eventDate instanceof Date)) return;
+          if (!(eventDate instanceof Date)) continue;
   
           const formattedDate = format(eventDate, "yyyy-MM-dd");
+          const clubId = data.club_id || "";
+          const clubName = clubMap[clubId] || "Unknown Club";
   
           if (!fetchedEvents[formattedDate]) {
             fetchedEvents[formattedDate] = [];
           }
   
           fetchedEvents[formattedDate].push({
-            id: doc.id,
+            id: docSnap.id,
             title: data.name,
             time: format(eventDate, "hh:mm a"),
             description: data.description || "",
@@ -73,21 +87,23 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
             maxParticipants: data.maxParticipants || 50,
             registered: data.registered || 0,
             points: data.points || 0,
-            clubId: data.club_id || "",
+            clubId,
+            clubName, // ✅ now resolved using the map
             isRegistered: false,
             date: eventDate,
-            poster: data.poster || "https://images.unsplash.com/photo-1505373877841-8d25f7d46678" // Default poster if none provided
+            poster: data.poster || "https://images.unsplash.com/photo-1505373877841-8d25f7d46678"
           });
-        });
+        }
   
         setEvents(fetchedEvents);
       } catch (error) {
-        console.error("Error fetching events:", error);
+        console.error("Error fetching events or clubs:", error);
       }
     };
   
     fetchEvents();
   }, []);
+  
 
   // Calendar navigation
   const navigateCalendar = (direction) => {
@@ -301,7 +317,9 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
         
         {expandedEvent === event.id && (
           <div className="event-content">
+            <p className="event-club"><strong>Organised by: {event.clubName}</strong></p>
             <p className="event-description">{event.description}</p>
+            <p className="event-points">{event.points}Points</p>
             <div className="event-meta">
               <div className="event-registration">
                 <span>Spots: {event.maxParticipants - event.registered} remaining</span>
