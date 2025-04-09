@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaFileAlt, FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaUserTie } from "react-icons/fa";
 import './Event.css';
+import {db} from '../../../firebaseFile/firebaseConfig';
+import { collection, getDocs } from "firebase/firestore";
 import {
   addDays,
   format,
@@ -32,44 +34,6 @@ const EVENT_TYPES = {
 };
 
 // Dummy event data
-const DUMMY_EVENTS = {
-  "2025-04-15": [
-    {
-      id: 1,
-      title: "Tech Workshop: Modern Web Development",
-      time: "10:00 AM - 12:00 PM",
-      description: "Interactive workshop on the latest web technologies.",
-      type: EVENT_TYPES.WORKSHOP,
-      maxParticipants: 30,
-      registered: 15,
-      isRegistered: false
-    }
-  ],
-  "2025-04-20": [
-    {
-      id: 2,
-      title: "Annual Career Fair",
-      time: "9:00 AM - 4:00 PM",
-      description: "Meet with top employers from the tech industry.",
-      type: EVENT_TYPES.CAREER,
-      maxParticipants: 100,
-      registered: 78,
-      isRegistered: false
-    }
-  ],
-  "2025-04-22": [
-    {
-      id: 3,
-      title: "Coding Competition",
-      time: "2:00 PM - 5:00 PM",
-      description: "Test your coding skills against other students.",
-      type: EVENT_TYPES.COMPETITION,
-      maxParticipants: 50,
-      registered: 42,
-      isRegistered: false
-    }
-  ]
-};
 
 export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => {
   const navigate = useNavigate();
@@ -77,9 +41,59 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
   // Calendar state
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [viewMode, setViewMode] = useState(VIEW_MODE.MONTH);
-  const [events] = useState(DUMMY_EVENTS);
-  const [expandedEvent, setExpandedEvent] = useState(null);
+  const [events, setEvents] = useState({});
 
+  const [expandedEvent, setExpandedEvent] = useState(null);
+  //-------------------
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "Events"));
+        const fetchedEvents = {};
+  
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+  
+          // Convert Firestore Timestamp to JS Date
+          const eventDate = data.date?.toDate();
+  
+          // Check if date is valid
+          if (!(eventDate instanceof Date) || isNaN(eventDate.getTime())) {
+            console.warn("Invalid date for doc:", doc.id);
+            return;
+          }
+  
+          const formattedDate = format(eventDate, "yyyy-MM-dd");
+  
+          if (!fetchedEvents[formattedDate]) {
+            fetchedEvents[formattedDate] = [];
+          }
+  
+          fetchedEvents[formattedDate].push({
+            id: doc.id,
+            title: data.name, // updated
+            time: format(eventDate, "hh:mm a"), // or just leave out if not needed
+            description: "", // optional, add if needed
+            type: "Event", // or fetch from data if available
+            maxParticipants: data.maxParticipants || 50,
+            registered: data.registered || 0,
+            points: data.points || 0,
+            clubId: data.club_id || "",
+            isRegistered: false, // update based on user if needed
+          });
+          
+        });
+  
+        setEvents(fetchedEvents);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+  
+    fetchEvents();
+  }, []);
+  
+  //-------------------------------------------------
   // Navigation handlers
   const navigateCalendar = (direction) => {
     if (viewMode === VIEW_MODE.MONTH) {
