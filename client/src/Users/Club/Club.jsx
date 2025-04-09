@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaUniversity, FaSignOutAlt, FaPlus, FaTimes, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import './Club.css';
+import { db } from '../../firebaseFile/firebaseConfig'; // adjust this path based on your setup
+import { collection, addDoc, Timestamp ,getDocs} from 'firebase/firestore';
+import { parse } from "date-fns"; // Make sure you have date-fns installed
+
 import {
   format,
   startOfMonth,
@@ -20,7 +24,7 @@ import {
 export const Club = ({ token, userData: initialUserData, onLogout }) => {
   const [userData, setUserData] = useState(initialUserData);
   const navigate = useNavigate();
-
+  //console.log("user data", userData);
   // Calendar state
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -33,38 +37,61 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
     location: '',
     poster: ''
   });
-  const [editingEvent, setEditingEvent] = useState(null);
+  const [editingEvent, setEditingEvent] = useState({
+    mode: 'create',
+    event: {
+      title: '',
+      time: '',
+      location: '',
+      poster: '',
+      description: '',
+    },
+  });
+  
   const [showDayEvents, setShowDayEvents] = useState(false);
 
   // Sample events data
+  // 
+  //         id: 1,
+  //         title: "Club Orientation",
+  //         time: "3:00 PM ",
+  //         duration: "2 hours",
+  //         points: 10,
+  //         description: "Welcome new members to our club and introduce them to our activities.",
+  //         location: "Main Auditorium",
+  //         poster: "https://images.unsplash.com/photo-1524179091875-bf99a9a6af57",
+  //         maxParticipants: 50,
+  
   useEffect(() => {
-    const sampleEvents = {
-      [format(new Date(), 'yyyy-MM-dd')]: [
-        {
-          id: 1,
-          title: "Club Orientation",
-          time: "3:00 PM - 5:00 PM",
-          description: "Welcome new members to our club and introduce them to our activities.",
-          location: "Main Auditorium",
-          poster: "https://images.unsplash.com/photo-1524179091875-bf99a9a6af57",
-          createdBy: "Admin"
-        }
-      ],
-      [format(addDays(new Date(), 3), 'yyyy-MM-dd')]: [
-        {
-          id: 2,
-          title: "Workshop: Public Speaking",
-          time: "10:00 AM - 12:00 PM",
-          description: "Improve your public speaking skills with our expert trainers.",
-          location: "Room 302",
-          poster: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678",
-          createdBy: "Admin"
-        }
-      ]
+    const fetchEvents = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "Events"));
+        const eventMap = {};
+  
+        querySnapshot.forEach((doc) => {
+          const eventData = doc.data();
+          
+          if (eventData.date?.seconds) {
+            // Convert Firestore timestamp to JS Date
+            const eventDate = new Date(eventData.date.seconds * 1000);
+            const dateKey = format(eventDate, "yyyy-MM-dd");
+  
+            if (!eventMap[dateKey]) {
+              eventMap[dateKey] = [];
+            }
+  
+            eventMap[dateKey].push({ id: doc.id, ...eventData });
+          }
+        });
+  
+        setEvents(eventMap);
+      } catch (error) {
+        console.error("Error fetching events: ", error);
+      }
     };
-    setEvents(sampleEvents);
+  
+    fetchEvents();
   }, []);
-
   // Navigation handlers
   useEffect(() => {
     if (!token) {
@@ -122,35 +149,46 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
     setShowDayEvents(false);
   };
 
-  const handleSaveEvent = () => {
-    if (!editingEvent.event.title || !editingEvent.event.time) {
-      alert('Please fill in required fields');
+ 
+  const handleSaveEvent = async () => {
+    const { title, time, location, poster, description } = editingEvent.event;
+  
+    if (!title || !time) {
+      alert("Title and Time are required.");
       return;
     }
-
-    const dateKey = format(editingEvent.date, 'yyyy-MM-dd');
-    const updatedEvents = { ...events };
-    
-    if (editingEvent.mode === 'create') {
-      if (!updatedEvents[dateKey]) {
-        updatedEvents[dateKey] = [];
-      }
-      updatedEvents[dateKey].push({
-        id: Date.now(),
-        ...editingEvent.event,
-        createdBy: userData.name
-      });
-    } else {
-      const eventIndex = updatedEvents[dateKey].findIndex(e => e.id === editingEvent.event.id);
-      if (eventIndex !== -1) {
-        updatedEvents[dateKey][eventIndex] = editingEvent.event;
-      }
+  
+    try {
+      // 🧠 Combine date and time into a single Date object
+      const dateString = `${format(selectedDate, 'yyyy-MM-dd')} ${time}`; // e.g. "2025-04-09 2:00 PM"
+      const combinedDate = parse(dateString, 'yyyy-MM-dd h:mm a', new Date());
+  
+      const newEvent = {
+        title,
+        time,
+        location,
+        poster,
+        description,
+        date: Timestamp.fromDate(combinedDate), // ✅ Save as Firestore Timestamp
+        club_id: userData.club_id || 'Unknown',
+        createdAt: Timestamp.now(),
+      };
+  
+      await addDoc(collection(db, 'Events'), newEvent);
+  
+      console.log('Event saved successfully to Firestore');
+      setEditingEvent(null);
+      //fetchEvents(); // Optional: refresh events from DB
+    } catch (error) {
+      console.error("Error saving event:", error);
+      alert("Failed to save event.");
     }
-
-    setEvents(updatedEvents);
-    setEditingEvent(null);
-    setShowDayEvents(true);
+    //setEvents(updatedEvents);
+      setEditingEvent(null);
+      setShowDayEvents(true);
   };
+  
+  
 
   const handleDeleteEvent = () => {
     if (editingEvent.mode === 'edit') {
@@ -292,6 +330,8 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
     
     const dateKey = format(selectedDate, 'yyyy-MM-dd');
     const dayEvents = events[dateKey] || [];
+    console.log("Events on selected date:", dayEvents.length);
+    console.log("dateKey", dateKey);
 
     return (
       <div className="club-day-events-popup">
@@ -316,10 +356,12 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
                 onClick={() => handleEditEvent(event)}
               >
                 <div className="club-day-events-popup__item-header">
+                <div className="club-day-events-popup__item-description"><strong>{event.title}</strong></div>
                   <span className="club-day-events-popup__item-time">{event.time}</span>
-                  <span className="club-day-events-popup__item-title">{event.title}</span>
+                  {/* <span className="club-day-events-popup__item-title">{event.title}</span> */}
                 </div>
-                <div className="club-day-events-popup__item-location">{event.location}</div>
+                <div className="club-day-events-popup__item-location">Location: {event.location}</div>
+                <div className="club-day-events-popup__item-location">Duration: {event.duration}</div>
                 {event.description && (
                   <div className="club-day-events-popup__item-description">{event.description}</div>
                 )}
@@ -328,8 +370,9 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
                     <img src={event.poster} alt={event.title} />
                   </div>
                 )}
+                <div className="club-day-events-popup__item-description">Points: {event.points}</div>
                 <div className="club-day-events-popup__item-footer">
-                  Created by: {event.createdBy}
+                  Created by: {event.club_id}
                 </div>
               </div>
             ))}
@@ -341,11 +384,15 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
         )}
         
         <button 
-          className="club-day-events-popup__add-button"
-          onClick={handleAddEvent}
-        >
-          <FaPlus /> Add Event
-        </button>
+  className={`club-day-events-popup__add-button ${
+    dayEvents.length > 0 ? 'pointer-events-none opacity-50 cursor-not-allowed' : ''
+  }`}
+  onClick={handleAddEvent}
+  disabled={dayEvents.length > 0}
+>
+  <FaPlus /> Add Event
+</button>
+
       </div>
     );
   };
@@ -397,7 +444,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
                 time: e.target.value
               }
             })}
-            placeholder="e.g. 2:00 PM - 4:00 PM"
+            placeholder="e.g. 2:00 PM "
           />
         </div>
         
