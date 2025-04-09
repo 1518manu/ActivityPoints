@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaFileAlt, FaThLarge, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt, FaUserTie } from "react-icons/fa";
 import './Event.css';
@@ -33,18 +33,19 @@ const EVENT_TYPES = {
   NETWORKING: 'networking'
 };
 
-// Dummy event data
-
 export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => {
   const navigate = useNavigate();
   
   // Calendar state
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
   const [viewMode, setViewMode] = useState(VIEW_MODE.MONTH);
   const [events, setEvents] = useState({});
-
   const [expandedEvent, setExpandedEvent] = useState(null);
-  //-------------------
+  const [showDayEvents, setShowDayEvents] = useState(false);
+  const [dayEvents, setDayEvents] = useState([]);
+
+  // Fetch events from Firestore
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -53,15 +54,9 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
   
         querySnapshot.forEach((doc) => {
           const data = doc.data();
-  
-          // Convert Firestore Timestamp to JS Date
           const eventDate = data.date?.toDate();
   
-          // Check if date is valid
-          if (!(eventDate instanceof Date) || isNaN(eventDate.getTime())) {
-            console.warn("Invalid date for doc:", doc.id);
-            return;
-          }
+          if (!(eventDate instanceof Date)) return;
   
           const formattedDate = format(eventDate, "yyyy-MM-dd");
   
@@ -71,17 +66,18 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
   
           fetchedEvents[formattedDate].push({
             id: doc.id,
-            title: data.name, // updated
-            time: format(eventDate, "hh:mm a"), // or just leave out if not needed
-            description: "", // optional, add if needed
-            type: "Event", // or fetch from data if available
+            title: data.name,
+            time: format(eventDate, "hh:mm a"),
+            description: data.description || "",
+            type: data.type || "Event",
             maxParticipants: data.maxParticipants || 50,
             registered: data.registered || 0,
             points: data.points || 0,
             clubId: data.club_id || "",
-            isRegistered: false, // update based on user if needed
+            isRegistered: false,
+            date: eventDate,
+            poster: data.poster || "https://images.unsplash.com/photo-1505373877841-8d25f7d46678" // Default poster if none provided
           });
-          
         });
   
         setEvents(fetchedEvents);
@@ -92,9 +88,8 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
   
     fetchEvents();
   }, []);
-  
-  //-------------------------------------------------
-  // Navigation handlers
+
+  // Calendar navigation
   const navigateCalendar = (direction) => {
     if (viewMode === VIEW_MODE.MONTH) {
       setCurrentMonth(addMonths(currentMonth, direction));
@@ -106,20 +101,55 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
   const goToToday = () => {
     const today = new Date();
     setCurrentMonth(today);
+    setSelectedDate(today);
+    showEventsForDay(today);
+  };
+
+  // Event handlers
+  const showEventsForDay = (day) => {
+    const dateKey = format(day, "yyyy-MM-dd");
+    setSelectedDate(day);
+    setDayEvents(events[dateKey] || []);
+    setShowDayEvents(true);
+  };
+
+  const hideDayEvents = () => {
+    setShowDayEvents(false);
+    setExpandedEvent(null);
   };
 
   const toggleEventExpand = (eventId) => {
     setExpandedEvent(expandedEvent === eventId ? null : eventId);
   };
 
-  const handleRegister = (dateKey, eventId) => {
+  const handleRegister = (eventId) => {
+    const dateKey = format(selectedDate, "yyyy-MM-dd");
     const eventIndex = events[dateKey]?.findIndex(e => e.id === eventId);
+    
     if (eventIndex !== undefined && eventIndex !== -1) {
       const updatedEvents = { ...events };
       updatedEvents[dateKey][eventIndex].isRegistered = true;
       updatedEvents[dateKey][eventIndex].registered += 1;
+      setEvents(updatedEvents);
+      
+      // Update the displayed events
+      setDayEvents(updatedEvents[dateKey]);
       alert(`Successfully registered for ${updatedEvents[dateKey][eventIndex].title}!`);
     }
+  };
+
+  const addToCalendar = (event) => {
+    // Format for Google Calendar
+    const startTime = format(event.date, "yyyyMMdd'T'HHmmss");
+    const endTime = format(addDays(event.date, 1), "yyyyMMdd'T'HHmmss"); // Assuming 1 day event
+    
+    const calendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${
+      encodeURIComponent(event.title)
+    }&dates=${startTime}/${endTime}&details=${
+      encodeURIComponent(event.description)
+    }&location=${encodeURIComponent(event.location || "")}`;
+    
+    window.open(calendarUrl, "_blank");
   };
 
   // Navigation functions
@@ -129,76 +159,45 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
   const onDashboard = () => navigate("/StudentDashboard");
 
   // Calendar sub-components
-  const EventItem = ({ event, dateKey, isExpanded }) => {
-    const isFull = event.registered >= event.maxParticipants;
-    
+  const EventDot = ({ type }) => (
+    <div className={`event-dot ${type}`} />
+  );
+
+  const DayCell = ({ day, monthStart }) => {
+    const formattedDate = format(day, "yyyy-MM-dd");
+    const dayEvents = events[formattedDate] || [];
+    const isDisabled = !isSameMonth(day, monthStart);
+    const isCurrentDay = isToday(day);
+    const isSelected = selectedDate && isSameDay(day, selectedDate);
+    const hasEvents = dayEvents.length > 0;
+
     return (
-      <div className={`event-item ${event.type} ${isExpanded ? 'expanded' : ''}`}>
-        <div className="event-header" onClick={() => toggleEventExpand(event.id)}>
-          <span className="event-time">{event.time.split(' - ')[0]}</span>
-          <span className="event-title">{event.title}</span>
-          {isExpanded ? (
-            <span className="event-toggle">▲</span>
-          ) : (
-            <span className="event-toggle">▼</span>
-          )}
-        </div>
-        
-        {isExpanded && (
-          <div className="event-details">
-            <p className="event-description">{event.description}</p>
-            <div className="event-meta">
-              <span>Spots: {event.maxParticipants - event.registered} remaining</span>
-              <progress 
-                value={event.registered} 
-                max={event.maxParticipants}
-              />
-            </div>
-            {event.isRegistered ? (
-              <div className="registration-success">
-                You are registered for this event!
-              </div>
-            ) : (
-              <button
-                className={`register-btn ${isFull ? 'disabled' : ''}`}
-                onClick={() => handleRegister(dateKey, event.id)}
-                disabled={isFull}
-              >
-                {isFull ? 'Event Full' : 'Register Now'}
-              </button>
-            )}
+      <div
+        className={`day-cell ${isDisabled ? "disabled" : ""} ${
+          isCurrentDay ? "today" : ""
+        } ${isSelected ? "selected" : ""} ${
+          hasEvents ? "has-events" : ""
+        }`}
+        onClick={() => !isDisabled && showEventsForDay(day)}
+      >
+        <span className="day-number">{format(day, "d")}</span>
+        {hasEvents && (
+          <div className="event-indicator">
+            <div className="event-marker" />
+          </div>
+        )}
+        {hasEvents && (
+          <div className="event-dots">
+            {dayEvents.slice(0, 3).map((event, i) => (
+              <EventDot key={i} type={event.type} />
+            ))}
           </div>
         )}
       </div>
     );
   };
 
-  const DayCell = ({ day, monthStart, events }) => {
-    const formattedDate = format(day, "yyyy-MM-dd");
-    const dayEvents = events[formattedDate] || [];
-    const isDisabled = !isSameMonth(day, monthStart);
-    const isCurrentDay = isToday(day);
-
-    return (
-      <div className={`day-cell ${isDisabled ? "disabled" : ""} ${isCurrentDay ? "today" : ""}`}>
-        <div className="day-header">
-          <span className="day-number">{format(day, "d")}</span>
-        </div>
-        <div className="day-events">
-          {dayEvents.map(event => (
-            <EventItem
-              key={event.id}
-              event={event}
-              dateKey={formattedDate}
-              isExpanded={expandedEvent === event.id}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  };
-
-  const MonthView = ({ currentMonth, events }) => {
+  const MonthView = ({ currentMonth }) => {
     const monthStart = startOfMonth(currentMonth);
     const monthEnd = endOfMonth(monthStart);
     const startDate = startOfWeek(monthStart);
@@ -220,7 +219,6 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
                 key={day.toString()}
                 day={day}
                 monthStart={monthStart}
-                events={events}
               />
             ))}
           </div>
@@ -229,7 +227,7 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
     );
   };
 
-  const WeekView = ({ currentMonth, events }) => {
+  const WeekView = ({ currentMonth }) => {
     const weekStart = startOfWeek(currentMonth);
     const weekEnd = endOfWeek(currentMonth);
     const today = startOfDay(new Date());
@@ -243,32 +241,107 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
           const dayEvents = events[formattedDate] || [];
           const isPastDate = isBefore(startOfDay(day), today);
           const isCurrentDay = isToday(day);
+          const isSelected = selectedDate && isSameDay(day, selectedDate);
   
           return (
             <div
               key={day.toString()}
               className={`week-day 
                 ${isCurrentDay ? 'today' : ''} 
-                ${isPastDate ? 'past-date' : ''}`}
+                ${isPastDate ? 'past-date' : ''}
+                ${isSelected ? 'selected' : ''}`}
+              onClick={() => showEventsForDay(day)}
             >
               <div className="week-day-header">
                 <span className="week-day-name">{format(day, "EEE")}</span>
                 <span className="week-day-number">{format(day, "d")}</span>
+                {dayEvents.length > 0 && (
+                  <div className="event-marker" />
+                )}
               </div>
-  
               <div className="week-day-events">
-                {dayEvents.map(event => (
-                  <EventItem
+                {dayEvents.slice(0, 2).map(event => (
+                  <div
                     key={event.id}
-                    event={event}
-                    dateKey={formattedDate}
-                    isExpanded={expandedEvent === event.id}
-                  />
+                    className={`week-event ${event.type}`}
+                  >
+                    <span className="event-time">{event.time}</span>
+                    <span className="event-title">{event.title}</span>
+                  </div>
                 ))}
+                {dayEvents.length > 2 && (
+                  <div className="more-events">+{dayEvents.length - 2} more</div>
+                )}
               </div>
             </div>
           );
         })}
+      </div>
+    );
+  };
+
+  const EventDetails = ({ event }) => {
+    const isFull = event.registered >= event.maxParticipants;
+    
+    return (
+      <div className={`event-details ${expandedEvent === event.id ? 'expanded' : ''}`}>
+        {event.poster && (
+          <div className="event-poster">
+            <img src={event.poster} alt={event.title} />
+          </div>
+        )}
+        <div className="event-header" onClick={() => toggleEventExpand(event.id)}>
+          <span className="event-time">{event.time}</span>
+          <span className="event-title">{event.title}</span>
+          <span className="event-type">{event.type}</span>
+          <span className="event-toggle">
+            {expandedEvent === event.id ? '▲' : '▼'}
+          </span>
+        </div>
+        
+        {expandedEvent === event.id && (
+          <div className="event-content">
+            <p className="event-description">{event.description}</p>
+            <div className="event-meta">
+              <div className="event-registration">
+                <span>Spots: {event.maxParticipants - event.registered} remaining</span>
+                <progress 
+                  value={event.registered} 
+                  max={event.maxParticipants}
+                />
+              </div>
+              <div className="event-actions">
+                {event.isRegistered ? (
+                  <div className="registration-success">
+                    You are registered for this event!
+                    <button 
+                      className="calendar-btn"
+                      onClick={() => addToCalendar(event)}
+                    >
+                      Add to Calendar
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <button
+                      className={`register-btn ${isFull ? 'disabled' : ''}`}
+                      onClick={() => handleRegister(event.id)}
+                      disabled={isFull}
+                    >
+                      {isFull ? 'Event Full' : 'Register Now'}
+                    </button>
+                    <button 
+                      className="calendar-btn"
+                      onClick={() => addToCalendar(event)}
+                    >
+                      Add to Calendar
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
@@ -351,16 +424,28 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
             </div>
 
             {viewMode === VIEW_MODE.MONTH ? (
-              <MonthView
-                currentMonth={currentMonth}
-                events={events}
-              />
+              <MonthView currentMonth={currentMonth} />
             ) : (
-              <WeekView
-                currentMonth={currentMonth}
-                events={events}
-              />
+              <WeekView currentMonth={currentMonth} />
             )}
+          </div>
+
+          {/* Day Events Panel */}
+          <div className={`day-events-panel ${showDayEvents ? 'visible' : ''}`}>
+            <div className="day-events-header">
+              <h3>{selectedDate ? format(selectedDate, "EEEE, MMMM d, yyyy") : "No date selected"}</h3>
+              <button className="close-btn" onClick={hideDayEvents}>×</button>
+            </div>
+            
+            <div className="day-events-list">
+              {dayEvents.length > 0 ? (
+                dayEvents.map(event => (
+                  <EventDetails key={event.id} event={event} />
+                ))
+              ) : (
+                <div className="no-events">No events scheduled for this day</div>
+              )}
+            </div>
           </div>
         </main>
       </div>
