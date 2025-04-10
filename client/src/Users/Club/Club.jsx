@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaUniversity, FaSignOutAlt, FaPlus, FaTimes, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import './Club.css';
@@ -19,6 +19,166 @@ import {
   parseISO,
   parse
 } from "date-fns";
+
+
+
+const EventEditor = ({ editingEvent, handleInputChange, handleCancelEdit, handleDeleteEvent, handleSaveEvent }) => {
+  const firstInputRef = useRef(null);
+
+  useEffect(() => {
+    // Focus the first input when editor opens
+    if (editingEvent && firstInputRef.current) {
+      firstInputRef.current.focus();
+    }
+  }, [editingEvent]);
+
+  if (!editingEvent) return null;
+
+  return (
+    <div className="club-event-editor">
+      <div className="club-event-editor__header">
+        <h3 className="club-event-editor__title">
+          {editingEvent.mode === 'create' ? 'Add New Event' : 'Edit Event'}
+        </h3>
+        <button 
+          className="club-event-editor__close"
+          onClick={handleCancelEdit}
+        >
+          <FaTimes />
+        </button>
+      </div>
+      
+      <div className="club-event-editor__field">
+        <label className="club-event-editor__label">Event Title*</label>
+        <input 
+          type="text" 
+          className="club-event-editor__input"
+          value={editingEvent.event.title}
+          onChange={(e) => handleInputChange('title', e.target.value)}
+          placeholder="Enter event title"
+          required
+        />
+      </div>
+      
+      <div className="club-event-editor__field">
+        <label className="club-event-editor__label">Date & Time*</label>
+        <input 
+          type="datetime-local" 
+          className="club-event-editor__input"
+          value={editingEvent.event.dateTime}
+          onChange={(e) => handleInputChange('dateTime', e.target.value)}
+          required
+        />
+      </div>
+      
+      <div className="club-event-editor__field">
+        <label className="club-event-editor__label">Location</label>
+        <input 
+          type="text" 
+          className="club-event-editor__input"
+          value={editingEvent.event.location}
+          onChange={(e) => handleInputChange('location', e.target.value)}
+          placeholder="Enter location"
+        />
+      </div>
+      
+      <div className="club-event-editor__field">
+        <label className="club-event-editor__label">Duration</label>
+        <input 
+          type="text" 
+          className="club-event-editor__input"
+          value={editingEvent.event.duration}
+          onChange={(e) => handleInputChange('duration', e.target.value)}
+          placeholder="e.g. 2 hours"
+        />
+      </div>
+      
+      <div className="club-event-editor__field">
+        <label className="club-event-editor__label">Points</label>
+        <input 
+          type="number" 
+          className="club-event-editor__input"
+          value={editingEvent.event.points}
+          onChange={(e) => handleInputChange('points', e.target.value)}
+          placeholder="Enter points"
+          min="0"
+        />
+      </div>
+      
+      <div className="club-event-editor__field">
+        <label className="club-event-editor__label">Max Participants</label>
+        <input 
+          type="number" 
+          className="club-event-editor__input"
+          value={editingEvent.event.maxParticipants}
+          onChange={(e) => handleInputChange('maxParticipants', e.target.value)}
+          placeholder="Enter max participants"
+          min="0"
+        />
+      </div>
+      
+      <div className="club-event-editor__field">
+        <label className="club-event-editor__label">Poster Image URL</label>
+        <input 
+          type="url" 
+          className="club-event-editor__input"
+          value={editingEvent.event.poster}
+          onChange={(e) => handleInputChange('poster', e.target.value)}
+          placeholder="Enter image URL"
+        />
+        {editingEvent.event.poster && (
+          <div className="club-event-editor__image-preview">
+            <img 
+              src={editingEvent.event.poster} 
+              alt="Poster preview" 
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = 'https://via.placeholder.com/300x150?text=Invalid+Image+URL';
+              }}
+            />
+          </div>
+        )}
+      </div>
+      
+      <div className="club-event-editor__field">
+        <label className="club-event-editor__label">Description</label>
+        <textarea 
+          className="club-event-editor__textarea"
+          value={editingEvent.event.description}
+          onChange={(e) => handleInputChange('description', e.target.value)}
+          placeholder="Enter event description"
+          rows="4"
+        />
+      </div>
+      
+      <div className="club-event-editor__actions">
+        {editingEvent.mode === 'edit' && (
+          <button 
+            className="club-event-editor__button club-event-editor__button--delete"
+            onClick={handleDeleteEvent}
+          >
+            Delete
+          </button>
+        )}
+        <button 
+          className="club-event-editor__button club-event-editor__button--cancel"
+          onClick={handleCancelEdit}
+        >
+          Cancel
+        </button>
+        <button 
+          className="club-event-editor__button club-event-editor__button--save"
+          onClick={handleSaveEvent}
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  );
+};
+
+
+
 
 export const Club = ({ token, userData: initialUserData, onLogout }) => {
   const [userData, setUserData] = useState(initialUserData);
@@ -220,6 +380,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
   };
 
   const handleInputChange = (field, value) => {
+    console.log("Input changed:", field, value);
     setEditingEvent(prev => ({
       ...prev,
       event: {
@@ -425,153 +586,6 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
       </div>
     );
   };
-
-  const EventEditor = () => {
-    if (!editingEvent) return null;
-
-    return (
-      <div className="club-event-editor">
-        <div className="club-event-editor__header">
-          <h3 className="club-event-editor__title">
-            {editingEvent.mode === 'create' ? 'Add New Event' : 'Edit Event'}
-          </h3>
-          <button 
-            className="club-event-editor__close"
-            onClick={handleCancelEdit}
-          >
-            <FaTimes />
-          </button>
-        </div>
-        
-        <div className="club-event-editor__field">
-          <label className="club-event-editor__label">Event Title*</label>
-          <input 
-            type="text" 
-            className="club-event-editor__input"
-            value={editingEvent.event.title}
-            onChange={(e) => handleInputChange('title', e.target.value)}
-            placeholder="Enter event title"
-            required
-          />
-        </div>
-        
-        <div className="club-event-editor__field">
-          <label className="club-event-editor__label">Date & Time*</label>
-          <input 
-            type="datetime-local" 
-            className="club-event-editor__input"
-            value={editingEvent.event.dateTime}
-            onChange={(e) => handleInputChange('dateTime', e.target.value)}
-            required
-          />
-        </div>
-        
-        <div className="club-event-editor__field">
-          <label className="club-event-editor__label">Location</label>
-          <input 
-            type="text" 
-            className="club-event-editor__input"
-            value={editingEvent.event.location}
-            onChange={(e) => handleInputChange('location', e.target.value)}
-            placeholder="Enter location"
-          />
-        </div>
-        
-        <div className="club-event-editor__field">
-          <label className="club-event-editor__label">Duration</label>
-          <input 
-            type="text" 
-            className="club-event-editor__input"
-            value={editingEvent.event.duration}
-            onChange={(e) => handleInputChange('duration', e.target.value)}
-            placeholder="e.g. 2 hours"
-          />
-        </div>
-        
-        <div className="club-event-editor__field">
-          <label className="club-event-editor__label">Points</label>
-          <input 
-            type="number" 
-            className="club-event-editor__input"
-            value={editingEvent.event.points}
-            onChange={(e) => handleInputChange('points', e.target.value)}
-            placeholder="Enter points"
-            min="0"
-          />
-        </div>
-        
-        <div className="club-event-editor__field">
-          <label className="club-event-editor__label">Max Participants</label>
-          <input 
-            type="number" 
-            className="club-event-editor__input"
-            value={editingEvent.event.maxParticipants}
-            onChange={(e) => handleInputChange('maxParticipants', e.target.value)}
-            placeholder="Enter max participants"
-            min="0"
-          />
-        </div>
-        
-        <div className="club-event-editor__field">
-          <label className="club-event-editor__label">Poster Image URL</label>
-          <input 
-            type="url" 
-            className="club-event-editor__input"
-            value={editingEvent.event.poster}
-            onChange={(e) => handleInputChange('poster', e.target.value)}
-            placeholder="Enter image URL"
-          />
-          {editingEvent.event.poster && (
-            <div className="club-event-editor__image-preview">
-              <img 
-                src={editingEvent.event.poster} 
-                alt="Poster preview" 
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = 'https://via.placeholder.com/300x150?text=Invalid+Image+URL';
-                }}
-              />
-            </div>
-          )}
-        </div>
-        
-        <div className="club-event-editor__field">
-          <label className="club-event-editor__label">Description</label>
-          <textarea 
-            className="club-event-editor__textarea"
-            value={editingEvent.event.description}
-            onChange={(e) => handleInputChange('description', e.target.value)}
-            placeholder="Enter event description"
-            rows="4"
-          />
-        </div>
-        
-        <div className="club-event-editor__actions">
-          {editingEvent.mode === 'edit' && (
-            <button 
-              className="club-event-editor__button club-event-editor__button--delete"
-              onClick={handleDeleteEvent}
-            >
-              Delete
-            </button>
-          )}
-          <button 
-            className="club-event-editor__button club-event-editor__button--cancel"
-            onClick={handleCancelEdit}
-          >
-            Cancel
-          </button>
-          <button 
-            className="club-event-editor__button club-event-editor__button--save"
-            onClick={handleSaveEvent}
-          >
-            Save
-          </button>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="club-dashboard">
       <header className="club-header">
@@ -674,7 +688,13 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
           </div>
 
           <div className="club-sidebar">
-            {editingEvent ? <EventEditor /> : <DayEventsPopup />}
+            {editingEvent ?  <EventEditor 
+        editingEvent={editingEvent}
+        handleInputChange={handleInputChange}
+        handleCancelEdit={handleCancelEdit}
+        handleDeleteEvent={handleDeleteEvent}
+        handleSaveEvent={handleSaveEvent}
+      /> : <DayEventsPopup />}
           </div>
         </div>
       </div>
