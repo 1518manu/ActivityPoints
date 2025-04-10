@@ -449,6 +449,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
             type="text" 
             className="club-event-editor__input"
             value={editingEvent.event.title}
+            onChange={(e) => handleInputChange('title', e.target.value)}
             placeholder="Enter event title"
             required
           />
@@ -460,6 +461,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
             type="datetime-local" 
             className="club-event-editor__input"
             value={editingEvent.event.dateTime}
+            onChange={(e) => handleInputChange('dateTime', e.target.value)}
             required
           />
         </div>
@@ -470,6 +472,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
             type="text" 
             className="club-event-editor__input"
             value={editingEvent.event.location}
+            onChange={(e) => handleInputChange('location', e.target.value)}
             placeholder="Enter location"
           />
         </div>
@@ -480,6 +483,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
             type="text" 
             className="club-event-editor__input"
             value={editingEvent.event.duration}
+            onChange={(e) => handleInputChange('duration', e.target.value)}
             placeholder="e.g. 2 hours"
           />
         </div>
@@ -490,6 +494,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
             type="number" 
             className="club-event-editor__input"
             value={editingEvent.event.points}
+            onChange={(e) => handleInputChange('points', e.target.value)}
             placeholder="Enter points"
             min="0"
           />
@@ -501,6 +506,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
             type="number" 
             className="club-event-editor__input"
             value={editingEvent.event.maxParticipants}
+            onChange={(e) => handleInputChange('maxParticipants', e.target.value)}
             placeholder="Enter max participants"
             min="0"
           />
@@ -512,6 +518,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
             type="url" 
             className="club-event-editor__input"
             value={editingEvent.event.poster}
+            onChange={(e) => handleInputChange('poster', e.target.value)}
             placeholder="Enter image URL"
           />
           {editingEvent.event.poster && (
@@ -533,6 +540,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
           <textarea 
             className="club-event-editor__textarea"
             value={editingEvent.event.description}
+            onChange={(e) => handleInputChange('description', e.target.value)}
             placeholder="Enter event description"
             rows="4"
           />
