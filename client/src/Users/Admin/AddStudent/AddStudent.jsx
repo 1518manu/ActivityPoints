@@ -1,6 +1,6 @@
 import { useState ,useRef} from "react";
 import { useNavigate } from "react-router-dom";
-import { FaUserTie, FaCog, FaSignOutAlt, FaBell, FaFilter, FaCheckCircle, FaPlus, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaUserTie, FaCog, FaSignOutAlt, FaThLarge, FaBell, FaFilter, FaCheckCircle, FaPlus, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { db } from '../../../firebaseFile/firebaseConfig';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
