@@ -4,7 +4,7 @@ import { FaUserTie, FaCog, FaPlus, FaSignOutAlt, FaBell, FaFilter, FaCheckCircle
 import { db } from '../../../firebaseFile/firebaseConfig';
 import { collection, addDoc, serverTimestamp, doc, setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword, getAuth, deleteUser } from 'firebase/auth';
-import './AddFaculty.css'; // Create similar CSS file as AddStudent.css
+import './AddFaculty.css'; 
 
 export const AddFaculty = ({ token, userData, onLogout }) => {
   const [formData, setFormData] = useState({
