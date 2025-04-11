@@ -37,6 +37,7 @@ const handleUploadButtonClick = () => {
   const navigate = useNavigate();
   const onAddStudent = () => { navigate("/AddStudent"); }
   const onDashboard = () => { navigate("/Admin"); }
+  const onStudentList = () => { navigate("/StudentListAdmin"); }
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -219,10 +220,6 @@ const handleUploadButtonClick = () => {
     }
   };
   
-  if (!token) {
-    navigate("/");
-    return null;
-  }
   
 
   return (
@@ -261,6 +258,7 @@ const handleUploadButtonClick = () => {
            <button><FaBell className="menu-icon-Admin" /> Notifications</button>
            <button><FaFilter className="menu-icon-Admin" /> Filter</button>
            <button><FaCog className="menu-icon-faculty" /> Settings  </button>
+           <button onClick={onStudentList}><FaThLarge className="menu-icon-Admin" /> Student List</button>
            <button onClick={onAddStudent}><FaPlus className="menu-icon-Admin" /> ADD Student </button>
            <button onClick={onLogout} className="logout-btn"> <FaSignOutAlt className="menu-icon-faculty" /> Logout </button>
         </div>

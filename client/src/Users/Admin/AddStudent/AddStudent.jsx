@@ -38,6 +38,7 @@ const handleUploadJSONClick = () => {
   const navigate = useNavigate();
   const onAddFaculty = () => { navigate("/AddFaculty"); }
   const onDashboard = () => { navigate("/Admin"); }
+  const onStudentList = () => { navigate("/StudentListAdmin"); }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -255,6 +256,7 @@ const handleUploadJSONClick = () => {
            <button><FaBell className="menu-icon-Admin" /> Notifications</button>
            <button><FaFilter className="menu-icon-Admin" /> Filter</button>
            <button><FaCog className="menu-icon-faculty" /> Settings  </button>
+           <button onClick={onStudentList}><FaThLarge className="menu-icon-Admin" /> Student List</button>
            <button onClick={onAddFaculty}><FaPlus className="menu-icon-Admin" /> ADD Faculty </button>
            <button onClick={onLogout} className="logout-btn"> <FaSignOutAlt className="menu-icon-faculty" /> Logout </button>
         </div>
