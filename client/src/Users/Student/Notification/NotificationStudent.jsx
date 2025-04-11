@@ -77,7 +77,6 @@ export const NotificationPageStudent = ({ token, userData, onLogout }) => {
   };
 
   useEffect(() => {
-    if (!token) navigate("/");
     if (userData) fetchNotifications(userData);
   }, [token, userData, navigate]);
 

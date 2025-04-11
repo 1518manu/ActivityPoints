@@ -217,10 +217,6 @@ const handleUploadJSONClick = () => {
     reader.readAsText(file);
   };
 
-  if (!token) {
-    navigate("/");
-    return null;
-  }
 
   return (
     <div className="container">

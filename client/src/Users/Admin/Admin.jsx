@@ -18,10 +18,6 @@ export const Admin = ({ token, userData: initialUserData, onLogout }) => {
   const onAddFaculty = () => { navigate("/AddFaculty"); }
 
   useEffect(() => {
-    if (!token) {
-      navigate("/");
-      return;
-    }
 
     const fetchAllData = async () => {
       try {

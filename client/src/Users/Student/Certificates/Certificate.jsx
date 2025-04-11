@@ -241,7 +241,6 @@ export const Certificate = ({ token, userData, onLogout } ) => {
   }, []);
   
     useEffect(() => {
-      if (!token) navigate("/");
       if (userData) fetchCertificates(userData);
     }, [token, userData, navigate]);
   

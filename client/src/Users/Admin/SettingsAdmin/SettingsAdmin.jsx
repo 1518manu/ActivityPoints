@@ -148,10 +148,6 @@ export const SettingsAdmin = ({ token, userData, onLogout }) => {
   };
 
   useEffect(() => {
-    if (!token) {
-      navigate("/");
-      return;
-    }
     fetchUserDetails();
   }, [token, navigate]);
 

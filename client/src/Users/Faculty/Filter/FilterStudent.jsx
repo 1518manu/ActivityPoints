@@ -256,7 +256,6 @@ export const FilterStudent = ({ token, userData, onLogout }) => {
   }, []);
 
   useEffect(() => {
-    if (!token) navigate("/");
     fetchStudents();
   }, [token, navigate]);
 

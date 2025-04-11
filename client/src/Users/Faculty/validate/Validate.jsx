@@ -95,9 +95,6 @@ export const Validate = ({ token, userData, onLogout }) => {
   };
 
   useEffect(() => {
-    if (!token) {
-      navigate("/");
-    }
     
     if (userData) {
       fetchValidationData();

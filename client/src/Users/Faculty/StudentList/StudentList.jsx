@@ -68,7 +68,6 @@ export const StudentList = ({ token, userData, onLogout }) => {
   };
 
   useEffect(() => {
-    if (!token) navigate("/");
     fetchStudents();
   }, [token, navigate]);
 
