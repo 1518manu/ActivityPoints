@@ -219,6 +219,11 @@ const handleUploadButtonClick = () => {
     }
   };
   
+  if (!token) {
+    navigate("/");
+    return null;
+  }
+  
 
   return (
     <div className="container">
