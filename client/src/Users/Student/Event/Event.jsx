@@ -80,7 +80,7 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
   
           fetchedEvents[formattedDate].push({
             id: docSnap.id,
-            title: data.name,
+            title: data.title,
             time: format(eventDate, "hh:mm a"),
             description: data.description || "",
             type: data.type || "Event",
