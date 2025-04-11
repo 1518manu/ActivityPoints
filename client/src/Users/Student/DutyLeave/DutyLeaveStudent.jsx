@@ -226,45 +226,8 @@ export const DutyLeaveForm = ({token, userData, onLogout}) => {
 
   return (
     <div className="container">
-      <header className="header">
-        <div className="header-left">
-          <div className="logo-container">
-            <img src="/api/placeholder/100/40" alt="Logo" className="logo" />
-          </div>
-        </div>
-
-        <div className="header-right">
-          <button className="business-btn" onClick={onLogout}>Logout</button>
-        </div>
-      </header>
 
       <div className="main-content">
-        <div className="sidebar-menu">
-          <button onClick={onCertificate}>
-            <FaThLarge className="menu-icon" /> Certificates
-          </button>
-
-          <button>
-            <FaCog className="menu-icon" /> Settings
-          </button>
-
-          <button>
-            <FaFileAlt className="menu-icon" /> Event <span className="badge">new</span>
-          </button>
-          
-          <button onClick={onDashboard}>
-            <FaUserTie className="menu-icon" /> Dashboard
-          </button>
-
-          <button onClick={onNotification}>
-            <FaBell className="menu-icon" /> Notifications
-            {/* {notificationCount > 0 && <span className="badge">{notificationCount}</span>} */}
-          </button>
-
-          <button onClick={onLogout} style={{ color: "#df0000" }}>
-            <FaSignOutAlt style={{ color: "#df0000" }} className="menu-icon" /> Logout
-          </button>
-        </div>
 
         <div className="duty-leave-container">
       <div className="college-header">
