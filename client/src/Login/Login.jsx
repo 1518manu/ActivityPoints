@@ -55,7 +55,6 @@ export function LoginPage({ onLoginSuccess }) {
             console.log("Login Successful!");
             console.log("userData:", userData);
   
-            setTimeout(() => {
               switch (role) {
                 case "Admin":
                   navigate("/Admin");
@@ -74,7 +73,6 @@ export function LoginPage({ onLoginSuccess }) {
                   showNotification("User role not found!", "error");
                   console.log("User role not found!");
               }
-            }, 1400);
           } else {
                     console.log("User role not found!");
                     showNotification("User role not found!", "error");
@@ -122,7 +120,7 @@ const handleGoogleSignIn = async (e) => {
         console.log("Login Successful");
 
         // Redirect to the appropriate dashboard based on the role
-        setTimeout(() => {
+        
           switch (role) {
             case "Admin":
               console.log("Admin role found!");
@@ -144,7 +142,6 @@ const handleGoogleSignIn = async (e) => {
               showNotification("User role not found!", "error");
               console.log("User role not found!");
           }
-        }, 1400);
       } else {
         showNotification("User role not found!", "error");
         console.log("User role not found!");
@@ -199,7 +196,7 @@ const handleSubmit = async (e) => {
 
         // Redirect to the appropriate dashboard based on the role
         
-        setTimeout(() => {
+        
           switch (role) {
             case "Admin":
               console.log("Admin role found!");
@@ -221,7 +218,6 @@ const handleSubmit = async (e) => {
               showNotification("User role not found!", "error");
               console.log("User role not found!");
           }
-        }, 1400);
 
       } else {
         showNotification("User role not found!", "error");
