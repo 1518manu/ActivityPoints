@@ -5,7 +5,8 @@ import { signInWithGoogle } from "./AuthApi/GoogleAuth";
 import { mockAuthApi } from "./AuthApi/Api";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { NotificationContainer } from "../Notification/NotificationContainer";
-import { fetchUserData , fetchUserRole} from "./dataApi/userDataApi"
+import { fetchUserData , fetchUserRole} from "./dataApi/userDataApi";
+import { ForgotPassword } from "../Password/Password";
 import "./Login.css";
 
 
@@ -15,6 +16,7 @@ export function LoginPage({ onLoginSuccess }) {
   const [showPassword, setShowPassword] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [notification, setNotification] = useState({ message: "", type: "", show: false });
 
   const navigate = useNavigate();
@@ -240,10 +242,13 @@ const handleSubmit = async (e) => {
 
 
 
-  const handleForgotPassword = () => {
-    showNotification("Password reset link sent!", "info");
-    console.log("Password reset link sent!");
-  };
+  
+const handleForgotPassword = (e) => {
+  e.preventDefault();
+  setShowForgotPassword(true);
+};
+
+
 
   return (
     <div className="login-container">
@@ -293,12 +298,20 @@ const handleSubmit = async (e) => {
                 <label htmlFor="show-password">Show Password</label>
               </div>
             </div>
-
+                        
             <div className="form-footer">
               {isLogin && (
-                <a href="#" onClick={handleForgotPassword} className="forgot-password">
-                  Forgot your password?
-                </a>
+                <>
+                  <a href="#" onClick={handleForgotPassword} className="forgot-password">
+                    Forgot your password?
+                  </a>
+                  {showForgotPassword && (
+                    <ForgotPassword 
+                      onClose={() => setShowForgotPassword(false)} 
+                      initialEmail={email} 
+                    />
+                  )}
+                </>
               )}
             </div>
 

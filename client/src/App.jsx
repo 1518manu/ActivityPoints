@@ -6,6 +6,7 @@ import { LoginPage } from "./Login/Login";
 import { SignupPage } from "./test/Signup/SignUp";
 import { NotificationContainer } from "./Notification/NotificationContainer";
 import { Loading } from "./Loading/Loading";
+import { ForgotPassword } from "./Password/Password";
 
 import { Student } from "./Users/Student/Student";
 import { DutyLeaveForm } from "./Users/Student/DutyLeave/DutyLeaveStudent";
@@ -94,6 +95,7 @@ function App() {
       console.log("No User Data in App");
     }
   }, [userData]);
+
 
   return (    
     <>
