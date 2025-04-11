@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, query, where, doc, getDoc ,deleteDoc } from "firebase/firestore";
 import { db } from "../../../firebaseFile/firebaseConfig";
 import { FaThLarge,FaUserTie, FaCog, FaCalendarAlt, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -133,21 +133,44 @@ export const NotificationPageStudent = ({ token, userData, onLogout }) => {
         ) : (
           <ul className="notification-list">
             {notifications.map((notification) => (
-              <li key={notification.id} className="notification-item">
-                <button
-                  className="notification-button"
-                  onClick={() => {
-                    setSelectedNotification(notification);
-                    setSelectedCertificate(notification.certificate || null);
-                  }}>
-                  <h3 className="notification-heading">{notification.title || "Notification"}</h3>
-                  <p className="notification-message">{notification.msg}</p>
-                  <p className="notification-date">
-                    {notification.timestamp ? new Date(notification.timestamp).toLocaleString() : "N/A"}
-                  </p>
-                </button>
-              </li>
-            ))}
+  <li key={notification.id} className="notification-item">
+    <button
+      className="notification-button"
+      onClick={() => {
+        setSelectedNotification(notification);
+        setSelectedCertificate(notification.certificate || null);
+      }}
+    >
+      <h3 className="notification-heading">{notification.title || "Notification"}</h3>
+      <p className="notification-message">{notification.msg}</p>
+      <p className="notification-date">
+        {notification.timestamp ? new Date(notification.timestamp).toLocaleString() : "N/A"}
+      </p>
+    </button>
+
+    {/* Delete on click (Mark as Read) */}
+    <button
+      className="mark-read-button"
+      onClick={async (e) => {
+        e.stopPropagation(); // Prevents triggering the modal
+        try {
+          const notifRef = doc(db, "Notifications", notification.id);
+          await deleteDoc(notifRef);
+
+          // Remove from local state
+          setNotifications((prev) =>
+            prev.filter((n) => n.id !== notification.id)
+          );
+        } catch (err) {
+          console.error("Error deleting notification:", err);
+        }
+      }}
+    >
+      Mark as Read
+    </button>
+  </li>
+))}
+
           </ul>
         )}
       </div>
