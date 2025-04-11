@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 import { app } from "../firebaseFile/firebaseConfig";
-import "./ForgotPassword.css"
+import "./Password.css";
 
 const auth = getAuth(app);
+
 export const ForgotPassword = ({ onClose, initialEmail = '' }) => {
     const [email, setEmail] = useState(initialEmail);
     const [message, setMessage] = useState('');
@@ -11,7 +12,7 @@ export const ForgotPassword = ({ onClose, initialEmail = '' }) => {
     const [isLoading, setIsLoading] = useState(false);
   
     const handleSubmit = async (e) => {
-      e.preventDefault();
+      // Remove e.preventDefault() since we're not using a form
       setMessage('');
       setError('');
       setIsLoading(true);
@@ -21,6 +22,7 @@ export const ForgotPassword = ({ onClose, initialEmail = '' }) => {
         setMessage('Password reset email sent! Check your inbox.');
       } catch (err) {
         setError(err.message);
+        console.error("Password reset error:", err);
       } finally {
         setIsLoading(false);
       }
@@ -39,7 +41,9 @@ export const ForgotPassword = ({ onClose, initialEmail = '' }) => {
               &times;
             </button>
           </div>
-          <form onSubmit={handleSubmit} className="forgot-password-form">
+          
+          {/* Replaced form with div */}
+          <div className="forgot-password-form">
             <input
               type="email"
               className="forgot-password-input"
@@ -47,15 +51,30 @@ export const ForgotPassword = ({ onClose, initialEmail = '' }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoFocus
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSubmit();
+                }
+              }}
             />
             <button
-              type="submit"
+              type="button"  // Changed from "submit" to "button"
               className="forgot-password-submit-btn"
+              onClick={handleSubmit}
               disabled={isLoading}
             >
-              {isLoading ? 'Sending...' : 'Send Reset Email'}
+              {isLoading ? (
+                <>
+                  <span className="spinner"></span>
+                  Sending...
+                </>
+              ) : (
+                'Send Reset Email'
+              )}
             </button>
-          </form>
+          </div>
+          
           {message && (
             <div className="forgot-password-message forgot-password-success">
               {message}
@@ -69,4 +88,4 @@ export const ForgotPassword = ({ onClose, initialEmail = '' }) => {
         </div>
       </div>
     );
-  };
+};
