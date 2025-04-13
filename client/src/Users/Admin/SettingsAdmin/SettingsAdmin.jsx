@@ -150,6 +150,8 @@ export const SettingsAdmin = ({ token, userData, onLogout }) => {
   useEffect(() => {
     fetchUserDetails();
   }, [token, navigate]);
+  
+  if(!token) navigate("/");
 
   if (!userData) return <Loading fullScreen={true} />;
 

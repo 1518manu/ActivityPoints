@@ -71,6 +71,9 @@ export const StudentList = ({ token, userData, onLogout }) => {
     fetchStudents();
   }, [token, navigate]);
 
+  
+  if(!token) navigate("/");
+
   if (!userData) return <div className="loading-full">Loading user data...</div>;
 
   return (

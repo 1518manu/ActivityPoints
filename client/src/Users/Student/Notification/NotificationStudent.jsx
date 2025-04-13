@@ -84,6 +84,9 @@ export const NotificationPageStudent = ({ token, userData, onLogout }) => {
   const onDashboard = () => navigate("/StudentDashboard");
   const onDutyLeave = () => navigate("/duty-leave");
 
+  
+  if(!token) navigate("/");
+
   return (loading ? (
     <Loading />
   ) :(

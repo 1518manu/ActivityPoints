@@ -219,6 +219,8 @@ const handleUploadButtonClick = () => {
       setLoading(false);
     }
   };
+
+  if(!token) navigate("/");
   
   
 

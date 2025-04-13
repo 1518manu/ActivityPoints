@@ -41,6 +41,10 @@ export const Admin = ({ token, userData: initialUserData, onLogout }) => {
 
     fetchAllData();
   }, [token, initialUserData?.email, navigate]);
+
+  if (!token) {
+    navigate("/");
+  }
   
   if (!userData) {
     return <Loading />;

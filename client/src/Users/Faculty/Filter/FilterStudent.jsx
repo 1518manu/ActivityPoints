@@ -259,6 +259,7 @@ export const FilterStudent = ({ token, userData, onLogout }) => {
     fetchStudents();
   }, [token, navigate]);
 
+
   // Navigation handlers
   const onValidate = () => navigate("/Validate");
   const onNotification = () => navigate("/Notification-faculty");
@@ -337,9 +338,13 @@ export const FilterStudent = ({ token, userData, onLogout }) => {
 
   const groupedStudents = groupStudentsByActivity();
 
+  
+  if(!token) navigate("/");
+  
   if (!userData) {
     return <div>Loading user data...</div>;
   }
+
 
   if (loading) {
     return <Loading />;

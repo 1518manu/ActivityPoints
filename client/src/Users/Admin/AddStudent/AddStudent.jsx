@@ -219,6 +219,8 @@ const handleUploadJSONClick = () => {
   };
 
 
+  if(!token) navigate("/");
+  
   return (
     <div className="container">
       <header className="header">

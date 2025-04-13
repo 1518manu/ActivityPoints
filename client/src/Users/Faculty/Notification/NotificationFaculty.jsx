@@ -52,6 +52,9 @@ export const NotificationPageFaculty = ({ token, userData, onLogout }) => {
   const onStudentList = () => { navigate("/StudentList"); }
   const onDashboard = () => { navigate("/FacultyDashboard"); }
 
+  
+  if(!token) navigate("/");
+  
   return (loading ? (
     <Loading />
   ) :(

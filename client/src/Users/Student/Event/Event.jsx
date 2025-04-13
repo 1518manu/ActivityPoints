@@ -363,6 +363,8 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
       </div>
     );
   };
+  
+  if(!token) navigate("/");
 
   return (
     <div className="container">

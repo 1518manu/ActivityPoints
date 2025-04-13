@@ -219,6 +219,9 @@ export const DutyLeaveForm = ({token, userData, onLogout}) => {
   useEffect(() => {
   }, [token, userData, navigate]);
 
+  
+  if(!token) navigate("/");
+  
   if (loading) {
     return <Loading />;
   }

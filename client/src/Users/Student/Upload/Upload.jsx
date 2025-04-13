@@ -284,6 +284,8 @@ export function CertificateUploadPage() {
     const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
+  
+  if(!token) navigate("/");
 
   return (
     <div className="upload-container">

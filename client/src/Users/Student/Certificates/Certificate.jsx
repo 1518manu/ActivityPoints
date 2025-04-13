@@ -398,6 +398,10 @@ const handleCertificateSelection = (e, cert) => {
         console.error("Error merging certificates:", error);
       }
     }; 
+
+    
+  if(!token) navigate("/");
+  
   if (isLoading) return <Loading />;
 
   return (

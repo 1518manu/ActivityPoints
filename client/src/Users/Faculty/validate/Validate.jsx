@@ -332,6 +332,9 @@ export const Validate = ({ token, userData, onLogout }) => {
     );
   };
 
+  
+  if(!token) navigate("/");
+  
   if (!userData) {
     return <div>Loading user data...</div>;
   }
