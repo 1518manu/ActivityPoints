@@ -87,7 +87,9 @@
     color: rgb(84, 84, 84);
   }
   
-  
+  #show-password {
+      margin-right: 10px;
+  }
   
   .forgot-password {
     font-size: 0.875rem;
