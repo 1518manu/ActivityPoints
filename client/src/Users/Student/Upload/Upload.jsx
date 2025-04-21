@@ -285,7 +285,6 @@ export function CertificateUploadPage() {
     return `${year}-${month}-${day}`;
   };
   
-  if(!token) navigate("/");
 
   return (
     <div className="upload-container">
