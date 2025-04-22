@@ -34,7 +34,6 @@ export const DutyLeaveForm = ({token, userData, onLogout}) => {
     leaveReason: "",
     examinationDuringLeave: "",
     dutyLeaveCount: "",
-    studentSignature: "",
     advisorRemarks: "",
     hodApproval: "",
     selectedCertificate: "",
@@ -162,7 +161,6 @@ export const DutyLeaveForm = ({token, userData, onLogout}) => {
         leaveReason: formData.leaveReason,
         examinationDuringLeave: formData.examinationDuringLeave,
         dutyLeaveCount: formData.dutyLeaveCount,
-        studentSignature: formData.studentSignature,
         advisorRemarks: formData.advisorRemarks,
         faculty_id: userData.mentor,
         hodApproval: formData.hodApproval,
@@ -202,7 +200,6 @@ export const DutyLeaveForm = ({token, userData, onLogout}) => {
       leaveReason: "",
       examinationDuringLeave: "",
       dutyLeaveCount: "",
-      studentSignature: "",
       advisorRemarks: "",
       hodApproval: "",
       selectedCertificate: "",
@@ -315,16 +312,7 @@ export const DutyLeaveForm = ({token, userData, onLogout}) => {
           />
         </div>
 
-        <div className="form-group">
-          <label>Signature of student with date:</label>
-          <input
-            type="text"
-            name="studentSignature"
-            value={formData.studentSignature}
-            onChange={handleChange}
-            required
-          />
-        </div>
+       
 
         {/* Certificate Selection Section */}
         <div className="form-group">
