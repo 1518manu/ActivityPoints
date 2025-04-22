@@ -251,9 +251,10 @@ const handleForgotPassword = (e) => {
       <NotificationContainer message={notification.message} type={notification.type} show={notification.show} />
       
       <div className="login-content">
-        <h1 className="login-title">Activity Point System</h1>
-        <h2 className="login-subtitle">Sign in to your account</h2>
-
+        <div className = "logo">
+          <img src="https://ik.imagekit.io/yx0worcwu/logo.jpg?updatedAt=1745328786060" alt="Logo" className="logo-image" />
+        
+        </div>
         <div className="login-form">
           <form onSubmit={handleSubmit}>
             <div className="form-group">
