@@ -591,7 +591,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
       <header className="club-header">
         <div className="club-header__left">
           <div className="club-logo">
-            <img src="https://ik.imagekit.io/yx0worcwu/logo.jpg?updatedAt=1745328786060" alt="Club Logo" className="logo" />
+            <img src="https://drive.google.com/file/d/14mwb0h4iESMMZocxhpXEq44ub0QL30Kl/view?usp=drive_link" alt="Club Logo" className="logo" />
           </div>
         </div>
         <div className="club-header__right">

@@ -707,7 +707,7 @@ const handleReject = async () => {
       <header className="header-faculty">
         <div className="header-left-faculty">
           <div className="logo-container-faculty">
-            <img src="https://ik.imagekit.io/yx0worcwu/logo.jpg?updatedAt=1745328786060" alt="Logo" className="logo" />
+            <img src="https://drive.google.com/file/d/14mwb0h4iESMMZocxhpXEq44ub0QL30Kl/view?usp=drive_link" alt="Logo" className="logo" />
           </div>
         </div>
         <div className="header-right-faculty">

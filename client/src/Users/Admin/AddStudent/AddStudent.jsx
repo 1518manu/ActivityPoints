@@ -226,7 +226,7 @@ const handleUploadJSONClick = () => {
       <header className="header">
         <div className="header-left">
           <div className="logo-container">
-            <img src="https://ik.imagekit.io/yx0worcwu/logo.jpg?updatedAt=1745328786060" alt="Logo" className="logo" />
+            <img src="/client/src/logo.png" alt="Logo" className="logo" />
           </div>
         </div>
         <div className="header-right-faculty">            

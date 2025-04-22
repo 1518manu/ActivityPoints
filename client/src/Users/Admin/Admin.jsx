@@ -59,7 +59,7 @@ export const Admin = ({ token, userData: initialUserData, onLogout }) => {
       <header className="header-Admin">
         <div className="header-left-Admin">
           <div className="logo-container-Admin">
-            <img src="https://ik.imagekit.io/yx0worcwu/logo.jpg?updatedAt=1745328786060" alt="Logo" className="logo" />
+            <img src="https://drive.google.com/file/d/14mwb0h4iESMMZocxhpXEq44ub0QL30Kl/view?usp=drive_link" alt="Logo" className="logo" />
           </div>
         </div>
         <div className="header-right-Admin">
