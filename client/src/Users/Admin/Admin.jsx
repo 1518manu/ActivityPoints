@@ -59,7 +59,7 @@ export const Admin = ({ token, userData: initialUserData, onLogout }) => {
       <header className="header-Admin">
         <div className="header-left-Admin">
           <div className="logo-container-Admin">
-            <img src="/api/placeholder/100/40" alt="Logo" className="logo" />
+            <img src="/client/src/logo.png" alt="Logo" className="logo" />
           </div>
         </div>
         <div className="header-right-Admin">

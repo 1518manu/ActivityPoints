@@ -1,3 +1,5 @@
+
+
 import { useState , useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUserTie, FaCog, FaPlus, FaSignOutAlt, FaThLarge, FaBell, FaFilter, FaCheckCircle, FaEye, FaEyeSlash } from 'react-icons/fa';
@@ -229,7 +231,7 @@ const handleUploadButtonClick = () => {
       <header className="header">
         <div className="header-left">
           <div className="logo-container">
-            <img src="/api/placeholder/100/40" alt="Logo" className="logo" />
+            <img src="/client/src/logo.png" alt="Logo" className="logo" />
           </div>
         </div>
         <div className="header-right-faculty">

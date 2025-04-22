@@ -121,7 +121,7 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
       <header className="header">
         <div className="header-left">
           <div className="logo-container">
-            <img src="/api/placeholder/100/40" alt="Logo" className="logo" />
+            <img src="/client/src/logo.png" alt="Logo" className="logo" />
           </div>
         </div>
 

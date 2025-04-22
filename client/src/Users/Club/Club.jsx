@@ -591,7 +591,7 @@ export const Club = ({ token, userData: initialUserData, onLogout }) => {
       <header className="club-header">
         <div className="club-header__left">
           <div className="club-logo">
-            <img src="/logo.png" alt="Club Logo" className="club-logo__image" />
+            <img src="/client/src/logo.png" alt="Club Logo" className="logo" />
           </div>
         </div>
         <div className="club-header__right">
