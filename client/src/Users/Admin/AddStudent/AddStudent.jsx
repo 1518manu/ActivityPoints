@@ -255,9 +255,6 @@ const handleUploadJSONClick = () => {
          
         <div className="sidebar-menu-faculty">
            <button onClick={onDashboard}><FaUserTie className="menu-icon-Admin" /> Dashboard</button>
-           <button><FaBell className="menu-icon-Admin" /> Notifications</button>
-           <button><FaFilter className="menu-icon-Admin" /> Filter</button>
-           <button><FaCog className="menu-icon-faculty" /> Settings  </button>
            <button onClick={onStudentList}><FaThLarge className="menu-icon-Admin" /> Student List</button>
            <button onClick={onAddFaculty}><FaPlus className="menu-icon-Admin" /> ADD Faculty </button>
            <button onClick={onLogout} className="logout-btn"> <FaSignOutAlt className="menu-icon-faculty" /> Logout </button>

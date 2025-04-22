@@ -384,9 +384,6 @@ export const StudentEvent = ({ token, userData: initialUserData, onLogout }) => 
           <button onClick={onCertificate}>
             <FaThLarge className="menu-icon" /> Certificates
           </button>
-          <button>
-            <FaCog className="menu-icon" /> Settings
-          </button>
           <button onClick={onDashboard}>
             <FaUserTie className="menu-icon" /> Dashboard
           </button>

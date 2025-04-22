@@ -719,10 +719,8 @@ const handleReject = async () => {
         <div className="sidebar-menu-faculty">
           <button onClick={onValidate}><FaCheckCircle className="menu-icon-faculty" /> Validate</button>
           <button onClick={onStudentList}><FaThLarge className="menu-icon-faculty" /> Student List</button>
-          <button><FaCalendarAlt className="menu-icon-faculty" /> Events <span className="badge">new</span></button>
           <button  onClick={onNotification}> <FaBell   className="menu-icon-faculty" /> Notifications  {notificationCount > 0 && <span className="badge">{notificationCount}</span>}</button>
           <button  onClick={onFilter}> <FaFilter   className="menu-icon-faculty" /> Filter  </button>
-          <button><FaCog className="menu-icon-faculty" /> Settings</button>
           <button onClick={onLogout} style={{ color: "#df0000" }}>
             <FaSignOutAlt className="menu-icon-faculty" /> Logout
           </button>

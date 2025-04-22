@@ -95,14 +95,12 @@ export const StudentList = ({ token, userData, onLogout }) => {
           <button onClick={() => navigate("/Validate")}>
             <FaCheckCircle className="menu-icon-faculty" /> Validate
           </button>
-          <button><FaCalendarAlt className="menu-icon-faculty" /> Events <span className="badge">new</span></button>
           <button onClick={() => navigate("/Notification-faculty")}>
             <FaBell className="menu-icon-faculty" /> Notifications
           </button>
           <button onClick={() => navigate("/filter")}>
             <FaFilter className="menu-icon-faculty" /> Filter & Sort
           </button>
-          <button><FaCog className="menu-icon-faculty" /> Settings</button>
           <button onClick={onLogout} className="logout-btn">
             <FaSignOutAlt className="menu-icon-faculty" /> Logout
           </button>

@@ -440,8 +440,7 @@ const handleCertificateSelection = (e, cert) => {
           <button onClick={() => navigate("/StudentDashboard")}>
             <FaUserTie className="menu-icon" /> Dashboard
           </button>
-          <button><FaCog className="menu-icon" /> Settings</button>
-          <button><FaCalendarAlt className="menu-icon" /> Events <span className="badge">new</span></button>
+          <button onClick={navigate("/StudentEvents")}><FaCalendarAlt className="menu-icon" /> Events <span className="badge">new</span></button>
           <button onClick={onNotification}>
             <FaBell className="menu-icon" /> Notifications  
             {notificationCount > 0 && <span className="badge">{notificationCount}</span>}

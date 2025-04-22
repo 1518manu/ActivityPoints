@@ -356,10 +356,8 @@ export const Validate = ({ token, userData, onLogout }) => {
         <div className="sidebar-menu-faculty">
           <button onClick={onDashboard}><FaUserTie className="menu-icon-faculty" /> Dashboard</button>
           <button onClick={onStudentList}><FaThLarge className="menu-icon-faculty" /> Student List</button>
-          <button><FaCalendarAlt className="menu-icon-faculty" /> Events <span className="badge">new</span></button>
           <button onClick={onNotification}> <FaBell className="menu-icon-faculty" /> Notifications</button>
           <button onClick={onFilter}> <FaFilter className="menu-icon-faculty" /> Filter & Sort</button>
-          <button><FaCog className="menu-icon-faculty" /> Settings</button>
           <button onClick={onLogout} style={{ color: "#df0000" }}>
             <FaSignOutAlt className="menu-icon-faculty" /> Logout
           </button>

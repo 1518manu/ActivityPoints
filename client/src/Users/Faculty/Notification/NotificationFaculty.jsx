@@ -77,9 +77,7 @@ export const NotificationPageFaculty = ({ token, userData, onLogout }) => {
       <button  onClick={onDashboard}> <FaUserTie   className="menu-icon-faculty" /> Dashboard  </button>
           <button onClick={onValidate}><FaCheckCircle className="menu-icon-faculty" /> Validate</button>
           <button onClick={onStudentList}><FaThLarge className="menu-icon-faculty" /> Student List</button>
-          <button><FaCalendarAlt className="menu-icon-faculty" /> Events <span className="badge">new</span></button>
           <button onClick={() => navigate("/filter")} ><FaFilter className="menu-icon-faculty" /> Filter & Sort</button>
-          <button><FaCog className="menu-icon-faculty" /> Settings</button>
           <button onClick={onLogout} style={{ color: "#df0000" }}>
             <FaSignOutAlt className="menu-icon-faculty" /> Logout
           </button>

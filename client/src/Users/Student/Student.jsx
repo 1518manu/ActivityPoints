@@ -136,9 +136,6 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
             <FaThLarge className="menu-icon" /> Certificates
           </button>
 
-          <button>
-            <FaCog className="menu-icon" /> Settings
-          </button>
 
           <button  onClick={onEvent}>
             <FaFileAlt className="menu-icon" /> Event <span className="badge">new</span>

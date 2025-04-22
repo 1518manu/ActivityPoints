@@ -112,10 +112,8 @@ export const NotificationPageStudent = ({ token, userData, onLogout }) => {
         <button onClick={onCertificate}>
           <FaThLarge className="menu-icon" /> Certificates
         </button>
-        <button>
-          <FaCog className="menu-icon" /> Settings
-        </button>
-        <button>
+        
+        <button onClick={navigate("/StudentEvents")}>
           <FaCalendarAlt className="menu-icon" /> Event <span className="badge">new</span>
         </button>
         <button onClick={onDutyLeave}>
