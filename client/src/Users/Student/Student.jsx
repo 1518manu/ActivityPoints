@@ -209,7 +209,6 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
   <p className="section-prompt">
     {userData?.about || "Craft an engaging story in your bio and make meaningful connections with peers and recruiters alike!"}
   </p>
-  <button className="add-button">Add About</button>
 </div>
 
 {/* Duty-Leave Applications Section */}
@@ -236,8 +235,6 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
         <p>No duty-leave applications available.</p>
       )}
     </div>
-
-
           </div>
         </div>
       </div>
