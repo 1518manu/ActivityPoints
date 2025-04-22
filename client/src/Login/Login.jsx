@@ -224,8 +224,8 @@ const handleSubmit = async (e) => {
         console.log("User role not found!");
       }
     } else {
-      showNotification(response.message || "Login Failed!", "error");
-      console.warn(response.message || "Login Failed!");
+      showNotification(response.message || "incorrect username or password!", "error");
+      console.log(response.message || "Login Failed!");
     }
   } catch (error) {
     showNotification("An error occurred. Please try again.", "error");

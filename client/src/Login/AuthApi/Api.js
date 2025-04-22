@@ -28,7 +28,6 @@ export async function mockAuthApi(email, password, action) {
                 }
             } else {
                 console.error("Error signing in with Email/Password:", error);
-                alert(`Error: ${error.message} (Code: ${error.code})`);
                 return { success: false, error: error.message };
             }
         }
