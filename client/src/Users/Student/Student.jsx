@@ -237,16 +237,6 @@ export const Student = ({ token, userData: initialUserData, onLogout }) => {
       )}
     </div>
 
-<div className="section-container">
-  <div className="section-header">
-    <h3>Resume</h3>
-  </div>
-  <div className="resume-section">
-    <h4>Add your Resume & get your profile filled in a click!</h4>
-    <p>Adding your Resume helps you to tell who you are and what makes you different—to employers and recruiters.</p>
-    <button className="upload-resume-btn">Upload Resume</button>
-  </div>
-</div>
 
           </div>
         </div>
