@@ -95,7 +95,7 @@ export const NotificationPageStudent = ({ token, userData, onLogout }) => {
       <header className="header">
         <div className="header-left">
           <div className="logo-container">
-            <img src="https://drive.google.com/file/d/14mwb0h4iESMMZocxhpXEq44ub0QL30Kl/view?usp=drive_link" alt="Logo" className="logo" />
+            <img src="https://drive.google.com/file/d/14mwb0h4iESMMZocxhpXEq44ub0QL30Kl/view" alt="Logo" className="logo" />
           </div>
         </div>
 
@@ -113,7 +113,7 @@ export const NotificationPageStudent = ({ token, userData, onLogout }) => {
           <FaThLarge className="menu-icon" /> Certificates
         </button>
         
-        <button onClick={navigate("/StudentEvents")}>
+        <button onClick={() =>navigate("/StudentEvents")}>
           <FaCalendarAlt className="menu-icon" /> Event <span className="badge">new</span>
         </button>
         <button onClick={onDutyLeave}>

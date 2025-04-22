@@ -178,7 +178,6 @@ export const SettingsAdmin = ({ token, userData, onLogout }) => {
       <div className="main-content">
         <div className="sidebar-menu-Admin">
           <button onClick={onDashboard}><FaUserTie className="menu-icon-Admin" /> Dashboard</button>
-          <button><FaCog className="menu-icon-Admin active" /> Settings</button>
           <button onClick={onLogout} className="logout-btn">
             <FaSignOutAlt className="menu-icon-Admin" /> Logout
           </button>

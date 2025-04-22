@@ -410,7 +410,7 @@ const handleCertificateSelection = (e, cert) => {
       <header className="header">
         <div className="header-left">
           <div className="logo-container">
-            <img src="https://drive.google.com/file/d/14mwb0h4iESMMZocxhpXEq44ub0QL30Kl/view?usp=drive_link" alt="Logo" className="logo" />
+            <img src="https://drive.google.com/file/d/14mwb0h4iESMMZocxhpXEq44ub0QL30Kl/view" alt="Logo" className="logo" />
           </div>
           <div className="search-bar">
             <input 
@@ -440,7 +440,7 @@ const handleCertificateSelection = (e, cert) => {
           <button onClick={() => navigate("/StudentDashboard")}>
             <FaUserTie className="menu-icon" /> Dashboard
           </button>
-          <button onClick={navigate("/StudentEvents")}><FaCalendarAlt className="menu-icon" /> Events <span className="badge">new</span></button>
+          <button onClick={() =>navigate("/StudentEvents")}><FaCalendarAlt className="menu-icon" /> Events <span className="badge">new</span></button>
           <button onClick={onNotification}>
             <FaBell className="menu-icon" /> Notifications  
             {notificationCount > 0 && <span className="badge">{notificationCount}</span>}
