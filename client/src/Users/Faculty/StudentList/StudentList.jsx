@@ -22,6 +22,7 @@ export const StudentList = ({ token, userData, onLogout }) => {
   const [studentCertificates, setStudentCertificates] = useState([]);
   const [loadingCertificates, setLoadingCertificates] = useState(false);
   const [loding , setLoading] = useState(true);
+  const [message, setMessage] = useState(false);
 
   const fetchStudents = async () => {
     try {
@@ -74,6 +75,10 @@ export const StudentList = ({ token, userData, onLogout }) => {
     fetchStudents();
   }, [token, navigate]);
 
+  const onMessage = () => {
+    console.log("Message button clicked!");
+    setMessage(true);
+  }
   
   if(!token) navigate("/");
 
@@ -81,6 +86,20 @@ export const StudentList = ({ token, userData, onLogout }) => {
 
   return (
     <div className="container">
+      {message && (
+        <div className="message-overlay">
+          <div className="message-modal">
+            <div className="message-header">
+              <h3>Send Notification</h3>
+            </div>
+            <div className="message-content">
+              <p>Send a notification to all students?</p>
+              <button className="send-button" onClick={() => { setMessage(false); alert("Notification sent!"); }}>Send</button>
+              <button className="cancel-button" onClick={() => setMessage(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
       <header className="header">
         <div className="header-left">
           <div className="logo-container">
@@ -88,6 +107,7 @@ export const StudentList = ({ token, userData, onLogout }) => {
           </div>
         </div>
         <div className="header-right-faculty">
+          <button onClick={onMessage} className="filter-sort-btn">Send Notification</button>
           <button className="business-btn" onClick={onLogout}>Logout</button>
         </div>
       </header>
