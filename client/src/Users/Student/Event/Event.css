@@ -1273,9 +1273,9 @@ progress::-webkit-progress-value {
   position: absolute;
   bottom: 5px;
   left: 50%;
-  transform: translateX(-50%);
-  width: 6px;
-  height: 6px;
+  transform: translateX(-50%);    
+  width: 18px;
+  height: 16px;
   border-radius: 50%;
   background-color: #3498db;
 }
