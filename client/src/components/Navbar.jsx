@@ -8,7 +8,6 @@ const Navbar = () => {
           <img src="/placeholder.svg?height=40&width=40" alt="Student" className="avatar" />
           <span className="name">Student Name</span>
         </div>
-        
         <button className="logout-btn">Logout</button>
       </div>
     </nav>

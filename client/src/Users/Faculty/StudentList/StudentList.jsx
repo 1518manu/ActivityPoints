@@ -6,6 +6,7 @@ import {  FaCheckCircle, FaCog,
          FaFilter} from 'react-icons/fa';
 import { db } from '../../../firebaseFile/firebaseConfig'; 
 import { collection, query, where, getDocs } from 'firebase/firestore';
+import { Loading } from "../../../Loading/Loading"
 import './StudentList.css';
 
 const getColor = (point) => {
@@ -20,6 +21,7 @@ export const StudentList = ({ token, userData, onLogout }) => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [studentCertificates, setStudentCertificates] = useState([]);
   const [loadingCertificates, setLoadingCertificates] = useState(false);
+  const [loding , setLoading] = useState(true);
 
   const fetchStudents = async () => {
     try {
@@ -35,6 +37,7 @@ export const StudentList = ({ token, userData, onLogout }) => {
       const studDataArray = studDoc.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setStudents(studDataArray);
     } catch (error) {
+      setLoading(false);
       console.error("Error fetching students:", error);
     }
   };
@@ -74,7 +77,7 @@ export const StudentList = ({ token, userData, onLogout }) => {
   
   if(!token) navigate("/");
 
-  if (!userData) return <div className="loading-full">Loading user data...</div>;
+  if (!userData) return <Loading />;
 
   return (
     <div className="container">
