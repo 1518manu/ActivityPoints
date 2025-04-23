@@ -5,7 +5,7 @@ import {  FaCheckCircle, FaCog,
          FaUser, FaUserTie, FaTimes,
          FaFilter} from 'react-icons/fa';
 import { db } from '../../../firebaseFile/firebaseConfig'; 
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs ,addDoc} from 'firebase/firestore';
 import { Loading } from "../../../Loading/Loading"
 import './StudentList.css';
 
@@ -23,7 +23,7 @@ export const StudentList = ({ token, userData, onLogout }) => {
   const [loadingCertificates, setLoadingCertificates] = useState(false);
   const [loding , setLoading] = useState(true);
   const [message, setMessage] = useState(false);
-
+  const [minPoints, setMinPoints] = useState("");
   const fetchStudents = async () => {
     try {
       const userDataString = localStorage.getItem('userData'); 
@@ -60,7 +60,45 @@ export const StudentList = ({ token, userData, onLogout }) => {
       setLoadingCertificates(false);
     }
   };
-
+  const handleSendNotification = async () => {
+    try {
+      const minPointsNum = Number(minPoints);
+      if (isNaN(minPointsNum)) {
+        alert("Please enter a valid number");
+        return;
+      }
+  
+      const studentsRef = collection(db, "Students");
+      const studentsSnapshot = await getDocs(studentsRef);
+  
+      const studentsToNotify = studentsSnapshot.docs.filter(doc => {
+        const points = doc.data().point || 0;
+        return points < minPointsNum;
+      });
+  
+      const notificationsRef = collection(db, "Notifications");
+  
+      for (const student of studentsToNotify) {
+        const rollNo = student.data().rollNo;
+        await addDoc(notificationsRef, {
+          cert_id: null, // No specific cert in this case
+          for: "student",
+          msg: "You have less points. Participate in events and upload certificates!",
+          status: "not viewed",
+          type: "reminder",
+          user_id: rollNo,
+          timestamp: new Date().toISOString(),
+        });
+      }
+  
+      alert("Notification sent!");
+      setMinPoints(""); 
+      setMessage(false);
+    } catch (error) {
+      console.error("Error sending notifications:", error);
+      alert("Failed to send notifications");
+    }
+  };
   const handleStudentClick = async (student) => {
     setSelectedStudent(student);
     await fetchStudentCertificates(student.rollNo);
@@ -93,8 +131,18 @@ export const StudentList = ({ token, userData, onLogout }) => {
               <h3>Send Notification</h3>
             </div>
             <div className="message-content">
-              <p>Send a notification to all students?</p>
-              <button className="send-button" onClick={() => { setMessage(false); alert("Notification sent!"); }}>Send</button>
+            <p>
+        <input
+          type="number"
+          className="min-points"
+          placeholder="Enter minimum points"
+          value={minPoints}
+          onChange={(e) => setMinPoints(e.target.value)}
+        />
+      </p>
+      <button className="send-button" onClick={handleSendNotification}>
+        Send
+      </button>
               <button className="cancel-button" onClick={() => setMessage(false)}>Cancel</button>
             </div>
           </div>
