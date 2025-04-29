@@ -259,7 +259,7 @@ const handleForgotPassword = (e) => {
             <div className="form-group">
               <label className="form-label" htmlFor="email">Email address</label>
               <input
-                className="form-input"
+                className="form-input emailtest"
                 placeholder="123456@tkmce.ac.in"
                 id="email"
                 name="email"
@@ -274,7 +274,7 @@ const handleForgotPassword = (e) => {
             <div className="form-group">
               <label className="form-label" htmlFor="password">Password</label>
               <input
-                className="form-input"
+                className="form-input passwordtest"
                 placeholder="Password"
                 id="password"
                 name="password"
@@ -311,7 +311,7 @@ const handleForgotPassword = (e) => {
               )}
             </div>
 
-            <button className="submit-button" type="submit" disabled={isLoading}>
+            <button className="submit-button loginbuttontest" type="submit" disabled={isLoading}>
               {isLoading ? "Processing..." : isLogin ? "Sign in" : "Register"}
             </button>
           </form>
