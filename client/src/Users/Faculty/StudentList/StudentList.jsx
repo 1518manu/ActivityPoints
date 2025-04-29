@@ -131,17 +131,18 @@ export const StudentList = ({ token, userData, onLogout }) => {
               <h3>Send Notification</h3>
             </div>
             <div className="message-content">
-           
-        <input
-          type="number"
-          className="min-points"
-          placeholder="Enter minimum points"
-          value={minPoints}
-          onChange={(e) => setMinPoints(e.target.value)}
-        />
-      <button className="send-button" onClick={handleSendNotification}>
-        Send
-      </button>
+              <div>  
+                <input
+                  type="number"
+                  className="min-points"
+                  placeholder="Enter minimum points"
+                  value={minPoints}
+                  onChange={(e) => setMinPoints(e.target.value)}
+                />
+              </div>
+              <button className="send-button" onClick={handleSendNotification}>
+                Send
+              </button>
               <button className="cancel-button" onClick={() => setMessage(false)}>Cancel</button>
             </div>
           </div>
