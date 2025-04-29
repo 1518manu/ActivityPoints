@@ -131,7 +131,7 @@ export const StudentList = ({ token, userData, onLogout }) => {
               <h3>Send Notification</h3>
             </div>
             <div className="message-content">
-            <p>
+           
         <input
           type="number"
           className="min-points"
@@ -139,7 +139,6 @@ export const StudentList = ({ token, userData, onLogout }) => {
           value={minPoints}
           onChange={(e) => setMinPoints(e.target.value)}
         />
-      </p>
       <button className="send-button" onClick={handleSendNotification}>
         Send
       </button>
