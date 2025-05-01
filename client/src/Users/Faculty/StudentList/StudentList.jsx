@@ -46,16 +46,40 @@ export const StudentList = ({ token, userData, onLogout }) => {
   const fetchStudentCertificates = async (rollNo) => {
     try {
       setLoadingCertificates(true);
-      const q = query(collection(db, "certificates"), where("user_id", "==", rollNo));
-      const querySnapshot = await getDocs(q);
-      const certs = querySnapshot.docs.map(doc => ({
+  
+      // Step 1: Fetch certificates for the student
+      const certQuery = query(collection(db, "certificates"), where("user_id", "==", rollNo));
+      const certSnapshot = await getDocs(certQuery);
+  
+      const certs = certSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-        fileUrl: doc.data().fileUrl || doc.data().fileURL // Handle both cases
+        fileUrl: doc.data().fileUrl || doc.data().fileURL // fallback for fileURL
       }));
-      setStudentCertificates(certs);
+  
+      // Step 2: Fetch validations for the certificate IDs
+      const certIds = certs.map(cert => cert.id);
+      const validationQuery = query(collection(db, "Validation"));
+      const validationSnapshot = await getDocs(validationQuery);
+  
+      // Build a map of cert_id to points
+      const validationMap = {};
+      validationSnapshot.docs.forEach(doc => {
+        const data = doc.data();
+        if (data.cert_id && certIds.includes(data.cert_id)) {
+          validationMap[data.cert_id] = data.points;
+        }
+      });
+  
+      // Step 3: Merge points into certificate data
+      const certsWithPoints = certs.map(cert => ({
+        ...cert,
+        points: validationMap[cert.id] || 0
+      }));
+  
+      setStudentCertificates(certsWithPoints);
     } catch (error) {
-      console.error("Error fetching certificates:", error);
+      console.error("Error fetching certificates or validations:", error);
     } finally {
       setLoadingCertificates(false);
     }
