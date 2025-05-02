@@ -38,9 +38,11 @@ export const StudentList = ({ token, userData, onLogout }) => {
       const studDataArray = studDoc.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setStudents(studDataArray);
     } catch (error) {
-      setLoading(false);
       console.error("Error fetching students:", error);
+    } finally {
+      setLoading(false);
     }
+
   };
 
   const fetchStudentCertificates = async (rollNo) => {
@@ -144,7 +146,7 @@ export const StudentList = ({ token, userData, onLogout }) => {
   
   if(!token) navigate("/");
 
-  if (!userData) return <Loading />;
+  if (!userData ) return <Loading />;
 
   return (
     <div className="container">

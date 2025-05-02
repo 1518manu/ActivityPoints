@@ -4,6 +4,7 @@ import { FaEye, FaThLarge, FaUserTie, FaCog, FaCalendarAlt, FaBell, FaSignOutAlt
 import { db } from '../../../firebaseFile/firebaseConfig'; 
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { doc, updateDoc, addDoc, getDoc } from 'firebase/firestore';
+import { Loading } from '../../../Loading/Loading';
 import './Validate.css';
 
 export const Validate = ({ token, userData, onLogout }) => {
@@ -42,7 +43,6 @@ export const Validate = ({ token, userData, onLogout }) => {
         console.log("No pending validations found.");
         setValidationData([]);
         setStudentsWithCertificates([]);
-        setLoading(false);
         return;
       }
 
@@ -87,9 +87,9 @@ export const Validate = ({ token, userData, onLogout }) => {
         const freshStudent = studentsArray.find(s => s.rollNo === selectedStudent.rollNo);
         setSelectedStudent(freshStudent || null);
       }
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching validation data:", error);
+    } finally {
       setLoading(false);
     }
   };
@@ -336,7 +336,7 @@ export const Validate = ({ token, userData, onLogout }) => {
   if(!token) navigate("/");
   
   if (!userData) {
-    return <div>Loading user data...</div>;
+    return <Loading />;
   }
 
   return (
