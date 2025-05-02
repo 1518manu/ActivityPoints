@@ -369,7 +369,7 @@ export const Validate = ({ token, userData, onLogout }) => {
           {loading ? (
             <div className="loading-state">
               <div className="spinner"></div>
-              <p>Loading validation data...</p>
+              <Loading/>
             </div>
           ) : (
             <div className="validation-container">
