@@ -94,20 +94,27 @@ export const Certificate = ({ token, userData, onLogout } ) => {
         validationSnapshot.forEach((doc) => {
           const data = doc.data();
           console.log("Validation Entry:", data); // 👈 Add this to verify cert_id exists
-          validationData[data.cert_id] = data.validation_status;
+          validationData[data.cert_id] = {
+            status: data.validation_status,
+            points: data.points || 0 // default to 0 if points is undefined
+          };
         });
     
         // Now create fetchedCertificates correctly
         const certificatesWithStatus = certificateDocs.map((doc) => {
           const certData = doc.data();
           const certId = doc.id;
-          const status = validationData[certId] ; // Default to "Pending"
+          const validation = validationData[certId] || {}; // fallback to empty object
+  const status = validation.status || "Not validated";
+  const points = validation.points ?? 0;
           console.log("certId", certId);
           console.log("status", status);
+          console.log("points", points);
           return {
             id: certId,
             ...certData,
             status,
+            points,
           };
         });
     
@@ -670,6 +677,7 @@ const handleCertificateSelection = (e, cert) => {
                   <p><strong>Issued By:</strong> {cert.activityHead || "N/A"}</p>
                   <p><strong>Date:</strong> {cert.eventDate || "N/A"}</p>
                   <p><strong>Status:</strong> {cert.status || "Not validated"}</p>
+                  <p><strong>Points:</strong> {cert.points || "0"}</p>
                   <a href={cert.fileURL} target="_blank" rel="noopener noreferrer" className="certificate-link">
                     View Certificate
                   </a>
